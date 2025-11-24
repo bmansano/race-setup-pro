@@ -18,7 +18,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename="/race-setup-pro">
           <div className="min-h-screen bg-background">
             <Navigation />
           <Routes>
