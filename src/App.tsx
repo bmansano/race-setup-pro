@@ -21,12 +21,12 @@ const App = () => (
         <BrowserRouter>
           <div className="min-h-screen bg-background">
             <Navigation />
-            <Routes>
-              <Route path="/" element={<Profile />} />
-              <Route path="/simulators" element={<Simulators />} />
-              <Route path="/setup/:id" element={<SetupDetails />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+          <Routes>
+            <Route path="/" element={<Simulators />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/setup/:id" element={<SetupDetails />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
           </div>
         </BrowserRouter>
       </TooltipProvider>

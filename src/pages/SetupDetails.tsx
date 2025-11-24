@@ -20,7 +20,7 @@ export default function SetupDetails() {
 
   return (
     <div className="container max-w-6xl py-8 space-y-6">
-      <Button variant="ghost" onClick={() => navigate("/simulators")} className="mb-4">
+      <Button variant="ghost" onClick={() => navigate("/")} className="mb-4">
         <ArrowLeft className="h-4 w-4 mr-2" />
         Voltar para Setups
       </Button>
