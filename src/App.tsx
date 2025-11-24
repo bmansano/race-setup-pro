@@ -20,6 +20,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter basename="/race-setup-pro">
           <div className="min-h-screen bg-background">
+                   <div style={{padding: '20px', backgroundColor: '#FF0000', color: '#FFFFFF', fontSize: '24px'}}>TEST - RaceSetup App Loaded!</div>
             <Navigation />
           <Routes>
             <Route path="/" element={<Simulators />} />
