@@ -26,16 +26,16 @@ export function Navigation() {
               className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
               activeClassName="text-foreground bg-muted"
             >
-              <User className="h-4 w-4 inline mr-2" />
-              Perfil
+              <Gamepad2 className="h-4 w-4 inline mr-2" />
+              Simuladores
             </NavLink>
             <NavLink
-              to="/simulators"
+              to="/profile"
               className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
               activeClassName="text-foreground bg-muted"
             >
-              <Gamepad2 className="h-4 w-4 inline mr-2" />
-              Simuladores
+              <User className="h-4 w-4 inline mr-2" />
+              Perfil
             </NavLink>
           </div>
         </div>
@@ -58,17 +58,17 @@ export function Navigation() {
                   className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
                   activeClassName="text-foreground bg-muted"
                 >
-                  <User className="h-4 w-4 inline mr-2" />
-                  Perfil
+                  <Gamepad2 className="h-4 w-4 inline mr-2" />
+                  Simuladores
                 </NavLink>
                 <NavLink
-                  to="/simulators"
+                  to="/profile"
                   onClick={() => setOpen(false)}
                   className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
                   activeClassName="text-foreground bg-muted"
                 >
-                  <Gamepad2 className="h-4 w-4 inline mr-2" />
-                  Simuladores
+                  <User className="h-4 w-4 inline mr-2" />
+                  Perfil
                 </NavLink>
               </nav>
             </SheetContent>

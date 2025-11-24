@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
+import { AddSetupDialog } from "@/components/AddSetupDialog";
 import car1 from "@/assets/car-1.jpg";
 import car2 from "@/assets/car-2.jpg";
 import car3 from "@/assets/car-3.jpg";
@@ -64,18 +65,22 @@ export default function Simulators() {
           </p>
         </div>
 
-        <Select value={selectedSimulator} onValueChange={setSelectedSimulator}>
-          <SelectTrigger className="w-full md:w-[280px]">
-            <SelectValue placeholder="Selecione o simulador" />
-          </SelectTrigger>
-          <SelectContent>
-            {simulators.map((sim) => (
-              <SelectItem key={sim} value={sim}>
-                {sim}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <Select value={selectedSimulator} onValueChange={setSelectedSimulator}>
+            <SelectTrigger className="w-full sm:w-[280px]">
+              <SelectValue placeholder="Selecione o simulador" />
+            </SelectTrigger>
+            <SelectContent>
+              {simulators.map((sim) => (
+                <SelectItem key={sim} value={sim}>
+                  {sim}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          <AddSetupDialog />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
