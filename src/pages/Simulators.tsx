@@ -158,15 +158,15 @@ export default function Simulators() {
               </div>
 
               <div className="p-4 space-y-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge variant="secondary" className="text-xs">
+                <div className="flex flex-col gap-2 mb-2">
+                  <Badge variant="secondary" className="text-xs w-fit">
                     {setup.simulator}
                   </Badge>
-                  <Badge variant="outline">{setup.category}</Badge>
+                  <Badge variant="outline" className="w-fit">{setup.category}</Badge>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-1">{setup.name}</h3>
-                  <p className="text-sm text-muted-foreground">{setup.car}</p>
+                  <p className="text-sm font-medium text-foreground">{setup.car}</p>
                   <p className="text-sm text-muted-foreground">{setup.track}</p>
                 </div>
 
