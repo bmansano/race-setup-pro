@@ -85,14 +85,6 @@ export default function SetupDetailsEditable() {
       power: "",
       coast: "",
       finalRatio: ""
-    },
-    ffb: {
-      overallForce: "",
-      damping: "",
-      kerbEffects: "",
-      roadEffects: "",
-      understeerEffect: "",
-      slipEffect: ""
     }
   });
   useEffect(() => {
@@ -166,14 +158,6 @@ export default function SetupDetailsEditable() {
             power: config.differential?.power || "",
             coast: config.differential?.coast || "",
             finalRatio: config.differential?.finalRatio || ""
-          },
-          ffb: {
-            overallForce: config.ffb?.generalForce || config.ffb?.overallForce || "",
-            damping: config.ffb?.damping || "",
-            kerbEffects: config.ffb?.kerbEffects || "",
-            roadEffects: config.ffb?.roadEffects || "",
-            understeerEffect: config.ffb?.understeerEffect || "",
-            slipEffect: config.ffb?.slipEffect || ""
           }
         });
       }
@@ -192,8 +176,7 @@ export default function SetupDetailsEditable() {
         suspension,
         tires,
         brake,
-        differential,
-        ffb
+        differential
       } = setupData;
       const {
         error
@@ -207,8 +190,7 @@ export default function SetupDetailsEditable() {
           suspension,
           tires,
           brake,
-          differential,
-          ffb
+          differential
         },
         updated_at: new Date().toISOString()
       }).eq("id", id);
@@ -385,13 +367,12 @@ export default function SetupDetailsEditable() {
       </div>
 
       <Tabs defaultValue="aero" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="aero">Aero</TabsTrigger>
           <TabsTrigger value="suspension">Suspensão</TabsTrigger>
           <TabsTrigger value="tires">Pneus</TabsTrigger>
           <TabsTrigger value="brake">Freios</TabsTrigger>
           <TabsTrigger value="differential">Diferencial</TabsTrigger>
-          <TabsTrigger value="ffb">FFB</TabsTrigger>
         </TabsList>
 
         <TabsContent value="aero" className="space-y-4">
@@ -577,38 +558,6 @@ export default function SetupDetailsEditable() {
               <div className="space-y-2">
                 <Label>Relação Final</Label>
                 <Input value={setupData.differential.finalRatio} onChange={e => updateSetupData("differential", "finalRatio", e.target.value)} />
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="ffb" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Configurações de Force Feedback</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Força Geral</Label>
-                <Input value={setupData.ffb.overallForce} onChange={e => updateSetupData("ffb", "overallForce", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Damping</Label>
-                <Input value={setupData.ffb.damping} onChange={e => updateSetupData("ffb", "damping", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Kerb Effects</Label>
-                <Input value={setupData.ffb.kerbEffects} onChange={e => updateSetupData("ffb", "kerbEffects", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Road Effects</Label>
-                <Input value={setupData.ffb.roadEffects} onChange={e => updateSetupData("ffb", "roadEffects", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Understeer Effect</Label>
-                <Input value={setupData.ffb.understeerEffect} onChange={e => updateSetupData("ffb", "understeerEffect", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Slip Effect</Label>
-                <Input value={setupData.ffb.slipEffect} onChange={e => updateSetupData("ffb", "slipEffect", e.target.value)} />
               </div>
             </div>
           </Card>
