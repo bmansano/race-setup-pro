@@ -222,6 +222,12 @@ export default function SetupDetailsEditable() {
 
   const handleDeleteSetup = async () => {
     if (!id) return;
+    
+    // Validate confirmation before proceeding
+    if (deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()) {
+      toast.error("O nome digitado não corresponde ao nome do setup");
+      return;
+    }
 
     try {
       const { error } = await supabase
@@ -232,13 +238,13 @@ export default function SetupDetailsEditable() {
       if (error) throw error;
 
       toast.success("Setup excluído com sucesso!");
+      setDeleteDialogOpen(false);
       navigate("/");
     } catch (error) {
       console.error("Erro ao excluir setup:", error);
       toast.error("Erro ao excluir setup");
     } finally {
       setDeleteConfirmation("");
-      setDeleteDialogOpen(false);
     }
   };
 
@@ -648,13 +654,13 @@ export default function SetupDetailsEditable() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
-            <AlertDialogAction 
+            <Button 
               onClick={handleDeleteSetup} 
               disabled={deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Excluir
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
