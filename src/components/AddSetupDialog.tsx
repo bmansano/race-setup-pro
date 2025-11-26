@@ -88,14 +88,6 @@ export function AddSetupDialog() {
       coast: "",
       finalRatio: "",
     },
-    ffb: {
-      generalForce: "",
-      damping: "",
-      kerbEffects: "",
-      roadEffects: "",
-      understeerEffect: "",
-      slipEffect: "",
-    },
   });
 
   const selectedSimulator = formData.simulator;
@@ -160,14 +152,6 @@ export function AddSetupDialog() {
           power: baseline.differential.power || "",
           coast: baseline.differential.coast || "",
           finalRatio: baseline.differential.finalRatio || "",
-        },
-        ffb: {
-          generalForce: baseline.ffb?.overallForce || "",
-          damping: baseline.ffb?.damping || "",
-          kerbEffects: baseline.ffb?.kerbEffects || "",
-          roadEffects: baseline.ffb?.roadEffects || "",
-          understeerEffect: baseline.ffb?.understeerEffect || "",
-          slipEffect: baseline.ffb?.slipEffect || "",
         },
       });
       
@@ -351,13 +335,12 @@ export function AddSetupDialog() {
             </div>
 
             <Tabs defaultValue="aero" className="w-full">
-              <TabsList className="grid w-full grid-cols-6">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="aero">Aero</TabsTrigger>
                 <TabsTrigger value="suspension">Suspensão</TabsTrigger>
                 <TabsTrigger value="tires">Pneus</TabsTrigger>
                 <TabsTrigger value="brake">Freios</TabsTrigger>
                 <TabsTrigger value="diff">Diferencial</TabsTrigger>
-                <TabsTrigger value="ffb">FFB</TabsTrigger>
               </TabsList>
 
               <TabsContent value="aero">
@@ -591,38 +574,6 @@ export function AddSetupDialog() {
                     <div className="space-y-2">
                       <Label>Relação Final</Label>
                       <Input type="text" placeholder="Ex: 3.54" />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="ffb">
-                <Card className="p-4">
-                  <h3 className="font-semibold mb-3">Configurações de Force Feedback</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Força Geral</Label>
-                      <Input type="text" placeholder="Ex: 75%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Damping</Label>
-                      <Input type="text" placeholder="Ex: 15%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Kerb Effects</Label>
-                      <Input type="text" placeholder="Ex: 60%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Road Effects</Label>
-                      <Input type="text" placeholder="Ex: 45%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Understeer Effect</Label>
-                      <Input type="text" placeholder="Ex: 50%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Slip Effect</Label>
-                      <Input type="text" placeholder="Ex: 40%" />
                     </div>
                   </div>
                 </Card>

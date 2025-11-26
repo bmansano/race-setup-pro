@@ -49,14 +49,6 @@ export interface BaselineSetup {
     coast?: string;
     finalRatio?: string;
   };
-  ffb?: {
-    overallForce?: string;
-    damping?: string;
-    kerbEffects?: string;
-    roadEffects?: string;
-    understeerEffect?: string;
-    slipEffect?: string;
-  };
   trackTemp?: string;
   lapTime?: string;
 }
@@ -101,14 +93,6 @@ const nascarNextGenOvalShort: BaselineSetup = {
     coast: "20%",
     finalRatio: "3.70",
   },
-  ffb: {
-    overallForce: "15-20 Nm",
-    damping: "10-20%",
-    kerbEffects: "20%",
-    roadEffects: "15%",
-    understeerEffect: "20%",
-    slipEffect: "15%",
-  },
   trackTemp: "75-85°F",
 };
 
@@ -150,14 +134,6 @@ const nascarNextGenOvalIntermediate: BaselineSetup = {
     power: "85%",
     coast: "25%",
     finalRatio: "3.55",
-  },
-  ffb: {
-    overallForce: "15-20 Nm",
-    damping: "10-20%",
-    kerbEffects: "20%",
-    roadEffects: "15%",
-    understeerEffect: "20%",
-    slipEffect: "15%",
   },
   trackTemp: "75-85°F",
 };
@@ -205,12 +181,6 @@ const accGT3Baseline: BaselineSetup = {
     preload: "90-110 Nm",
     power: "70-80%",
     coast: "40-50%",
-  },
-  ffb: {
-    overallForce: "100 (in-game)",
-    damping: "0%",
-    kerbEffects: "N/A",
-    roadEffects: "N/A",
   },
   trackTemp: "25-30°C optimal",
 };
@@ -473,14 +443,6 @@ const genericBaseline: BaselineSetup = {
     power: "75%",
     coast: "50%",
     finalRatio: "3.50",
-  },
-  ffb: {
-    overallForce: "10-15 Nm",
-    damping: "15%",
-    kerbEffects: "25%",
-    roadEffects: "20%",
-    understeerEffect: "15%",
-    slipEffect: "20%",
   },
   trackTemp: "20-25°C",
 };
