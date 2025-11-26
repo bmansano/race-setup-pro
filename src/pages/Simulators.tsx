@@ -34,7 +34,7 @@ interface Setup {
 }
 
 export default function Simulators() {
-  const [selectedSimulator, setSelectedSimulator] = useState("iRacing");
+  const [selectedSimulator, setSelectedSimulator] = useState("Todos os simuladores");
   const [setups, setSetups] = useState<Setup[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -53,12 +53,17 @@ export default function Simulators() {
         return;
       }
 
-      const { data, error } = await supabase
+      let query = supabase
         .from("setups")
         .select("*")
-        .eq("user_id", user.id)
-        .eq("simulator", selectedSimulator)
-        .order("created_at", { ascending: false });
+        .eq("user_id", user.id);
+
+      // Only filter by simulator if a specific one is selected
+      if (selectedSimulator !== "Todos os simuladores") {
+        query = query.eq("simulator", selectedSimulator);
+      }
+
+      const { data, error } = await query.order("created_at", { ascending: false });
 
       if (error) throw error;
 
@@ -86,6 +91,9 @@ export default function Simulators() {
               <SelectValue placeholder="Selecione o simulador" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="Todos os simuladores">
+                Todos os simuladores
+              </SelectItem>
               {simulators.map((sim) => (
                 <SelectItem key={sim} value={sim}>
                   {sim}
@@ -104,7 +112,9 @@ export default function Simulators() {
         </div>
       ) : setups.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
-          Nenhum setup encontrado para {selectedSimulator}. Crie seu primeiro setup!
+          {selectedSimulator === "Todos os simuladores" 
+            ? "Nenhum setup encontrado. Crie seu primeiro setup!" 
+            : `Nenhum setup encontrado para ${selectedSimulator}. Crie seu primeiro setup!`}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -129,22 +139,26 @@ export default function Simulators() {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <Badge
-                  variant={setup.condition === "dry" ? "default" : "secondary"}
-                  className="absolute top-3 right-3"
-                >
-                  {setup.condition === "dry" ? (
-                    <>
-                      <Sun className="h-3 w-3 mr-1" />
-                      Pista Seca
-                    </>
-                  ) : (
-                    <>
-                      <Cloud className="h-3 w-3 mr-1" />
-                      Pista Molhada
-                    </>
-                  )}
-                </Badge>
+                <div className="absolute top-3 left-3 right-3 flex justify-between items-start gap-2">
+                  <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
+                    {setup.simulator}
+                  </Badge>
+                  <Badge
+                    variant={setup.condition === "dry" ? "default" : "secondary"}
+                  >
+                    {setup.condition === "dry" ? (
+                      <>
+                        <Sun className="h-3 w-3 mr-1" />
+                        Pista Seca
+                      </>
+                    ) : (
+                      <>
+                        <Cloud className="h-3 w-3 mr-1" />
+                        Pista Molhada
+                      </>
+                    )}
+                  </Badge>
+                </div>
               </div>
 
               <div className="p-4 space-y-3">
