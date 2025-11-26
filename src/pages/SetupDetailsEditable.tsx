@@ -27,6 +27,7 @@ export default function SetupDetailsEditable() {
   const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [setupName, setSetupName] = useState("");
+  const [carImageUrl, setCarImageUrl] = useState<string | null>(null);
   const [setupData, setSetupData] = useState({
     car: "",
     track: "",
@@ -107,6 +108,7 @@ export default function SetupDetailsEditable() {
         const config = data.configuration as any || {};
         setSetupName(data.name);
         setComment(data.comment || "");
+        setCarImageUrl(data.car_image_url || null);
         setSetupData({
           car: data.car,
           track: data.track,
@@ -261,10 +263,12 @@ export default function SetupDetailsEditable() {
       </div>;
   }
 
-  // Selecionar imagem baseada na condição e carro
-  const setupImage = setupData.car.includes("Camry") 
-    ? (setupData.condition === "Pista Molhada" ? nascarWet : nascarDry)
-    : (setupData.condition === "Pista Molhada" ? car2 : car1);
+  // Use AI-generated image if available, otherwise use default images
+  const setupImage = carImageUrl 
+    ? carImageUrl
+    : setupData.car.includes("Camry") 
+      ? (setupData.condition === "Pista Molhada" ? nascarWet : nascarDry)
+      : (setupData.condition === "Pista Molhada" ? car2 : car1);
   return <div className="container max-w-6xl py-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="ghost" onClick={() => navigate("/")} className="gap-2">

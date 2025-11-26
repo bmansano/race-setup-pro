@@ -2,3 +2,6 @@ project_id = "jkhaoebwtsfwbfngqeff"
 
 [functions.performance-engineer]
 verify_jwt = false
+
+[functions.generate-car-image]
+verify_jwt = false

@@ -61,6 +61,7 @@ export type Database = {
       setups: {
         Row: {
           car: string
+          car_image_url: string | null
           category: string
           comment: string | null
           condition: string
@@ -77,6 +78,7 @@ export type Database = {
         }
         Insert: {
           car: string
+          car_image_url?: string | null
           category: string
           comment?: string | null
           condition: string
@@ -93,6 +95,7 @@ export type Database = {
         }
         Update: {
           car?: string
+          car_image_url?: string | null
           category?: string
           comment?: string | null
           condition?: string

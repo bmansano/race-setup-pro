@@ -190,6 +190,23 @@ export function AddSetupDialog() {
         return;
       }
 
+      // Generate car image using AI
+      toast.loading("Gerando imagem do carro...", { id: "car-image" });
+      const { data: imageData, error: imageError } = await supabase.functions.invoke("generate-car-image", {
+        body: {
+          car: formData.car,
+          simulator: formData.simulator,
+          condition: formData.condition,
+        },
+      });
+
+      if (imageError) {
+        console.error("Error generating car image:", imageError);
+        toast.error("Erro ao gerar imagem do carro, mas o setup será criado", { id: "car-image" });
+      } else {
+        toast.success("Imagem do carro gerada!", { id: "car-image" });
+      }
+
       // Get car category from the selected car
       const selectedCar = availableCars.find(c => c.name === formData.car);
       const category = selectedCar?.category || "Other";
@@ -205,6 +222,7 @@ export function AddSetupDialog() {
           condition: formData.condition,
           configuration: configuration,
           user_id: user.id,
+          car_image_url: imageData?.imageUrl || null,
         })
         .select()
         .single();
