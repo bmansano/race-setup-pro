@@ -25,28 +25,25 @@ const mockSetups = [
   {
     id: 1,
     car: "Ferrari 488 GT3",
+    category: "GT3",
     track: "Spa-Francorchamps",
-    condition: "dry",
-    likes: 24,
-    dislikes: 3,
+    condition: "dry" as const,
     image: car1,
   },
   {
     id: 2,
     car: "Porsche 911 GT3 R",
+    category: "GT3",
     track: "Nürburgring GP",
-    condition: "wet",
-    likes: 18,
-    dislikes: 5,
+    condition: "wet" as const,
     image: car2,
   },
   {
     id: 3,
     car: "Mercedes-AMG F1 W12",
+    category: "Formula",
     track: "Monza",
-    condition: "dry",
-    likes: 42,
-    dislikes: 2,
+    condition: "dry" as const,
     image: car3,
   },
 ];
@@ -116,6 +113,9 @@ export default function Simulators() {
             </div>
 
             <div className="p-4 space-y-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline">{setup.category}</Badge>
+              </div>
               <div>
                 <h3 className="font-semibold text-lg mb-1">{setup.car}</h3>
                 <p className="text-sm text-muted-foreground">{setup.track}</p>
