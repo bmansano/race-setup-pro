@@ -194,6 +194,7 @@ export default function SetupDetailsEditable() {
       const { error } = await supabase
         .from("setups")
         .update({
+          name: setupName,
           track_temp: setupData.trackTemp,
           lap_time: setupData.lapTime,
           comment: comment,
@@ -276,20 +277,25 @@ export default function SetupDetailsEditable() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="overflow-hidden">
-          <img src={setupImage} alt={setupData.car} className="w-full aspect-video object-cover" />
+        <Card className="overflow-hidden bg-muted/30">
+          <img src={setupImage} alt={setupData.car} className="w-full aspect-[4/3] object-contain" />
         </Card>
 
         <Card className="p-6 space-y-4">
           <div>
-            <div className="flex items-start justify-between mb-2">
+            <div className="space-y-3 mb-2">
               <div>
-                <h1 className="text-2xl font-bold">{setupName}</h1>
-                <p className="text-lg font-medium mt-1">{setupData.car}</p>
+                <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
+                <Input
+                  value={setupName}
+                  onChange={(e) => setSetupName(e.target.value)}
+                  className="text-2xl font-bold h-auto py-2 border-0 px-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
+                <p className="text-lg font-medium mt-2">{setupData.car}</p>
               </div>
-              <div className="flex gap-2">
-                <Badge>{setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}</Badge>
-                <Badge variant="outline">{setupData.category}</Badge>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="whitespace-nowrap">{setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}</Badge>
+                <Badge variant="outline" className="whitespace-nowrap">{setupData.category}</Badge>
               </div>
             </div>
             <p className="text-muted-foreground">{setupData.track}</p>
