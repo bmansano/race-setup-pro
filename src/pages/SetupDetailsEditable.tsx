@@ -265,7 +265,7 @@ export default function SetupDetailsEditable() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="overflow-hidden bg-muted/30">
-          <img src={setupImage} alt={setupData.car} className="w-full aspect-[4/3] object-contain" />
+          <img src={setupImage} alt={setupData.car} className="w-full aspect-[4/3] object-fill" />
         </Card>
 
         <Card className="p-6 space-y-4">
