@@ -14,7 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      setup_versions: {
+        Row: {
+          comment: string | null
+          configuration: Json
+          created_at: string
+          created_by: string
+          id: string
+          lap_time: string | null
+          setup_id: string
+          track_temp: string | null
+          version_number: number
+        }
+        Insert: {
+          comment?: string | null
+          configuration: Json
+          created_at?: string
+          created_by: string
+          id?: string
+          lap_time?: string | null
+          setup_id: string
+          track_temp?: string | null
+          version_number: number
+        }
+        Update: {
+          comment?: string | null
+          configuration?: Json
+          created_at?: string
+          created_by?: string
+          id?: string
+          lap_time?: string | null
+          setup_id?: string
+          track_temp?: string | null
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "setup_versions_setup_id_fkey"
+            columns: ["setup_id"]
+            isOneToOne: false
+            referencedRelation: "setups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      setups: {
+        Row: {
+          car: string
+          category: string
+          comment: string | null
+          condition: string
+          configuration: Json
+          created_at: string
+          id: string
+          lap_time: string | null
+          name: string
+          simulator: string
+          track: string
+          track_temp: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          car: string
+          category: string
+          comment?: string | null
+          condition: string
+          configuration: Json
+          created_at?: string
+          id?: string
+          lap_time?: string | null
+          name: string
+          simulator: string
+          track: string
+          track_temp?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          car?: string
+          category?: string
+          comment?: string | null
+          condition?: string
+          configuration?: Json
+          created_at?: string
+          id?: string
+          lap_time?: string | null
+          name?: string
+          simulator?: string
+          track?: string
+          track_temp?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
