@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import car1 from "@/assets/car-1.jpg";
@@ -288,11 +288,13 @@ export default function SetupDetailsEditable() {
     });
   };
   if (loading) {
-    return <div className="container max-w-6xl py-8">
+    return (
+      <div className="container max-w-6xl py-8">
         <div className="text-center py-12 text-muted-foreground">
           Carregando setup...
         </div>
-      </div>;
+      </div>
+    );
   }
 
   // Use AI-generated image if available, otherwise use default images
@@ -301,7 +303,8 @@ export default function SetupDetailsEditable() {
     : setupData.car.includes("Camry") 
       ? (setupData.condition === "Pista Molhada" ? nascarWet : nascarDry)
       : (setupData.condition === "Pista Molhada" ? car2 : car1);
-  return <div className="container max-w-6xl py-8 space-y-6">
+  return (
+    <div className="container max-w-6xl py-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="ghost" onClick={() => navigate("/")} className="gap-2">
           <ArrowLeft className="h-4 w-4" />
@@ -664,5 +667,6 @@ export default function SetupDetailsEditable() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>;
+    </div>
+  );
 }
