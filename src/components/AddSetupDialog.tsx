@@ -162,12 +162,12 @@ export function AddSetupDialog() {
           finalRatio: baseline.differential.finalRatio || "",
         },
         ffb: {
-          generalForce: baseline.ffb.overallForce || "",
-          damping: baseline.ffb.damping || "",
-          kerbEffects: baseline.ffb.kerbEffects || "",
-          roadEffects: baseline.ffb.roadEffects || "",
-          understeerEffect: baseline.ffb.understeerEffect || "",
-          slipEffect: baseline.ffb.slipEffect || "",
+          generalForce: baseline.ffb?.overallForce || "",
+          damping: baseline.ffb?.damping || "",
+          kerbEffects: baseline.ffb?.kerbEffects || "",
+          roadEffects: baseline.ffb?.roadEffects || "",
+          understeerEffect: baseline.ffb?.understeerEffect || "",
+          slipEffect: baseline.ffb?.slipEffect || "",
         },
       });
       
