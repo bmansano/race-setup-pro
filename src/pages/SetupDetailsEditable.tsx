@@ -650,7 +650,7 @@ export default function SetupDetailsEditable() {
             <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDeleteSetup} 
-              disabled={deleteConfirmation.trim() !== setupName.trim()}
+              disabled={deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Excluir
