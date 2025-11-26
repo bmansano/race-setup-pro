@@ -10,6 +10,8 @@ import { AddSetupDialog } from "@/components/AddSetupDialog";
 import car1 from "@/assets/car-1.jpg";
 import car2 from "@/assets/car-2.jpg";
 import car3 from "@/assets/car-3.jpg";
+import nascarDry from "@/assets/nascar-camry-dry.jpg";
+import nascarWet from "@/assets/nascar-camry-wet.jpg";
 
 const simulators = [
   "iRacing",
@@ -106,8 +108,10 @@ export default function Simulators() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {setups.map((setup) => {
-            // Selecionar imagem baseada na condição
-            const setupImage = setup.condition === "wet" ? car2 : car1;
+            // Selecionar imagem baseada na condição e carro
+            const setupImage = setup.car.includes("Camry") 
+              ? (setup.condition === "Pista Molhada" ? nascarWet : nascarDry)
+              : (setup.condition === "Pista Molhada" ? car2 : car1);
             
             return (
             <Card
