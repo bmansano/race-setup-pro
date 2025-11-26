@@ -1,12 +1,37 @@
-import { User, Gamepad2, Settings, Menu, X } from "lucide-react";
+import { User, Gamepad2, Settings, Menu, LogOut } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export function Navigation() {
   const [open, setOpen] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserName(user.user_metadata?.name || user.email?.split('@')[0] || "Usuário");
+      }
+    };
+    getUserData();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Logout realizado",
+      description: "Até breve!",
+    });
+    navigate("/auth");
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-card/80 backdrop-blur-lg">
@@ -41,6 +66,14 @@ export function Navigation() {
         </div>
         
         <div className="flex items-center gap-2">
+          {userName && (
+            <span className="hidden sm:inline text-sm text-muted-foreground">
+              Olá, {userName}
+            </span>
+          )}
+          <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
+            <LogOut className="h-5 w-5" />
+          </Button>
           <ThemeToggle />
           
           <Sheet open={open} onOpenChange={setOpen}>
@@ -70,6 +103,17 @@ export function Navigation() {
                   <User className="h-4 w-4 inline mr-2" />
                   Perfil
                 </NavLink>
+                <Button 
+                  variant="ghost" 
+                  className="justify-start px-4 py-3"
+                  onClick={() => {
+                    setOpen(false);
+                    handleLogout();
+                  }}
+                >
+                  <LogOut className="h-4 w-4 inline mr-2" />
+                  Sair
+                </Button>
               </nav>
             </SheetContent>
           </Sheet>

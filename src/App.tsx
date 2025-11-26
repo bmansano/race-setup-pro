@@ -9,6 +9,8 @@ import Profile from "./pages/Profile";
 import Simulators from "./pages/Simulators";
 import SetupDetailsEditable from "./pages/SetupDetailsEditable";
 import NotFound from "./pages/NotFound";
+import Auth from "./pages/Auth";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -19,15 +21,43 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="min-h-screen bg-background">
-            <Navigation />
-        <Routes>
-          <Route path="/" element={<Simulators />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/setup/:id" element={<SetupDetailsEditable />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-          </div>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-background">
+                    <Navigation />
+                    <Simulators />
+                  </div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-background">
+                    <Navigation />
+                    <Profile />
+                  </div>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/setup/:id"
+              element={
+                <ProtectedRoute>
+                  <div className="min-h-screen bg-background">
+                    <Navigation />
+                    <SetupDetailsEditable />
+                  </div>
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>

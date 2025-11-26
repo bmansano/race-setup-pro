@@ -1,4 +1,4 @@
-import { ArrowLeft, Save, Sparkles } from "lucide-react";
+import { ArrowLeft, Save, Sparkles, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,12 +12,14 @@ import { useState } from "react";
 import car1 from "@/assets/car-1.jpg";
 import { toast } from "sonner";
 import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
+import { SetupVersionHistory } from "@/components/SetupVersionHistory";
 
 export default function SetupDetailsEditable() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
+  const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
 
   const [setupData, setSetupData] = useState({
     car: "Ferrari 488 GT3",
@@ -89,6 +91,11 @@ export default function SetupDetailsEditable() {
     console.log("Setup salvo:", setupData, "Comentário:", comment);
   };
 
+  const handleRestoreVersion = (configuration: any) => {
+    setSetupData(configuration);
+    toast.success("Versão restaurada com sucesso!");
+  };
+
   const updateSetupData = (category: string, field: string, value: string) => {
     setSetupData((prev) => {
       const categoryData = prev[category as keyof typeof prev];
@@ -113,6 +120,10 @@ export default function SetupDetailsEditable() {
           Voltar para Setups
         </Button>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setVersionHistoryOpen(true)} className="gap-2">
+            <History className="h-4 w-4" />
+            Histórico
+          </Button>
           <Button variant="secondary" onClick={() => setEngineerDialogOpen(true)} className="gap-2">
             <Sparkles className="h-4 w-4" />
             Engenheiro de Performance
@@ -552,6 +563,13 @@ export default function SetupDetailsEditable() {
         open={engineerDialogOpen}
         onOpenChange={setEngineerDialogOpen}
         setup={setupData}
+      />
+
+      <SetupVersionHistory
+        open={versionHistoryOpen}
+        onOpenChange={setVersionHistoryOpen}
+        setupId={id || ""}
+        onRestore={handleRestoreVersion}
       />
     </div>
   );
