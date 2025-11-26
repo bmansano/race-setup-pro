@@ -11,6 +11,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import car1 from "@/assets/car-1.jpg";
 import car2 from "@/assets/car-2.jpg";
+import nascarDry from "@/assets/nascar-camry-dry.jpg";
+import nascarWet from "@/assets/nascar-camry-wet.jpg";
 import { toast } from "sonner";
 import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
 import { SetupVersionHistory } from "@/components/SetupVersionHistory";
@@ -239,8 +241,10 @@ export default function SetupDetailsEditable() {
       </div>;
   }
 
-  // Selecionar imagem baseada na condição
-  const setupImage = setupData.condition === "wet" ? car2 : car1;
+  // Selecionar imagem baseada na condição e carro
+  const setupImage = setupData.car.includes("Camry") 
+    ? (setupData.condition === "Pista Molhada" ? nascarWet : nascarDry)
+    : (setupData.condition === "Pista Molhada" ? car2 : car1);
   return <div className="container max-w-6xl py-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="ghost" onClick={() => navigate("/")} className="gap-2">
@@ -265,7 +269,7 @@ export default function SetupDetailsEditable() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="overflow-hidden">
-          <img src={setupImage} alt={setupData.car} className="w-full aspect-[4/3] object-cover" />
+          <img src={setupImage} alt={setupData.car} className="w-full h-full object-cover" />
         </Card>
 
         <Card className="p-6 space-y-4">
