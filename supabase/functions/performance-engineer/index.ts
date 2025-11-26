@@ -112,20 +112,38 @@ Responda em português de forma clara e técnica.`;
     }
 
     const data = await response.json();
-    console.log("AI response:", data);
+    console.log("AI response:", JSON.stringify(data, null, 2));
 
-    const toolCall = data.choices[0].message.tool_calls?.[0];
-    let suggestion = data.choices[0].message.content;
+    const toolCalls = data.choices[0].message.tool_calls;
+    let suggestion = data.choices[0].message.content || "";
     let suggestedChanges = null;
 
-    if (toolCall && toolCall.function.name === "suggest_setup_changes") {
-      try {
-        const functionArgs = JSON.parse(toolCall.function.arguments);
-        suggestion = functionArgs.explanation;
-        suggestedChanges = functionArgs.changes;
-      } catch (e) {
-        console.error("Error parsing tool call arguments:", e);
+    console.log("Tool calls received:", JSON.stringify(toolCalls, null, 2));
+
+    if (toolCalls && toolCalls.length > 0) {
+      const toolCall = toolCalls[0];
+      console.log("Processing tool call:", JSON.stringify(toolCall, null, 2));
+      
+      if (toolCall.function.name === "suggest_setup_changes") {
+        try {
+          const functionArgs = typeof toolCall.function.arguments === 'string' 
+            ? JSON.parse(toolCall.function.arguments)
+            : toolCall.function.arguments;
+          
+          console.log("Parsed function args:", JSON.stringify(functionArgs, null, 2));
+          
+          suggestion = functionArgs.explanation || "Análise de setup concluída.";
+          suggestedChanges = functionArgs.changes || null;
+          
+          console.log("Extracted suggestion:", suggestion);
+          console.log("Extracted changes:", JSON.stringify(suggestedChanges, null, 2));
+        } catch (e) {
+          console.error("Error parsing tool call arguments:", e);
+          console.error("Tool call arguments:", toolCall.function.arguments);
+        }
       }
+    } else {
+      console.log("No tool calls found, using content directly");
     }
 
     return new Response(
