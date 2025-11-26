@@ -233,6 +233,26 @@ export default function SetupDetailsEditable() {
       return prev;
     });
   };
+
+  const handleApplySuggestions = (changes: any) => {
+    setSetupData(prev => {
+      const updated = { ...prev };
+      
+      // Aplicar alterações em cada categoria
+      Object.keys(changes).forEach(key => {
+        if (key === 'trackTemp' || key === 'lapTime') {
+          updated[key] = changes[key] || prev[key];
+        } else if (typeof changes[key] === 'object' && changes[key] !== null) {
+          updated[key as keyof typeof prev] = {
+            ...(prev[key as keyof typeof prev] as any),
+            ...changes[key]
+          };
+        }
+      });
+      
+      return updated;
+    });
+  };
   if (loading) {
     return <div className="container max-w-6xl py-8">
         <div className="text-center py-12 text-muted-foreground">
@@ -558,7 +578,12 @@ export default function SetupDetailsEditable() {
         </div>
       </Card>
 
-      <PerformanceEngineerDialog open={engineerDialogOpen} onOpenChange={setEngineerDialogOpen} setup={setupData} />
+      <PerformanceEngineerDialog 
+        open={engineerDialogOpen} 
+        onOpenChange={setEngineerDialogOpen} 
+        setup={setupData}
+        onApplySuggestions={handleApplySuggestions}
+      />
 
       <SetupVersionHistory open={versionHistoryOpen} onOpenChange={setVersionHistoryOpen} setupId={id || ""} onRestore={handleRestoreVersion} />
     </div>;

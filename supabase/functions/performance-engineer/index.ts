@@ -43,18 +43,52 @@ Responda em português de forma clara e técnica.`;
 
     console.log("Calling Lovable AI with messages:", messages);
 
+    const requestBody: any = {
+      model: "google/gemini-2.5-flash",
+      messages,
+      tools: [
+        {
+          type: "function",
+          function: {
+            name: "suggest_setup_changes",
+            description: "Sugere alterações específicas para o setup do carro",
+            parameters: {
+              type: "object",
+              properties: {
+                explanation: {
+                  type: "string",
+                  description: "Explicação técnica detalhada das sugestões"
+                },
+                changes: {
+                  type: "object",
+                  description: "Alterações sugeridas organizadas por categoria",
+                  properties: {
+                    aero: { type: "object" },
+                    suspension: { type: "object" },
+                    tires: { type: "object" },
+                    brake: { type: "object" },
+                    differential: { type: "object" },
+                    ffb: { type: "object" },
+                    trackTemp: { type: "string" },
+                    lapTime: { type: "string" }
+                  }
+                }
+              },
+              required: ["explanation", "changes"]
+            }
+          }
+        }
+      ],
+      tool_choice: { type: "function", function: { name: "suggest_setup_changes" } }
+    };
+
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages,
-        temperature: 0.7,
-        max_tokens: 1000,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
@@ -80,12 +114,27 @@ Responda em português de forma clara e técnica.`;
     const data = await response.json();
     console.log("AI response:", data);
 
+    const toolCall = data.choices[0].message.tool_calls?.[0];
+    let suggestion = data.choices[0].message.content;
+    let suggestedChanges = null;
+
+    if (toolCall && toolCall.function.name === "suggest_setup_changes") {
+      try {
+        const functionArgs = JSON.parse(toolCall.function.arguments);
+        suggestion = functionArgs.explanation;
+        suggestedChanges = functionArgs.changes;
+      } catch (e) {
+        console.error("Error parsing tool call arguments:", e);
+      }
+    }
+
     return new Response(
       JSON.stringify({ 
-        suggestion: data.choices[0].message.content,
+        suggestion,
+        suggestedChanges,
         conversationHistory: [
           ...messages,
-          { role: "assistant", content: data.choices[0].message.content }
+          { role: "assistant", content: suggestion }
         ]
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
