@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -25,24 +27,133 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
 export function AddSetupDialog() {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    name: "",
     simulator: "",
     car: "",
     track: "",
     condition: "",
   });
 
+  // State for all configuration fields
+  const [configuration, setConfiguration] = useState({
+    aero: {
+      frontWing: "",
+      rearWing: "",
+      diffuserHeight: "",
+      rake: "",
+      frontSplitter: "",
+      gurneyFlap: "",
+    },
+    suspension: {
+      frontSpring: "",
+      rearSpring: "",
+      frontBumpDamper: "",
+      rearBumpDamper: "",
+      frontReboundDamper: "",
+      rearReboundDamper: "",
+      frontAntiRollBar: "",
+      rearAntiRollBar: "",
+      frontRideHeight: "",
+      rearRideHeight: "",
+      frontCamber: "",
+      rearCamber: "",
+      frontToe: "",
+      rearToe: "",
+      caster: "",
+    },
+    tires: {
+      frontLeftPressure: "",
+      frontRightPressure: "",
+      rearLeftPressure: "",
+      rearRightPressure: "",
+      frontCompound: "",
+      rearCompound: "",
+    },
+    brakes: {
+      bias: "",
+      pressure: "",
+      frontDisc: "",
+      rearDisc: "",
+      frontPads: "",
+      rearPads: "",
+    },
+    differential: {
+      preload: "",
+      power: "",
+      coast: "",
+      finalRatio: "",
+    },
+    ffb: {
+      generalForce: "",
+      damping: "",
+      kerbEffects: "",
+      roadEffects: "",
+      understeerEffect: "",
+      slipEffect: "",
+    },
+  });
+
   const selectedSimulator = formData.simulator;
   const availableCars = selectedSimulator ? simulatorData[selectedSimulator]?.cars || [] : [];
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
 
-  const handleSubmit = () => {
-    toast.success("Setup criado com sucesso!");
-    console.log("Setup criado:", formData);
+  const handleSubmit = async () => {
+    if (!formData.name || !formData.simulator || !formData.car || !formData.track || !formData.condition) {
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast.error("Você precisa estar logado para criar um setup");
+        return;
+      }
+
+      // Get car category from the selected car
+      const selectedCar = availableCars.find(c => c.name === formData.car);
+      const category = selectedCar?.category || "Other";
+
+      const { data, error } = await supabase
+        .from("setups")
+        .insert({
+          name: formData.name,
+          simulator: formData.simulator,
+          car: formData.car,
+          track: formData.track,
+          category: category,
+          condition: formData.condition,
+          configuration: configuration,
+          user_id: user.id,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast.success("Setup criado com sucesso!");
+      setOpen(false);
+      
+      // Navigate to the new setup details page
+      if (data) {
+        navigate(`/setup/${data.id}`);
+      }
+    } catch (error) {
+      console.error("Erro ao criar setup:", error);
+      toast.error("Erro ao criar setup");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="gap-2 shadow-racing">
           <Plus className="h-4 w-4" />
@@ -60,6 +171,16 @@ export function AddSetupDialog() {
         <ScrollArea className="max-h-[65vh] pr-4">
           <div className="space-y-4 py-4">
             <div className="space-y-2">
+              <Label htmlFor="name">Nome do Setup</Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Ex: Setup Spa Qualifying"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="simulator">Simulador</Label>
               <Select
                 value={formData.simulator}
@@ -73,12 +194,10 @@ export function AddSetupDialog() {
                 <SelectContent>
                   <SelectItem value="iRacing">iRacing</SelectItem>
                   <SelectItem value="Automobilista 2">Automobilista 2</SelectItem>
-                  <SelectItem value="Project Cars 2">Project Cars 2</SelectItem>
                   <SelectItem value="Assetto Corsa EVO">Assetto Corsa EVO</SelectItem>
                   <SelectItem value="Assetto Corsa">Assetto Corsa</SelectItem>
-                  <SelectItem value="Assetto Corsa Rally">Assetto Corsa Rally</SelectItem>
                   <SelectItem value="Assetto Corsa Competizione">Assetto Corsa Competizione</SelectItem>
-                  <SelectItem value="RaceRoom">RaceRoom</SelectItem>
+                  <SelectItem value="RaceRoom Racing Experience">RaceRoom Racing Experience</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -155,27 +274,75 @@ export function AddSetupDialog() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
                       <Label>Asa Dianteira</Label>
-                      <Input type="number" placeholder="Ex: 4" />
+                      <Input 
+                        type="number" 
+                        placeholder="Ex: 4"
+                        value={configuration.aero.frontWing}
+                        onChange={(e) => setConfiguration({
+                          ...configuration,
+                          aero: { ...configuration.aero, frontWing: e.target.value }
+                        })}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Asa Traseira</Label>
-                      <Input type="number" placeholder="Ex: 7" />
+                      <Input 
+                        type="number" 
+                        placeholder="Ex: 7"
+                        value={configuration.aero.rearWing}
+                        onChange={(e) => setConfiguration({
+                          ...configuration,
+                          aero: { ...configuration.aero, rearWing: e.target.value }
+                        })}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Altura do Diffuser</Label>
-                      <Input type="text" placeholder="Ex: 65mm" />
+                      <Input 
+                        type="text" 
+                        placeholder="Ex: 65mm"
+                        value={configuration.aero.diffuserHeight}
+                        onChange={(e) => setConfiguration({
+                          ...configuration,
+                          aero: { ...configuration.aero, diffuserHeight: e.target.value }
+                        })}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Rake (Ângulo do Carro)</Label>
-                      <Input type="text" placeholder="Ex: +8mm" />
+                      <Input 
+                        type="text" 
+                        placeholder="Ex: +8mm"
+                        value={configuration.aero.rake}
+                        onChange={(e) => setConfiguration({
+                          ...configuration,
+                          aero: { ...configuration.aero, rake: e.target.value }
+                        })}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Splitter Dianteiro</Label>
-                      <Input type="number" placeholder="Ex: 3" />
+                      <Input 
+                        type="number" 
+                        placeholder="Ex: 3"
+                        value={configuration.aero.frontSplitter}
+                        onChange={(e) => setConfiguration({
+                          ...configuration,
+                          aero: { ...configuration.aero, frontSplitter: e.target.value }
+                        })}
+                      />
                     </div>
                     <div className="space-y-2">
                       <Label>Gurney Flap</Label>
-                      <Input type="text" placeholder="Ex: Pequeno" />
+                      <Input 
+                        type="text" 
+                        placeholder="Ex: Pequeno"
+                        value={configuration.aero.gurneyFlap}
+                        onChange={(e) => setConfiguration({
+                          ...configuration,
+                          aero: { ...configuration.aero, gurneyFlap: e.target.value }
+                        })}
+                      />
                     </div>
                   </div>
                 </Card>
@@ -373,11 +540,11 @@ export function AddSetupDialog() {
         </ScrollArea>
 
         <div className="flex gap-3 justify-end pt-4 border-t">
-          <Button type="button" variant="outline">
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} className="shadow-racing">
-            Criar Setup
+          <Button onClick={handleSubmit} disabled={loading} className="shadow-racing">
+            {loading ? "Criando..." : "Criar Setup"}
           </Button>
         </div>
       </DialogContent>
