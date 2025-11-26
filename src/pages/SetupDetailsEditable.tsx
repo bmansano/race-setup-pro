@@ -27,6 +27,7 @@ export default function SetupDetailsEditable() {
   const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
   const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [loading, setLoading] = useState(true);
   const [setupName, setSetupName] = useState("");
   const [carImageUrl, setCarImageUrl] = useState<string | null>(null);
@@ -235,6 +236,9 @@ export default function SetupDetailsEditable() {
     } catch (error) {
       console.error("Erro ao excluir setup:", error);
       toast.error("Erro ao excluir setup");
+    } finally {
+      setDeleteConfirmation("");
+      setDeleteDialogOpen(false);
     }
   };
 
@@ -621,17 +625,34 @@ export default function SetupDetailsEditable() {
 
       <SetupVersionHistory open={versionHistoryOpen} onOpenChange={setVersionHistoryOpen} setupId={id || ""} onRestore={handleRestoreVersion} />
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => {
+        setDeleteDialogOpen(open);
+        if (!open) setDeleteConfirmation("");
+      }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja excluir este setup? Esta ação não pode ser desfeita e todas as versões do setup também serão removidas.
+            <AlertDialogDescription className="space-y-4">
+              <p>Esta ação não pode ser desfeita e todas as versões do setup também serão removidas.</p>
+              <p>Para confirmar, digite o nome do setup:</p>
+              <p className="font-semibold text-foreground">
+                {setupName}
+              </p>
+              <Input
+                value={deleteConfirmation}
+                onChange={(e) => setDeleteConfirmation(e.target.value)}
+                placeholder="Digite o nome do setup"
+                className="mt-2"
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteSetup} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteSetup} 
+              disabled={deleteConfirmation.trim() !== setupName.trim()}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
