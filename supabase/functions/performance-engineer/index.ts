@@ -27,6 +27,12 @@ Quando o piloto descrever problemas como:
 - Perda de tração na aceleração: Ajuste diferencial, distribuição de freio, pressão dos pneus traseiros
 - Instabilidade em alta velocidade: Ajuste aerodinâmica, altura do carro, rigidez das molas
 
+IMPORTANTE: Formate sua resposta com parágrafos bem definidos. Use quebras de linha (\n\n) entre seções diferentes.
+Organize sua análise em seções claras:
+1. Análise do setup atual
+2. Problemas identificados
+3. Sugestões de ajuste
+
 Sempre forneça valores específicos e explique o raciocínio técnico por trás de cada sugestão.
 Responda em português de forma clara e técnica.`;
 

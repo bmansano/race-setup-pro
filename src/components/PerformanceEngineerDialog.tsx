@@ -132,15 +132,15 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] flex flex-col">
-        <DialogHeader>
+      <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6">
           <DialogTitle>Engenheiro de Performance</DialogTitle>
           <DialogDescription>
             Converse com o engenheiro de IA para otimizar seu setup baseado no comportamento do carro
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 pr-4 max-h-[50vh]">
+        <ScrollArea className="flex-1 px-6 h-[calc(85vh-220px)]">
           {messages.length === 0 && isLoading ? (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -149,7 +149,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 pb-4">
               {messages.map((message, index) => (
                 <div key={index} className="space-y-2">
                   <div
@@ -162,7 +162,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
                           : "bg-muted"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                      <p className="text-sm whitespace-pre-line leading-relaxed">{message.content}</p>
                     </div>
                   </div>
                   {message.role === "assistant" && message.suggestedChanges && onApplySuggestions && (
@@ -194,7 +194,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
           )}
         </ScrollArea>
 
-        <div className="flex gap-2 mt-4">
+        <div className="flex gap-2 p-6 border-t">
           <Textarea
             placeholder="Descreva o comportamento do carro (ex: 'O carro está subesterçando na entrada das curvas')"
             value={input}
