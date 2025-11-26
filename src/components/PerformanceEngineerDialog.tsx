@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,7 +22,20 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup }: Perform
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [hasInitialAnalysis, setHasInitialAnalysis] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (open && !hasInitialAnalysis && messages.length === 0) {
+      handleInitialAnalysis();
+      setHasInitialAnalysis(true);
+    }
+    
+    if (!open) {
+      setHasInitialAnalysis(false);
+      setMessages([]);
+    }
+  }, [open]);
 
   const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -123,21 +136,12 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup }: Perform
         </DialogHeader>
 
         <ScrollArea className="flex-1 pr-4">
-          {messages.length === 0 ? (
+          {messages.length === 0 && isLoading ? (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="text-muted-foreground text-center">
-                Inicie uma conversa para receber sugestões sobre seu setup
+                Analisando setup e gerando sugestão inicial...
               </p>
-              <Button onClick={handleInitialAnalysis} disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Analisando...
-                  </>
-                ) : (
-                  "Obter Análise Inicial"
-                )}
-              </Button>
             </div>
           ) : (
             <div className="space-y-4">
