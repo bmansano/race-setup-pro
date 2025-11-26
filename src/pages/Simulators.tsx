@@ -138,31 +138,30 @@ export default function Simulators() {
                   alt={setup.car}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <div className="absolute top-3 left-3 right-3 flex justify-between items-start gap-2">
-                  <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm">
-                    {setup.simulator}
-                  </Badge>
-                  <Badge
-                    variant={setup.condition === "dry" ? "default" : "secondary"}
-                  >
-                    {setup.condition === "dry" ? (
-                      <>
-                        <Sun className="h-3 w-3 mr-1" />
-                        Pista Seca
-                      </>
-                    ) : (
-                      <>
-                        <Cloud className="h-3 w-3 mr-1" />
-                        Pista Molhada
-                      </>
-                    )}
-                  </Badge>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <Badge
+                  variant={setup.condition === "Pista Molhada" ? "secondary" : "default"}
+                  className="absolute top-3 right-3"
+                >
+                  {setup.condition === "Pista Molhada" ? (
+                    <>
+                      <Cloud className="h-3 w-3 mr-1" />
+                      Molhada
+                    </>
+                  ) : (
+                    <>
+                      <Sun className="h-3 w-3 mr-1" />
+                      Seca
+                    </>
+                  )}
+                </Badge>
               </div>
 
               <div className="p-4 space-y-3">
                 <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="secondary" className="text-xs">
+                    {setup.simulator}
+                  </Badge>
                   <Badge variant="outline">{setup.category}</Badge>
                 </div>
                 <div>
