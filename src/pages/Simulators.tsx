@@ -84,6 +84,13 @@ export default function Simulators() {
   const handleDeleteSetup = async () => {
     if (!setupToDelete) return;
 
+    // Validate confirmation before proceeding
+    const setupName = setups.find(s => s.id === setupToDelete)?.name.trim().toLowerCase() || "";
+    if (deleteConfirmation.trim().toLowerCase() !== setupName) {
+      toast.error("O nome digitado não corresponde ao nome do setup");
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from("setups")
@@ -93,12 +100,12 @@ export default function Simulators() {
       if (error) throw error;
 
       toast.success("Setup excluído com sucesso!");
+      setDeleteDialogOpen(false);
       setSetups(setups.filter(s => s.id !== setupToDelete));
     } catch (error) {
       console.error("Erro ao excluir setup:", error);
       toast.error("Erro ao excluir setup");
     } finally {
-      setDeleteDialogOpen(false);
       setSetupToDelete(null);
       setDeleteConfirmation("");
     }
@@ -249,13 +256,13 @@ export default function Simulators() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
-            <AlertDialogAction 
+            <Button 
               onClick={handleDeleteSetup} 
               disabled={deleteConfirmation.trim().toLowerCase() !== (setups.find(s => s.id === setupToDelete)?.name.trim().toLowerCase() || "")}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Excluir
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
