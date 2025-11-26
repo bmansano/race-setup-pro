@@ -140,7 +140,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 pr-4">
+        <ScrollArea className="flex-1 pr-4 max-h-[50vh]">
           {messages.length === 0 && isLoading ? (
             <div className="flex flex-col items-center justify-center h-64 gap-4">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
