@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { AddSetupDialog } from "@/components/AddSetupDialog";
@@ -41,6 +42,7 @@ export default function Simulators() {
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [setupToDelete, setSetupToDelete] = useState<string | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,6 +100,7 @@ export default function Simulators() {
     } finally {
       setDeleteDialogOpen(false);
       setSetupToDelete(null);
+      setDeleteConfirmation("");
     }
   };
 
@@ -224,17 +227,33 @@ export default function Simulators() {
         </div>
       )}
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => {
+        setDeleteDialogOpen(open);
+        if (!open) setDeleteConfirmation("");
+      }}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja excluir este setup? Esta ação não pode ser desfeita.
+            <AlertDialogDescription className="space-y-4">
+              <p>Esta ação não pode ser desfeita. Para confirmar, digite o nome do setup:</p>
+              <p className="font-semibold text-foreground">
+                {setups.find(s => s.id === setupToDelete)?.name}
+              </p>
+              <Input
+                value={deleteConfirmation}
+                onChange={(e) => setDeleteConfirmation(e.target.value)}
+                placeholder="Digite o nome do setup"
+                className="mt-2"
+              />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteSetup} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteSetup} 
+              disabled={deleteConfirmation.trim() !== setups.find(s => s.id === setupToDelete)?.name.trim()}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
