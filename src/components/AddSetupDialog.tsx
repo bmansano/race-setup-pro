@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,6 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { simulatorData } from "@/data/racing-data";
+import { getBaselineSetup } from "@/data/baseline-setups";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
@@ -100,6 +101,79 @@ export function AddSetupDialog() {
   const selectedSimulator = formData.simulator;
   const availableCars = selectedSimulator ? simulatorData[selectedSimulator]?.cars || [] : [];
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
+
+  // Auto-load baseline setup when all required fields are selected
+  useEffect(() => {
+    if (formData.simulator && formData.car && formData.track && formData.condition) {
+      const baseline = getBaselineSetup(
+        formData.simulator,
+        formData.car,
+        formData.track,
+        formData.condition
+      );
+      
+      // Apply baseline values to configuration
+      setConfiguration({
+        aero: {
+          frontWing: baseline.aero.frontWing || "",
+          rearWing: baseline.aero.rearWing || "",
+          diffuserHeight: baseline.aero.diffuserHeight || "",
+          rake: baseline.aero.rake || "",
+          frontSplitter: baseline.aero.frontSplitter || "",
+          gurneyFlap: baseline.aero.gurneyFlap || "",
+        },
+        suspension: {
+          frontSpring: baseline.suspension.frontSpring || "",
+          rearSpring: baseline.suspension.rearSpring || "",
+          frontBumpDamper: baseline.suspension.frontBump || "",
+          rearBumpDamper: baseline.suspension.rearBump || "",
+          frontReboundDamper: baseline.suspension.frontRebound || "",
+          rearReboundDamper: baseline.suspension.rearRebound || "",
+          frontAntiRollBar: baseline.suspension.frontARB || "",
+          rearAntiRollBar: baseline.suspension.rearARB || "",
+          frontRideHeight: baseline.suspension.frontHeight || "",
+          rearRideHeight: baseline.suspension.rearHeight || "",
+          frontCamber: baseline.suspension.frontCamber || "",
+          rearCamber: baseline.suspension.rearCamber || "",
+          frontToe: baseline.suspension.frontToe || "",
+          rearToe: baseline.suspension.rearToe || "",
+          caster: baseline.suspension.caster || "",
+        },
+        tires: {
+          frontLeftPressure: baseline.tires.frontLeftPressure || "",
+          frontRightPressure: baseline.tires.frontRightPressure || "",
+          rearLeftPressure: baseline.tires.rearLeftPressure || "",
+          rearRightPressure: baseline.tires.rearRightPressure || "",
+          frontCompound: baseline.tires.frontCompound || "",
+          rearCompound: baseline.tires.rearCompound || "",
+        },
+        brakes: {
+          bias: baseline.brake.bias || "",
+          pressure: baseline.brake.systemPressure || "",
+          frontDisc: baseline.brake.frontDisc || "",
+          rearDisc: baseline.brake.rearDisc || "",
+          frontPads: baseline.brake.frontPads || "",
+          rearPads: baseline.brake.rearPads || "",
+        },
+        differential: {
+          preload: baseline.differential.preload || "",
+          power: baseline.differential.power || "",
+          coast: baseline.differential.coast || "",
+          finalRatio: baseline.differential.finalRatio || "",
+        },
+        ffb: {
+          generalForce: baseline.ffb.overallForce || "",
+          damping: baseline.ffb.damping || "",
+          kerbEffects: baseline.ffb.kerbEffects || "",
+          roadEffects: baseline.ffb.roadEffects || "",
+          understeerEffect: baseline.ffb.understeerEffect || "",
+          slipEffect: baseline.ffb.slipEffect || "",
+        },
+      });
+      
+      toast.success("Setup baseline carregado automaticamente!");
+    }
+  }, [formData.simulator, formData.car, formData.track, formData.condition]);
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.simulator || !formData.car || !formData.track || !formData.condition) {
