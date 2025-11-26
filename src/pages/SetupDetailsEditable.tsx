@@ -8,11 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import car1 from "@/assets/car-1.jpg";
+import car2 from "@/assets/car-2.jpg";
 import { toast } from "sonner";
 import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
 import { SetupVersionHistory } from "@/components/SetupVersionHistory";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function SetupDetailsEditable() {
   const navigate = useNavigate();
@@ -20,75 +22,144 @@ export default function SetupDetailsEditable() {
   const [comment, setComment] = useState("");
   const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
   const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [setupName, setSetupName] = useState("");
 
   const [setupData, setSetupData] = useState({
-    car: "Ferrari 488 GT3",
-    track: "Spa-Francorchamps",
-    category: "GT3",
-    simulator: "iRacing",
-    condition: "Pista Seca",
-    trackTemp: "28°C",
-    lapTime: "2:17.543",
+    car: "",
+    track: "",
+    category: "",
+    simulator: "",
+    condition: "",
+    trackTemp: "",
+    lapTime: "",
     aero: {
-      frontWing: "4",
-      rearWing: "7",
-      diffuserHeight: "65mm",
-      rake: "+8mm",
-      frontSplitter: "3",
-      gurneyFlap: "Pequeno",
+      frontWing: "",
+      rearWing: "",
+      diffuserHeight: "",
+      rake: "",
+      frontSplitter: "",
+      gurneyFlap: "",
     },
     suspension: {
-      frontSpring: "95,000 N/m",
-      rearSpring: "88,000 N/m",
-      frontBump: "6 clicks",
-      rearBump: "5 clicks",
-      frontRebound: "8 clicks",
-      rearRebound: "7 clicks",
-      frontARB: "3",
-      rearARB: "2",
-      frontHeight: "55mm",
-      rearHeight: "60mm",
-      frontCamber: "-3.5°",
-      rearCamber: "-2.8°",
-      frontToe: "0.05°",
-      rearToe: "0.15°",
-      caster: "7.5°",
+      frontSpring: "",
+      rearSpring: "",
+      frontBump: "",
+      rearBump: "",
+      frontRebound: "",
+      rearRebound: "",
+      frontARB: "",
+      rearARB: "",
+      frontHeight: "",
+      rearHeight: "",
+      frontCamber: "",
+      rearCamber: "",
+      frontToe: "",
+      rearToe: "",
+      caster: "",
     },
     tires: {
-      frontLeftPressure: "27.8 PSI",
-      frontRightPressure: "27.8 PSI",
-      rearLeftPressure: "26.5 PSI",
-      rearRightPressure: "26.5 PSI",
-      frontCompound: "Médio",
-      rearCompound: "Médio",
+      frontLeftPressure: "",
+      frontRightPressure: "",
+      rearLeftPressure: "",
+      rearRightPressure: "",
+      frontCompound: "",
+      rearCompound: "",
     },
     brake: {
-      bias: "56.5%",
-      systemPressure: "85%",
-      frontDisc: "370mm",
-      rearDisc: "355mm",
-      frontPads: "Tipo 1",
-      rearPads: "Tipo 2",
+      bias: "",
+      systemPressure: "",
+      frontDisc: "",
+      rearDisc: "",
+      frontPads: "",
+      rearPads: "",
     },
     differential: {
-      preload: "80 Nm",
-      power: "65%",
-      coast: "35%",
-      finalRatio: "3.54",
+      preload: "",
+      power: "",
+      coast: "",
+      finalRatio: "",
     },
     ffb: {
-      overallForce: "75%",
-      damping: "15%",
-      kerbEffects: "60%",
-      roadEffects: "45%",
-      understeerEffect: "50%",
-      slipEffect: "40%",
+      overallForce: "",
+      damping: "",
+      kerbEffects: "",
+      roadEffects: "",
+      understeerEffect: "",
+      slipEffect: "",
     },
   });
 
-  const handleSave = () => {
-    toast.success("Setup salvo com sucesso!");
-    console.log("Setup salvo:", setupData, "Comentário:", comment);
+  useEffect(() => {
+    loadSetup();
+  }, [id]);
+
+  const loadSetup = async () => {
+    if (!id) return;
+    
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("setups")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setSetupName(data.name);
+        setComment(data.comment || "");
+        setSetupData({
+          car: data.car,
+          track: data.track,
+          category: data.category,
+          simulator: data.simulator,
+          condition: data.condition,
+          trackTemp: data.track_temp || "",
+          lapTime: data.lap_time || "",
+          ...(data.configuration as any),
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao carregar setup:", error);
+      toast.error("Erro ao carregar setup");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSave = async () => {
+    if (!id) return;
+
+    try {
+      const { aero, suspension, tires, brake, differential, ffb } = setupData;
+      
+      const { error } = await supabase
+        .from("setups")
+        .update({
+          track_temp: setupData.trackTemp,
+          lap_time: setupData.lapTime,
+          comment: comment,
+          configuration: {
+            aero,
+            suspension,
+            tires,
+            brake,
+            differential,
+            ffb,
+          },
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Setup salvo com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar setup:", error);
+      toast.error("Erro ao salvar setup");
+    }
   };
 
   const handleRestoreVersion = (configuration: any) => {
@@ -111,6 +182,19 @@ export default function SetupDetailsEditable() {
       return prev;
     });
   };
+
+  if (loading) {
+    return (
+      <div className="container max-w-6xl py-8">
+        <div className="text-center py-12 text-muted-foreground">
+          Carregando setup...
+        </div>
+      </div>
+    );
+  }
+
+  // Selecionar imagem baseada na condição
+  const setupImage = setupData.condition === "wet" ? car2 : car1;
 
   return (
     <div className="container max-w-6xl py-8 space-y-6">
@@ -137,15 +221,18 @@ export default function SetupDetailsEditable() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="overflow-hidden">
-          <img src={car1} alt={setupData.car} className="w-full aspect-video object-cover" />
+          <img src={setupImage} alt={setupData.car} className="w-full aspect-video object-cover" />
         </Card>
 
         <Card className="p-6 space-y-4">
           <div>
             <div className="flex items-start justify-between mb-2">
-              <h1 className="text-2xl font-bold">{setupData.car}</h1>
+              <div>
+                <h1 className="text-2xl font-bold">{setupName}</h1>
+                <p className="text-lg font-medium mt-1">{setupData.car}</p>
+              </div>
               <div className="flex gap-2">
-                <Badge>{setupData.condition}</Badge>
+                <Badge>{setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}</Badge>
                 <Badge variant="outline">{setupData.category}</Badge>
               </div>
             </div>
