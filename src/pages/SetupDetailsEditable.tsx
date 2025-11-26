@@ -264,8 +264,8 @@ export default function SetupDetailsEditable() {
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <Card className="overflow-hidden bg-muted/30">
-          <img src={setupImage} alt={setupData.car} className="w-full aspect-[4/3] object-fill" />
+        <Card className="overflow-hidden">
+          <img src={setupImage} alt={setupData.car} className="w-full aspect-[4/3] object-cover" />
         </Card>
 
         <Card className="p-6 space-y-4">
@@ -273,7 +273,7 @@ export default function SetupDetailsEditable() {
             <div className="space-y-3 mb-2">
               <div>
                 <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
-                <Input value={setupName} onChange={e => setSetupName(e.target.value)} className="text-2xl font-bold h-auto py-2 border-0 px-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                <Input value={setupName} onChange={e => setSetupName(e.target.value)} className="text-2xl font-bold h-auto py-2 border-0 pl-2 pr-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
                 <p className="text-lg mt-2 font-normal">{setupData.car}</p>
               </div>
               <div className="flex flex-wrap gap-2">
