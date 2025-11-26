@@ -30,6 +30,7 @@ interface Setup {
   track: string;
   condition: string;
   simulator: string;
+  car_image_url: string | null;
 }
 
 export default function Simulators() {
@@ -108,10 +109,12 @@ export default function Simulators() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {setups.map((setup) => {
-            // Selecionar imagem baseada na condição e carro
-            const setupImage = setup.car.includes("Camry") 
-              ? (setup.condition === "Pista Molhada" ? nascarWet : nascarDry)
-              : (setup.condition === "Pista Molhada" ? car2 : car1);
+            // Use AI-generated image if available, otherwise use default images
+            const setupImage = setup.car_image_url 
+              ? setup.car_image_url
+              : setup.car.includes("Camry") 
+                ? (setup.condition === "Pista Molhada" ? nascarWet : nascarDry)
+                : (setup.condition === "Pista Molhada" ? car2 : car1);
             
             return (
             <Card
