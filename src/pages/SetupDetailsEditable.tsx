@@ -274,18 +274,18 @@ export default function SetupDetailsEditable() {
 
         <Card className="p-6 space-y-4">
           <div>
-            <div className="space-y-3 mb-2">
+            <div className="space-y-3">
               <div>
                 <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
                 <Input value={setupName} onChange={e => setSetupName(e.target.value)} className="text-2xl font-bold h-auto py-2 border-0 pl-2 pr-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
                 <p className="text-lg mt-2 font-normal">{setupData.car}</p>
               </div>
+              <p className="text-muted-foreground">{setupData.track}</p>
               <div className="flex flex-wrap gap-2">
                 <Badge className="whitespace-nowrap">{setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}</Badge>
                 <Badge variant="outline" className="whitespace-nowrap">{setupData.category}</Badge>
               </div>
             </div>
-            <p className="text-muted-foreground">{setupData.track}</p>
           </div>
 
           <Separator />
