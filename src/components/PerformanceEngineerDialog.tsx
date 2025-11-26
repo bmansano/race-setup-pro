@@ -5,20 +5,23 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Send } from "lucide-react";
+import { toast as sonnerToast } from "sonner";
+import { Loader2, Send, CheckCircle } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+  suggestedChanges?: any;
 }
 
 interface PerformanceEngineerDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   setup: any;
+  onApplySuggestions?: (changes: any) => void;
 }
 
-export const PerformanceEngineerDialog = ({ open, onOpenChange, setup }: PerformanceEngineerDialogProps) => {
+export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySuggestions }: PerformanceEngineerDialogProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +72,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup }: Perform
       const assistantMessage: Message = {
         role: "assistant",
         content: data.suggestion,
+        suggestedChanges: data.suggestedChanges,
       };
 
       setMessages(prev => [...prev, assistantMessage]);
@@ -110,6 +114,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup }: Perform
       const assistantMessage: Message = {
         role: "assistant",
         content: data.suggestion,
+        suggestedChanges: data.suggestedChanges,
       };
 
       setMessages([assistantMessage]);
@@ -146,19 +151,36 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup }: Perform
           ) : (
             <div className="space-y-4">
               {messages.map((message, index) => (
-                <div
-                  key={index}
-                  className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                >
+                <div key={index} className="space-y-2">
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
-                      message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
-                    }`}
+                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                   >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    <div
+                      className={`max-w-[80%] rounded-lg p-4 ${
+                        message.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted"
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                    </div>
                   </div>
+                  {message.role === "assistant" && message.suggestedChanges && onApplySuggestions && (
+                    <div className="flex justify-start">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          onApplySuggestions(message.suggestedChanges);
+                          sonnerToast.success("Sugestões aplicadas ao setup");
+                        }}
+                        className="ml-2"
+                      >
+                        <CheckCircle className="mr-2 h-4 w-4" />
+                        Aplicar Sugestões
+                      </Button>
+                    </div>
+                  )}
                 </div>
               ))}
               {isLoading && (
