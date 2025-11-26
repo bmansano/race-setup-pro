@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ThumbsUp, ThumbsDown, Cloud, Sun, ChevronRight } from "lucide-react";
+import { Cloud, Sun, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -121,18 +121,7 @@ export default function Simulators() {
                 <p className="text-sm text-muted-foreground">{setup.track}</p>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t">
-                <div className="flex items-center gap-3">
-                  <button className="flex items-center gap-1 text-success hover:text-success/80 transition-colors">
-                    <ThumbsUp className="h-4 w-4" />
-                    <span className="text-sm font-medium">{setup.likes}</span>
-                  </button>
-                  <button className="flex items-center gap-1 text-muted-foreground hover:text-destructive transition-colors">
-                    <ThumbsDown className="h-4 w-4" />
-                    <span className="text-sm font-medium">{setup.dislikes}</span>
-                  </button>
-                </div>
-
+              <div className="flex items-center justify-end pt-2 border-t">
                 <Button variant="ghost" size="sm" className="gap-1">
                   Ver Setup
                   <ChevronRight className="h-4 w-4" />
