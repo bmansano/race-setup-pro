@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { Navigation } from "@/components/Navigation";
 import Profile from "./pages/Profile";
 import Simulators from "./pages/Simulators";
-import SetupDetails from "./pages/SetupDetails";
+import SetupDetailsEditable from "./pages/SetupDetailsEditable";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,12 +21,12 @@ const App = () => (
         <BrowserRouter>
           <div className="min-h-screen bg-background">
             <Navigation />
-          <Routes>
-            <Route path="/" element={<Simulators />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/setup/:id" element={<SetupDetails />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<Simulators />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/setup/:id" element={<SetupDetailsEditable />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
           </div>
         </BrowserRouter>
       </TooltipProvider>
