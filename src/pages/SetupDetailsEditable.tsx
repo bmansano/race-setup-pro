@@ -1,4 +1,4 @@
-import { ArrowLeft, Save, Sparkles, History } from "lucide-react";
+import { ArrowLeft, Save, Sparkles, History, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import car1 from "@/assets/car-1.jpg";
@@ -25,6 +26,7 @@ export default function SetupDetailsEditable() {
   const [comment, setComment] = useState("");
   const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
   const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [setupName, setSetupName] = useState("");
   const [carImageUrl, setCarImageUrl] = useState<string | null>(null);
@@ -216,6 +218,26 @@ export default function SetupDetailsEditable() {
       toast.error("Erro ao salvar setup");
     }
   };
+
+  const handleDeleteSetup = async () => {
+    if (!id) return;
+
+    try {
+      const { error } = await supabase
+        .from("setups")
+        .delete()
+        .eq("id", id);
+
+      if (error) throw error;
+
+      toast.success("Setup excluído com sucesso!");
+      navigate("/");
+    } catch (error) {
+      console.error("Erro ao excluir setup:", error);
+      toast.error("Erro ao excluir setup");
+    }
+  };
+
   const handleRestoreVersion = (configuration: any) => {
     setSetupData(configuration);
     toast.success("Versão restaurada com sucesso!");
@@ -276,6 +298,14 @@ export default function SetupDetailsEditable() {
           Voltar para Setups
         </Button>
         <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => setDeleteDialogOpen(true)} 
+            className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+          >
+            <Trash2 className="h-4 w-4" />
+            Excluir
+          </Button>
           <Button variant="outline" onClick={() => setVersionHistoryOpen(true)} className="gap-2">
             <History className="h-4 w-4" />
             Histórico
@@ -590,5 +620,22 @@ export default function SetupDetailsEditable() {
       />
 
       <SetupVersionHistory open={versionHistoryOpen} onOpenChange={setVersionHistoryOpen} setupId={id || ""} onRestore={handleRestoreVersion} />
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir este setup? Esta ação não pode ser desfeita e todas as versões do setup também serão removidas.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteSetup} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>;
 }

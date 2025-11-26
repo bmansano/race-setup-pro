@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Cloud, Sun, ChevronRight } from "lucide-react";
+import { Cloud, Sun, ChevronRight, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { AddSetupDialog } from "@/components/AddSetupDialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 import car1 from "@/assets/car-1.jpg";
 import car2 from "@/assets/car-2.jpg";
 import car3 from "@/assets/car-3.jpg";
@@ -37,6 +39,8 @@ export default function Simulators() {
   const [selectedSimulator, setSelectedSimulator] = useState("Todos os simuladores");
   const [setups, setSetups] = useState<Setup[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [setupToDelete, setSetupToDelete] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,6 +76,28 @@ export default function Simulators() {
       console.error("Erro ao carregar setups:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteSetup = async () => {
+    if (!setupToDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from("setups")
+        .delete()
+        .eq("id", setupToDelete);
+
+      if (error) throw error;
+
+      toast.success("Setup excluído com sucesso!");
+      setSetups(setups.filter(s => s.id !== setupToDelete));
+    } catch (error) {
+      console.error("Erro ao excluir setup:", error);
+      toast.error("Erro ao excluir setup");
+    } finally {
+      setDeleteDialogOpen(false);
+      setSetupToDelete(null);
     }
   };
 
@@ -170,7 +196,19 @@ export default function Simulators() {
                   <p className="text-sm text-muted-foreground">{setup.track}</p>
                 </div>
 
-                <div className="flex items-center justify-end pt-2 border-t">
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSetupToDelete(setup.id);
+                      setDeleteDialogOpen(true);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                   <Button variant="ghost" size="sm" className="gap-1">
                     Ver Setup
                     <ChevronRight className="h-4 w-4" />
@@ -182,6 +220,23 @@ export default function Simulators() {
         })}
         </div>
       )}
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir este setup? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteSetup} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
