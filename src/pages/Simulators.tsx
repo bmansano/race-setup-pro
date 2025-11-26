@@ -155,8 +155,7 @@ export default function Simulators() {
             return (
             <Card
               key={setup.id}
-              className="group overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-racing hover:scale-[1.02]"
-              onClick={() => navigate(`/setup/${setup.id}`)}
+              className="group overflow-hidden transition-all duration-300 hover:shadow-racing hover:scale-[1.02]"
             >
               <div className="aspect-video relative overflow-hidden">
                 <img
@@ -201,15 +200,19 @@ export default function Simulators() {
                     variant="ghost" 
                     size="sm" 
                     className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onClick={() => {
                       setSetupToDelete(setup.id);
                       setDeleteDialogOpen(true);
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" className="gap-1">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="gap-1"
+                    onClick={() => navigate(`/setup/${setup.id}`)}
+                  >
                     Ver Setup
                     <ChevronRight className="h-4 w-4" />
                   </Button>
