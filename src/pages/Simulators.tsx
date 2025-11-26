@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Cloud, Sun, ChevronRight, Trash2 } from "lucide-react";
+import { Cloud, Sun, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -165,7 +165,8 @@ export default function Simulators() {
             return (
             <Card
               key={setup.id}
-              className="group overflow-hidden transition-all duration-300 hover:shadow-racing hover:scale-[1.02]"
+              className="group overflow-hidden transition-all duration-300 hover:shadow-racing hover:scale-[1.02] cursor-pointer"
+              onClick={() => navigate(`/setup/${setup.id}`)}
             >
               <div className="aspect-video relative overflow-hidden">
                 <img
@@ -205,26 +206,18 @@ export default function Simulators() {
                   <p className="text-sm text-muted-foreground">{setup.track}</p>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t">
+                <div className="flex items-center justify-end pt-2 border-t">
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setSetupToDelete(setup.id);
                       setDeleteDialogOpen(true);
                     }}
                   >
                     <Trash2 className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="gap-1"
-                    onClick={() => navigate(`/setup/${setup.id}`)}
-                  >
-                    Ver Setup
-                    <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
