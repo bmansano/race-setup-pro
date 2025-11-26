@@ -15,16 +15,16 @@ import { toast } from "sonner";
 import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
 import { SetupVersionHistory } from "@/components/SetupVersionHistory";
 import { supabase } from "@/integrations/supabase/client";
-
 export default function SetupDetailsEditable() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const {
+    id
+  } = useParams();
   const [comment, setComment] = useState("");
   const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
   const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [setupName, setSetupName] = useState("");
-
   const [setupData, setSetupData] = useState({
     car: "",
     track: "",
@@ -39,7 +39,7 @@ export default function SetupDetailsEditable() {
       diffuserHeight: "",
       rake: "",
       frontSplitter: "",
-      gurneyFlap: "",
+      gurneyFlap: ""
     },
     suspension: {
       frontSpring: "",
@@ -56,7 +56,7 @@ export default function SetupDetailsEditable() {
       rearCamber: "",
       frontToe: "",
       rearToe: "",
-      caster: "",
+      caster: ""
     },
     tires: {
       frontLeftPressure: "",
@@ -64,7 +64,7 @@ export default function SetupDetailsEditable() {
       rearLeftPressure: "",
       rearRightPressure: "",
       frontCompound: "",
-      rearCompound: "",
+      rearCompound: ""
     },
     brake: {
       bias: "",
@@ -72,13 +72,13 @@ export default function SetupDetailsEditable() {
       frontDisc: "",
       rearDisc: "",
       frontPads: "",
-      rearPads: "",
+      rearPads: ""
     },
     differential: {
       preload: "",
       power: "",
       coast: "",
-      finalRatio: "",
+      finalRatio: ""
     },
     ffb: {
       overallForce: "",
@@ -86,30 +86,23 @@ export default function SetupDetailsEditable() {
       kerbEffects: "",
       roadEffects: "",
       understeerEffect: "",
-      slipEffect: "",
-    },
+      slipEffect: ""
+    }
   });
-
   useEffect(() => {
     loadSetup();
   }, [id]);
-
   const loadSetup = async () => {
     if (!id) return;
-    
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("setups")
-        .select("*")
-        .eq("id", id)
-        .maybeSingle();
-
+      const {
+        data,
+        error
+      } = await supabase.from("setups").select("*").eq("id", id).maybeSingle();
       if (error) throw error;
-
       if (data) {
         const config = data.configuration as any || {};
-        
         setSetupName(data.name);
         setComment(data.comment || "");
         setSetupData({
@@ -126,7 +119,7 @@ export default function SetupDetailsEditable() {
             diffuserHeight: config.aero?.diffuserHeight || "",
             rake: config.aero?.rake || "",
             frontSplitter: config.aero?.frontSplitter || "",
-            gurneyFlap: config.aero?.gurneyFlap || "",
+            gurneyFlap: config.aero?.gurneyFlap || ""
           },
           suspension: {
             frontSpring: config.suspension?.frontSpring || "",
@@ -143,7 +136,7 @@ export default function SetupDetailsEditable() {
             rearCamber: config.suspension?.rearCamber || "",
             frontToe: config.suspension?.frontToe || "",
             rearToe: config.suspension?.rearToe || "",
-            caster: config.suspension?.caster || "",
+            caster: config.suspension?.caster || ""
           },
           tires: {
             frontLeftPressure: config.tires?.frontLeftPressure || "",
@@ -151,7 +144,7 @@ export default function SetupDetailsEditable() {
             rearLeftPressure: config.tires?.rearLeftPressure || "",
             rearRightPressure: config.tires?.rearRightPressure || "",
             frontCompound: config.tires?.frontCompound || "",
-            rearCompound: config.tires?.rearCompound || "",
+            rearCompound: config.tires?.rearCompound || ""
           },
           brake: {
             bias: config.brakes?.bias || config.brake?.bias || "",
@@ -159,13 +152,13 @@ export default function SetupDetailsEditable() {
             frontDisc: config.brakes?.frontDisc || config.brake?.frontDisc || "",
             rearDisc: config.brakes?.rearDisc || config.brake?.rearDisc || "",
             frontPads: config.brakes?.frontPads || config.brake?.frontPads || "",
-            rearPads: config.brakes?.rearPads || config.brake?.rearPads || "",
+            rearPads: config.brakes?.rearPads || config.brake?.rearPads || ""
           },
           differential: {
             preload: config.differential?.preload || "",
             power: config.differential?.power || "",
             coast: config.differential?.coast || "",
-            finalRatio: config.differential?.finalRatio || "",
+            finalRatio: config.differential?.finalRatio || ""
           },
           ffb: {
             overallForce: config.ffb?.generalForce || config.ffb?.overallForce || "",
@@ -173,8 +166,8 @@ export default function SetupDetailsEditable() {
             kerbEffects: config.ffb?.kerbEffects || "",
             roadEffects: config.ffb?.roadEffects || "",
             understeerEffect: config.ffb?.understeerEffect || "",
-            slipEffect: config.ffb?.slipEffect || "",
-          },
+            slipEffect: config.ffb?.slipEffect || ""
+          }
         });
       }
     } catch (error) {
@@ -184,77 +177,71 @@ export default function SetupDetailsEditable() {
       setLoading(false);
     }
   };
-
   const handleSave = async () => {
     if (!id) return;
-
     try {
-      const { aero, suspension, tires, brake, differential, ffb } = setupData;
-      
-      const { error } = await supabase
-        .from("setups")
-        .update({
-          name: setupName,
-          track_temp: setupData.trackTemp,
-          lap_time: setupData.lapTime,
-          comment: comment,
-          configuration: {
-            aero,
-            suspension,
-            tires,
-            brake,
-            differential,
-            ffb,
-          },
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", id);
-
+      const {
+        aero,
+        suspension,
+        tires,
+        brake,
+        differential,
+        ffb
+      } = setupData;
+      const {
+        error
+      } = await supabase.from("setups").update({
+        name: setupName,
+        track_temp: setupData.trackTemp,
+        lap_time: setupData.lapTime,
+        comment: comment,
+        configuration: {
+          aero,
+          suspension,
+          tires,
+          brake,
+          differential,
+          ffb
+        },
+        updated_at: new Date().toISOString()
+      }).eq("id", id);
       if (error) throw error;
-
       toast.success("Setup salvo com sucesso!");
     } catch (error) {
       console.error("Erro ao salvar setup:", error);
       toast.error("Erro ao salvar setup");
     }
   };
-
   const handleRestoreVersion = (configuration: any) => {
     setSetupData(configuration);
     toast.success("Versão restaurada com sucesso!");
   };
-
   const updateSetupData = (category: string, field: string, value: string) => {
-    setSetupData((prev) => {
+    setSetupData(prev => {
       const categoryData = prev[category as keyof typeof prev];
       if (typeof categoryData === 'object' && categoryData !== null) {
         return {
           ...prev,
           [category]: {
             ...categoryData,
-            [field]: value,
-          },
+            [field]: value
+          }
         };
       }
       return prev;
     });
   };
-
   if (loading) {
-    return (
-      <div className="container max-w-6xl py-8">
+    return <div className="container max-w-6xl py-8">
         <div className="text-center py-12 text-muted-foreground">
           Carregando setup...
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Selecionar imagem baseada na condição
   const setupImage = setupData.condition === "wet" ? car2 : car1;
-
-  return (
-    <div className="container max-w-6xl py-8 space-y-6">
+  return <div className="container max-w-6xl py-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <Button variant="ghost" onClick={() => navigate("/")} className="gap-2">
           <ArrowLeft className="h-4 w-4" />
@@ -286,12 +273,8 @@ export default function SetupDetailsEditable() {
             <div className="space-y-3 mb-2">
               <div>
                 <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
-                <Input
-                  value={setupName}
-                  onChange={(e) => setSetupName(e.target.value)}
-                  className="text-2xl font-bold h-auto py-2 border-0 px-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-                <p className="text-lg font-medium mt-2">{setupData.car}</p>
+                <Input value={setupName} onChange={e => setSetupName(e.target.value)} className="text-2xl font-bold h-auto py-2 border-0 px-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                <p className="text-lg mt-2 font-normal">{setupData.car}</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Badge className="whitespace-nowrap">{setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}</Badge>
@@ -314,19 +297,17 @@ export default function SetupDetailsEditable() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Temperatura Pista:</span>
-              <Input
-                value={setupData.trackTemp}
-                onChange={(e) => setSetupData({ ...setupData, trackTemp: e.target.value })}
-                className="h-7 w-24 text-right"
-              />
+              <Input value={setupData.trackTemp} onChange={e => setSetupData({
+              ...setupData,
+              trackTemp: e.target.value
+            })} className="h-7 w-24 text-right" />
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Tempo de Volta:</span>
-              <Input
-                value={setupData.lapTime}
-                onChange={(e) => setSetupData({ ...setupData, lapTime: e.target.value })}
-                className="h-7 w-28 text-right"
-              />
+              <Input value={setupData.lapTime} onChange={e => setSetupData({
+              ...setupData,
+              lapTime: e.target.value
+            })} className="h-7 w-28 text-right" />
             </div>
           </div>
         </Card>
@@ -348,45 +329,27 @@ export default function SetupDetailsEditable() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Asa Dianteira</Label>
-                <Input
-                  value={setupData.aero.frontWing}
-                  onChange={(e) => updateSetupData("aero", "frontWing", e.target.value)}
-                />
+                <Input value={setupData.aero.frontWing} onChange={e => updateSetupData("aero", "frontWing", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Asa Traseira</Label>
-                <Input
-                  value={setupData.aero.rearWing}
-                  onChange={(e) => updateSetupData("aero", "rearWing", e.target.value)}
-                />
+                <Input value={setupData.aero.rearWing} onChange={e => updateSetupData("aero", "rearWing", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Altura do Diffuser</Label>
-                <Input
-                  value={setupData.aero.diffuserHeight}
-                  onChange={(e) => updateSetupData("aero", "diffuserHeight", e.target.value)}
-                />
+                <Input value={setupData.aero.diffuserHeight} onChange={e => updateSetupData("aero", "diffuserHeight", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Rake</Label>
-                <Input
-                  value={setupData.aero.rake}
-                  onChange={(e) => updateSetupData("aero", "rake", e.target.value)}
-                />
+                <Input value={setupData.aero.rake} onChange={e => updateSetupData("aero", "rake", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Splitter Dianteiro</Label>
-                <Input
-                  value={setupData.aero.frontSplitter}
-                  onChange={(e) => updateSetupData("aero", "frontSplitter", e.target.value)}
-                />
+                <Input value={setupData.aero.frontSplitter} onChange={e => updateSetupData("aero", "frontSplitter", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Gurney Flap</Label>
-                <Input
-                  value={setupData.aero.gurneyFlap}
-                  onChange={(e) => updateSetupData("aero", "gurneyFlap", e.target.value)}
-                />
+                <Input value={setupData.aero.gurneyFlap} onChange={e => updateSetupData("aero", "gurneyFlap", e.target.value)} />
               </div>
             </div>
           </Card>
@@ -398,108 +361,63 @@ export default function SetupDetailsEditable() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Mola Dianteira</Label>
-                <Input
-                  value={setupData.suspension.frontSpring}
-                  onChange={(e) => updateSetupData("suspension", "frontSpring", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontSpring} onChange={e => updateSetupData("suspension", "frontSpring", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Mola Traseira</Label>
-                <Input
-                  value={setupData.suspension.rearSpring}
-                  onChange={(e) => updateSetupData("suspension", "rearSpring", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearSpring} onChange={e => updateSetupData("suspension", "rearSpring", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Amortecedor Diant. (Bump)</Label>
-                <Input
-                  value={setupData.suspension.frontBump}
-                  onChange={(e) => updateSetupData("suspension", "frontBump", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontBump} onChange={e => updateSetupData("suspension", "frontBump", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Amortecedor Tras. (Bump)</Label>
-                <Input
-                  value={setupData.suspension.rearBump}
-                  onChange={(e) => updateSetupData("suspension", "rearBump", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearBump} onChange={e => updateSetupData("suspension", "rearBump", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Amortecedor Diant. (Rebound)</Label>
-                <Input
-                  value={setupData.suspension.frontRebound}
-                  onChange={(e) => updateSetupData("suspension", "frontRebound", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontRebound} onChange={e => updateSetupData("suspension", "frontRebound", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Amortecedor Tras. (Rebound)</Label>
-                <Input
-                  value={setupData.suspension.rearRebound}
-                  onChange={(e) => updateSetupData("suspension", "rearRebound", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearRebound} onChange={e => updateSetupData("suspension", "rearRebound", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Barra Estabilizadora Diant.</Label>
-                <Input
-                  value={setupData.suspension.frontARB}
-                  onChange={(e) => updateSetupData("suspension", "frontARB", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontARB} onChange={e => updateSetupData("suspension", "frontARB", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Barra Estabilizadora Tras.</Label>
-                <Input
-                  value={setupData.suspension.rearARB}
-                  onChange={(e) => updateSetupData("suspension", "rearARB", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearARB} onChange={e => updateSetupData("suspension", "rearARB", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Altura Suspensão Diant.</Label>
-                <Input
-                  value={setupData.suspension.frontHeight}
-                  onChange={(e) => updateSetupData("suspension", "frontHeight", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontHeight} onChange={e => updateSetupData("suspension", "frontHeight", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Altura Suspensão Tras.</Label>
-                <Input
-                  value={setupData.suspension.rearHeight}
-                  onChange={(e) => updateSetupData("suspension", "rearHeight", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearHeight} onChange={e => updateSetupData("suspension", "rearHeight", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Camber Dianteiro</Label>
-                <Input
-                  value={setupData.suspension.frontCamber}
-                  onChange={(e) => updateSetupData("suspension", "frontCamber", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontCamber} onChange={e => updateSetupData("suspension", "frontCamber", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Camber Traseiro</Label>
-                <Input
-                  value={setupData.suspension.rearCamber}
-                  onChange={(e) => updateSetupData("suspension", "rearCamber", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearCamber} onChange={e => updateSetupData("suspension", "rearCamber", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Toe Dianteiro</Label>
-                <Input
-                  value={setupData.suspension.frontToe}
-                  onChange={(e) => updateSetupData("suspension", "frontToe", e.target.value)}
-                />
+                <Input value={setupData.suspension.frontToe} onChange={e => updateSetupData("suspension", "frontToe", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Toe Traseiro</Label>
-                <Input
-                  value={setupData.suspension.rearToe}
-                  onChange={(e) => updateSetupData("suspension", "rearToe", e.target.value)}
-                />
+                <Input value={setupData.suspension.rearToe} onChange={e => updateSetupData("suspension", "rearToe", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Caster</Label>
-                <Input
-                  value={setupData.suspension.caster}
-                  onChange={(e) => updateSetupData("suspension", "caster", e.target.value)}
-                />
+                <Input value={setupData.suspension.caster} onChange={e => updateSetupData("suspension", "caster", e.target.value)} />
               </div>
             </div>
           </Card>
@@ -511,45 +429,27 @@ export default function SetupDetailsEditable() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Pressão Diant. Esq.</Label>
-                <Input
-                  value={setupData.tires.frontLeftPressure}
-                  onChange={(e) => updateSetupData("tires", "frontLeftPressure", e.target.value)}
-                />
+                <Input value={setupData.tires.frontLeftPressure} onChange={e => updateSetupData("tires", "frontLeftPressure", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Pressão Diant. Dir.</Label>
-                <Input
-                  value={setupData.tires.frontRightPressure}
-                  onChange={(e) => updateSetupData("tires", "frontRightPressure", e.target.value)}
-                />
+                <Input value={setupData.tires.frontRightPressure} onChange={e => updateSetupData("tires", "frontRightPressure", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Pressão Tras. Esq.</Label>
-                <Input
-                  value={setupData.tires.rearLeftPressure}
-                  onChange={(e) => updateSetupData("tires", "rearLeftPressure", e.target.value)}
-                />
+                <Input value={setupData.tires.rearLeftPressure} onChange={e => updateSetupData("tires", "rearLeftPressure", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Pressão Tras. Dir.</Label>
-                <Input
-                  value={setupData.tires.rearRightPressure}
-                  onChange={(e) => updateSetupData("tires", "rearRightPressure", e.target.value)}
-                />
+                <Input value={setupData.tires.rearRightPressure} onChange={e => updateSetupData("tires", "rearRightPressure", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Composto Pneu Diant.</Label>
-                <Input
-                  value={setupData.tires.frontCompound}
-                  onChange={(e) => updateSetupData("tires", "frontCompound", e.target.value)}
-                />
+                <Input value={setupData.tires.frontCompound} onChange={e => updateSetupData("tires", "frontCompound", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Composto Pneu Tras.</Label>
-                <Input
-                  value={setupData.tires.rearCompound}
-                  onChange={(e) => updateSetupData("tires", "rearCompound", e.target.value)}
-                />
+                <Input value={setupData.tires.rearCompound} onChange={e => updateSetupData("tires", "rearCompound", e.target.value)} />
               </div>
             </div>
           </Card>
@@ -561,45 +461,27 @@ export default function SetupDetailsEditable() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Bias</Label>
-                <Input
-                  value={setupData.brake.bias}
-                  onChange={(e) => updateSetupData("brake", "bias", e.target.value)}
-                />
+                <Input value={setupData.brake.bias} onChange={e => updateSetupData("brake", "bias", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Pressão do Sistema</Label>
-                <Input
-                  value={setupData.brake.systemPressure}
-                  onChange={(e) => updateSetupData("brake", "systemPressure", e.target.value)}
-                />
+                <Input value={setupData.brake.systemPressure} onChange={e => updateSetupData("brake", "systemPressure", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Disco Dianteiro</Label>
-                <Input
-                  value={setupData.brake.frontDisc}
-                  onChange={(e) => updateSetupData("brake", "frontDisc", e.target.value)}
-                />
+                <Input value={setupData.brake.frontDisc} onChange={e => updateSetupData("brake", "frontDisc", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Disco Traseiro</Label>
-                <Input
-                  value={setupData.brake.rearDisc}
-                  onChange={(e) => updateSetupData("brake", "rearDisc", e.target.value)}
-                />
+                <Input value={setupData.brake.rearDisc} onChange={e => updateSetupData("brake", "rearDisc", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Pastilhas Dianteiras</Label>
-                <Input
-                  value={setupData.brake.frontPads}
-                  onChange={(e) => updateSetupData("brake", "frontPads", e.target.value)}
-                />
+                <Input value={setupData.brake.frontPads} onChange={e => updateSetupData("brake", "frontPads", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Pastilhas Traseiras</Label>
-                <Input
-                  value={setupData.brake.rearPads}
-                  onChange={(e) => updateSetupData("brake", "rearPads", e.target.value)}
-                />
+                <Input value={setupData.brake.rearPads} onChange={e => updateSetupData("brake", "rearPads", e.target.value)} />
               </div>
             </div>
           </Card>
@@ -611,31 +493,19 @@ export default function SetupDetailsEditable() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Preload</Label>
-                <Input
-                  value={setupData.differential.preload}
-                  onChange={(e) => updateSetupData("differential", "preload", e.target.value)}
-                />
+                <Input value={setupData.differential.preload} onChange={e => updateSetupData("differential", "preload", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Power (Aceleração)</Label>
-                <Input
-                  value={setupData.differential.power}
-                  onChange={(e) => updateSetupData("differential", "power", e.target.value)}
-                />
+                <Input value={setupData.differential.power} onChange={e => updateSetupData("differential", "power", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Coast (Desaceleração)</Label>
-                <Input
-                  value={setupData.differential.coast}
-                  onChange={(e) => updateSetupData("differential", "coast", e.target.value)}
-                />
+                <Input value={setupData.differential.coast} onChange={e => updateSetupData("differential", "coast", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Relação Final</Label>
-                <Input
-                  value={setupData.differential.finalRatio}
-                  onChange={(e) => updateSetupData("differential", "finalRatio", e.target.value)}
-                />
+                <Input value={setupData.differential.finalRatio} onChange={e => updateSetupData("differential", "finalRatio", e.target.value)} />
               </div>
             </div>
           </Card>
@@ -647,45 +517,27 @@ export default function SetupDetailsEditable() {
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Força Geral</Label>
-                <Input
-                  value={setupData.ffb.overallForce}
-                  onChange={(e) => updateSetupData("ffb", "overallForce", e.target.value)}
-                />
+                <Input value={setupData.ffb.overallForce} onChange={e => updateSetupData("ffb", "overallForce", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Damping</Label>
-                <Input
-                  value={setupData.ffb.damping}
-                  onChange={(e) => updateSetupData("ffb", "damping", e.target.value)}
-                />
+                <Input value={setupData.ffb.damping} onChange={e => updateSetupData("ffb", "damping", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Kerb Effects</Label>
-                <Input
-                  value={setupData.ffb.kerbEffects}
-                  onChange={(e) => updateSetupData("ffb", "kerbEffects", e.target.value)}
-                />
+                <Input value={setupData.ffb.kerbEffects} onChange={e => updateSetupData("ffb", "kerbEffects", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Road Effects</Label>
-                <Input
-                  value={setupData.ffb.roadEffects}
-                  onChange={(e) => updateSetupData("ffb", "roadEffects", e.target.value)}
-                />
+                <Input value={setupData.ffb.roadEffects} onChange={e => updateSetupData("ffb", "roadEffects", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Understeer Effect</Label>
-                <Input
-                  value={setupData.ffb.understeerEffect}
-                  onChange={(e) => updateSetupData("ffb", "understeerEffect", e.target.value)}
-                />
+                <Input value={setupData.ffb.understeerEffect} onChange={e => updateSetupData("ffb", "understeerEffect", e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Slip Effect</Label>
-                <Input
-                  value={setupData.ffb.slipEffect}
-                  onChange={(e) => updateSetupData("ffb", "slipEffect", e.target.value)}
-                />
+                <Input value={setupData.ffb.slipEffect} onChange={e => updateSetupData("ffb", "slipEffect", e.target.value)} />
               </div>
             </div>
           </Card>
@@ -698,28 +550,12 @@ export default function SetupDetailsEditable() {
           <Label htmlFor="comment">
             Adicione anotações sobre o setup, condições da pista, ou observações importantes
           </Label>
-          <Textarea
-            id="comment"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="Ex: Setup funciona muito bem em pista seca e temperatura acima de 25°C. Ajustar asa traseira para +1 se houver vento forte..."
-            className="min-h-[120px]"
-          />
+          <Textarea id="comment" value={comment} onChange={e => setComment(e.target.value)} placeholder="Ex: Setup funciona muito bem em pista seca e temperatura acima de 25°C. Ajustar asa traseira para +1 se houver vento forte..." className="min-h-[120px]" />
         </div>
       </Card>
 
-      <PerformanceEngineerDialog
-        open={engineerDialogOpen}
-        onOpenChange={setEngineerDialogOpen}
-        setup={setupData}
-      />
+      <PerformanceEngineerDialog open={engineerDialogOpen} onOpenChange={setEngineerDialogOpen} setup={setupData} />
 
-      <SetupVersionHistory
-        open={versionHistoryOpen}
-        onOpenChange={setVersionHistoryOpen}
-        setupId={id || ""}
-        onRestore={handleRestoreVersion}
-      />
-    </div>
-  );
+      <SetupVersionHistory open={versionHistoryOpen} onOpenChange={setVersionHistoryOpen} setupId={id || ""} onRestore={handleRestoreVersion} />
+    </div>;
 }
