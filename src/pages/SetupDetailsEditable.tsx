@@ -103,11 +103,13 @@ export default function SetupDetailsEditable() {
         .from("setups")
         .select("*")
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
       if (data) {
+        const config = data.configuration as any || {};
+        
         setSetupName(data.name);
         setComment(data.comment || "");
         setSetupData({
@@ -118,7 +120,61 @@ export default function SetupDetailsEditable() {
           condition: data.condition,
           trackTemp: data.track_temp || "",
           lapTime: data.lap_time || "",
-          ...(data.configuration as any),
+          aero: {
+            frontWing: config.aero?.frontWing || "",
+            rearWing: config.aero?.rearWing || "",
+            diffuserHeight: config.aero?.diffuserHeight || "",
+            rake: config.aero?.rake || "",
+            frontSplitter: config.aero?.frontSplitter || "",
+            gurneyFlap: config.aero?.gurneyFlap || "",
+          },
+          suspension: {
+            frontSpring: config.suspension?.frontSpring || "",
+            rearSpring: config.suspension?.rearSpring || "",
+            frontBump: config.suspension?.frontBumpDamper || config.suspension?.frontBump || "",
+            rearBump: config.suspension?.rearBumpDamper || config.suspension?.rearBump || "",
+            frontRebound: config.suspension?.frontReboundDamper || config.suspension?.frontRebound || "",
+            rearRebound: config.suspension?.rearReboundDamper || config.suspension?.rearRebound || "",
+            frontARB: config.suspension?.frontAntiRollBar || config.suspension?.frontARB || "",
+            rearARB: config.suspension?.rearAntiRollBar || config.suspension?.rearARB || "",
+            frontHeight: config.suspension?.frontRideHeight || config.suspension?.frontHeight || "",
+            rearHeight: config.suspension?.rearRideHeight || config.suspension?.rearHeight || "",
+            frontCamber: config.suspension?.frontCamber || "",
+            rearCamber: config.suspension?.rearCamber || "",
+            frontToe: config.suspension?.frontToe || "",
+            rearToe: config.suspension?.rearToe || "",
+            caster: config.suspension?.caster || "",
+          },
+          tires: {
+            frontLeftPressure: config.tires?.frontLeftPressure || "",
+            frontRightPressure: config.tires?.frontRightPressure || "",
+            rearLeftPressure: config.tires?.rearLeftPressure || "",
+            rearRightPressure: config.tires?.rearRightPressure || "",
+            frontCompound: config.tires?.frontCompound || "",
+            rearCompound: config.tires?.rearCompound || "",
+          },
+          brake: {
+            bias: config.brakes?.bias || config.brake?.bias || "",
+            systemPressure: config.brakes?.pressure || config.brake?.systemPressure || "",
+            frontDisc: config.brakes?.frontDisc || config.brake?.frontDisc || "",
+            rearDisc: config.brakes?.rearDisc || config.brake?.rearDisc || "",
+            frontPads: config.brakes?.frontPads || config.brake?.frontPads || "",
+            rearPads: config.brakes?.rearPads || config.brake?.rearPads || "",
+          },
+          differential: {
+            preload: config.differential?.preload || "",
+            power: config.differential?.power || "",
+            coast: config.differential?.coast || "",
+            finalRatio: config.differential?.finalRatio || "",
+          },
+          ffb: {
+            overallForce: config.ffb?.generalForce || config.ffb?.overallForce || "",
+            damping: config.ffb?.damping || "",
+            kerbEffects: config.ffb?.kerbEffects || "",
+            roadEffects: config.ffb?.roadEffects || "",
+            understeerEffect: config.ffb?.understeerEffect || "",
+            slipEffect: config.ffb?.slipEffect || "",
+          },
         });
       }
     } catch (error) {
