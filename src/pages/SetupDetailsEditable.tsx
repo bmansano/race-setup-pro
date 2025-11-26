@@ -1,4 +1,4 @@
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,11 +11,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import car1 from "@/assets/car-1.jpg";
 import { toast } from "sonner";
+import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
 
 export default function SetupDetailsEditable() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [comment, setComment] = useState("");
+  const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
 
   const [setupData, setSetupData] = useState({
     car: "Ferrari 488 GT3",
@@ -110,10 +112,16 @@ export default function SetupDetailsEditable() {
           <ArrowLeft className="h-4 w-4" />
           Voltar para Setups
         </Button>
-        <Button onClick={handleSave} className="gap-2 shadow-racing">
-          <Save className="h-4 w-4" />
-          Salvar Alterações
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={() => setEngineerDialogOpen(true)} className="gap-2">
+            <Sparkles className="h-4 w-4" />
+            Engenheiro de Performance
+          </Button>
+          <Button onClick={handleSave} className="gap-2 shadow-racing">
+            <Save className="h-4 w-4" />
+            Salvar Alterações
+          </Button>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -539,6 +547,12 @@ export default function SetupDetailsEditable() {
           />
         </div>
       </Card>
+
+      <PerformanceEngineerDialog
+        open={engineerDialogOpen}
+        onOpenChange={setEngineerDialogOpen}
+        setup={setupData}
+      />
     </div>
   );
 }

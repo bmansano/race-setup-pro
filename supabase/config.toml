@@ -1,0 +1,4 @@
+project_id = "jkhaoebwtsfwbfngqeff"
+
+[functions.performance-engineer]
+verify_jwt = false
