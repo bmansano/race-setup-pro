@@ -28,17 +28,16 @@ import { getBaselineSetup } from "@/data/baseline-setups";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
-// Lista de todos os simuladores suportados
+// Lista de todos os simuladores suportados (em ordem alfabética)
 const SIMULATORS = [
-  "iRacing",
-  "Automobilista 2",
   "Assetto Corsa Competizione",
   "Assetto Corsa EVO",
-  "Assetto Corsa",
   "Assetto Corsa Rally",
-  "RaceRoom Racing Experience",
+  "Automobilista 2",
+  "iRacing",
   "Le Mans Ultimate",
   "Project Motor Racing",
+  "RaceRoom",
 ];
 
 export function AddSetupDialog() {
@@ -473,7 +472,7 @@ export function AddSetupDialog() {
                     <TabsTrigger value="electronics">Eletrônica</TabsTrigger>
                   )}
                   {availableCategories.includes('drivetrain') && (
-                    <TabsTrigger value="drivetrain">Transmissão</TabsTrigger>
+                    <TabsTrigger value="drivetrain">Geral</TabsTrigger>
                   )}
                 </TabsList>
 

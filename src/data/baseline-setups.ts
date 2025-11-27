@@ -616,8 +616,8 @@ export function getBaselineSetup(
     return acGenericBaseline;
   }
 
-  // RaceRoom Racing Experience detection
-  if (simulator === "RaceRoom Racing Experience") {
+  // RaceRoom detection
+  if (simulator === "RaceRoom") {
     if (car.includes("GT3") || car.includes("DTM")) {
       return raceRoomGT3Baseline;
     }
