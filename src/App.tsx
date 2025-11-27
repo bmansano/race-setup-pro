@@ -10,6 +10,7 @@ import Simulators from "./pages/Simulators";
 import SetupDetailsEditable from "./pages/SetupDetailsEditable";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
+import Landing from "./pages/Landing";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/landing" element={<Landing />} />
             <Route
               path="/"
               element={

@@ -207,10 +207,10 @@ export default function Profile() {
       </Card>
 
       <Card className="p-6 bg-gradient-carbon border-primary/20">
-        <h3 className="text-lg font-semibold mb-2">Sobre o RaceSetup</h3>
+        <h3 className="text-lg font-semibold mb-2">Sobre o Apex Engineer</h3>
         <p className="text-sm text-muted-foreground">
-          Sistema profissional de gerenciamento de setups para simuladores de corrida.
-          Compatível com iRacing, Automobilista 2, Assetto Corsa e mais.
+          Sistema profissional de gerenciamento de setups para simuladores de corrida com 
+          engenheiro de IA. Compatível com iRacing, Automobilista 2, Assetto Corsa e mais.
         </p>
       </Card>
     </div>
