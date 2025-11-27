@@ -1,35 +1,50 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { DemoDialog } from "@/components/DemoDialog";
 import { 
   Settings, 
   Zap, 
   Brain, 
   History, 
-  Gamepad2, 
   ChevronRight,
   Trophy,
   Timer,
+  Gamepad2,
   Wrench
 } from "lucide-react";
 import heroImage from "@/assets/hero-gt3.jpg";
 import featureFerrari from "@/assets/feature-ferrari.jpg";
-import featureCockpit from "@/assets/feature-cockpit.jpg";
 import featureEngineer from "@/assets/feature-engineer.jpg";
+import featureVersionHistory from "@/assets/feature-version-history.jpg";
+import alfaRomeoDtm from "@/assets/alfa-romeo-155-dtm.jpg";
 
-const simulators = [
-  "Assetto Corsa Competizione",
-  "Assetto Corsa EVO",
-  "Assetto Corsa Rally",
-  "Automobilista 2",
-  "iRacing",
-  "Le Mans Ultimate",
-  "Project Motor Racing",
-  "RaceRoom"
+// Simulator logos
+import logoAcc from "@/assets/logos/logo-acc.png";
+import logoAcEvo from "@/assets/logos/logo-ac-evo.png";
+import logoAcRally from "@/assets/logos/logo-ac-rally.png";
+import logoAms2 from "@/assets/logos/logo-ams2.png";
+import logoIracing from "@/assets/logos/logo-iracing.png";
+import logoLmu from "@/assets/logos/logo-lmu.png";
+import logoPmr from "@/assets/logos/logo-pmr.png";
+import logoRaceroom from "@/assets/logos/logo-raceroom.png";
+
+const simulatorLogos = [
+  { name: "Assetto Corsa Competizione", logo: logoAcc },
+  { name: "Assetto Corsa EVO", logo: logoAcEvo },
+  { name: "Assetto Corsa Rally", logo: logoAcRally },
+  { name: "Automobilista 2", logo: logoAms2 },
+  { name: "iRacing", logo: logoIracing },
+  { name: "Le Mans Ultimate", logo: logoLmu },
+  { name: "Project Motor Racing", logo: logoPmr },
+  { name: "RaceRoom", logo: logoRaceroom },
 ];
 
 export default function Landing() {
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -47,7 +62,7 @@ export default function Landing() {
               <Button variant="outline" size="sm">Entrar</Button>
             </Link>
             <Link to="/auth">
-              <Button size="sm" className="shadow-racing">Começar Grátis</Button>
+              <Button size="sm" className="shadow-racing">Começar grátis</Button>
             </Link>
           </div>
         </div>
@@ -68,7 +83,7 @@ export default function Landing() {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-            Seu Engenheiro de<br />Performance Virtual
+            Seu engenheiro de<br />performance virtual
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10">
@@ -79,12 +94,17 @@ export default function Landing() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
             <Link to="/auth">
               <Button size="lg" className="text-lg px-8 py-6 shadow-racing group">
-                Começar Agora
+                Começar agora
                 <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-              Ver Demo
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="text-lg px-8 py-6"
+              onClick={() => setDemoOpen(true)}
+            >
+              Ver demo
             </Button>
           </div>
 
@@ -92,7 +112,7 @@ export default function Landing() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {[
               { value: "8+", label: "Simuladores" },
-              { value: "500+", label: "Carros Suportados" },
+              { value: "500+", label: "Carros suportados" },
               { value: "200+", label: "Pistas" },
               { value: "IA", label: "Engenheiro 24/7" },
             ].map((stat) => (
@@ -110,7 +130,7 @@ export default function Landing() {
         <div className="container">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Tudo que Você Precisa para <span className="text-primary">Vencer</span>
+              Tudo que você precisa para <span className="text-primary">vencer</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Ferramentas profissionais de gerenciamento de setup combinadas com 
@@ -157,7 +177,7 @@ export default function Landing() {
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Wrench className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold">Gestão de Setups</h3>
+                  <h3 className="text-xl font-semibold">Gestão de setups</h3>
                 </div>
                 <p className="text-muted-foreground">
                   Organize todos os seus setups em um só lugar. Campos específicos 
@@ -170,8 +190,8 @@ export default function Landing() {
             <Card className="group overflow-hidden border-border/50 hover:border-primary/50 transition-all duration-300">
               <div className="aspect-video overflow-hidden">
                 <img 
-                  src={featureCockpit} 
-                  alt="Version History" 
+                  src={featureVersionHistory} 
+                  alt="Version History"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -180,7 +200,7 @@ export default function Landing() {
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <History className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold">Histórico de Versões</h3>
+                  <h3 className="text-xl font-semibold">Histórico de versões</h3>
                 </div>
                 <p className="text-muted-foreground">
                   Nunca perca uma configuração que funcionou. Compare diferentes 
@@ -198,8 +218,8 @@ export default function Landing() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Ganhe Segundos,<br />
-                <span className="text-primary">Não Milésimos</span>
+                Ganhe segundos,<br />
+                <span className="text-primary">não milésimos</span>
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
                 Enquanto outros perdem horas testando configurações aleatórias, 
@@ -211,17 +231,17 @@ export default function Landing() {
                 {[
                   {
                     icon: Trophy,
-                    title: "Setups Competitivos",
+                    title: "Setups competitivos",
                     description: "Configurações baseadas em dados reais dos melhores pilotos"
                   },
                   {
                     icon: Timer,
-                    title: "Economia de Tempo",
+                    title: "Economia de tempo",
                     description: "Chegue ao setup ideal em minutos, não horas"
                   },
                   {
                     icon: Gamepad2,
-                    title: "Multi-Simulador",
+                    title: "Multi-simulador",
                     description: "Suporte para os principais simuladores do mercado"
                   },
                 ].map((benefit) => (
@@ -241,8 +261,8 @@ export default function Landing() {
             <div className="relative">
               <div className="aspect-square rounded-2xl overflow-hidden border border-border/50">
                 <img 
-                  src={featureFerrari} 
-                  alt="Race Car" 
+                  src={alfaRomeoDtm} 
+                  alt="Alfa Romeo 155 V6 TI DTM 1995" 
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -252,7 +272,7 @@ export default function Landing() {
                     <Zap className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Setup Otimizado</div>
+                    <div className="text-sm font-medium">Setup otimizado</div>
                     <div className="text-xs text-muted-foreground">-1.2s no tempo de volta</div>
                   </div>
                 </div>
@@ -266,19 +286,23 @@ export default function Landing() {
       <section className="py-24 bg-muted/30">
         <div className="container text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Compatível com Seus <span className="text-primary">Simuladores Favoritos</span>
+            Compatível com seus <span className="text-primary">simuladores favoritos</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
             Suporte completo para os principais simuladores de corrida do mercado
           </p>
           
-          <div className="flex flex-wrap justify-center gap-4">
-            {simulators.map((sim) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {simulatorLogos.map((sim) => (
               <div 
-                key={sim}
-                className="px-6 py-3 rounded-full bg-card border border-border/50 text-sm font-medium hover:border-primary/50 hover:bg-primary/5 transition-all cursor-default"
+                key={sim.name}
+                className="group p-6 rounded-xl bg-card border border-border/50 hover:border-primary/50 transition-all cursor-default"
               >
-                {sim}
+                <img 
+                  src={sim.logo} 
+                  alt={sim.name}
+                  className="w-full h-16 object-contain opacity-80 group-hover:opacity-100 transition-opacity"
+                />
               </div>
             ))}
           </div>
@@ -293,7 +317,7 @@ export default function Landing() {
             
             <div className="relative z-10">
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Pronto para Dominar as Pistas?
+                Pronto para dominar as pistas?
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
                 Junte-se a milhares de pilotos que já estão usando o Apex Engineer 
@@ -301,7 +325,7 @@ export default function Landing() {
               </p>
               <Link to="/auth">
                 <Button size="lg" className="text-lg px-10 py-6 shadow-racing">
-                  Criar Conta Gratuita
+                  Criar conta gratuita
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -326,6 +350,9 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+
+      {/* Demo Dialog */}
+      <DemoDialog open={demoOpen} onOpenChange={setDemoOpen} />
     </div>
   );
 }
