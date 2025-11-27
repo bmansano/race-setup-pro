@@ -1,4 +1,4 @@
-import { User, Gamepad2, Settings, Menu, LogOut } from "lucide-react";
+import { User, Gamepad2, Settings, Menu, LogOut, Home } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState, useEffect } from "react";
@@ -37,7 +37,7 @@ export function Navigation() {
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-card/80 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link to="/simulators" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Settings className="h-5 w-5 text-primary-foreground" />
             </div>
@@ -45,6 +45,14 @@ export function Navigation() {
           </Link>
           
           <div className="hidden md:flex items-center gap-1">
+            <NavLink
+              to="/"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+              activeClassName="text-foreground bg-muted"
+            >
+              <Home className="h-4 w-4 inline mr-2" />
+              Início
+            </NavLink>
             <NavLink
               to="/simulators"
               end
@@ -85,6 +93,15 @@ export function Navigation() {
             <SheetContent side="right" className="w-64">
               <nav className="flex flex-col gap-2 mt-8">
                 <NavLink
+                  to="/"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+                  activeClassName="text-foreground bg-muted"
+                >
+                  <Home className="h-4 w-4 inline mr-2" />
+                  Início
+                </NavLink>
+                <NavLink
                   to="/simulators"
                   end
                   onClick={() => setOpen(false)}
@@ -103,7 +120,7 @@ export function Navigation() {
                   <User className="h-4 w-4 inline mr-2" />
                   Perfil
                 </NavLink>
-                <Button 
+                <Button
                   variant="ghost" 
                   className="justify-start px-4 py-3"
                   onClick={() => {
