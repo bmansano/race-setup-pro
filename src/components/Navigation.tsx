@@ -30,7 +30,7 @@ export function Navigation() {
       title: "Logout realizado",
       description: "Até breve!",
     });
-    navigate("/auth");
+    navigate("/");
   };
 
   return (
@@ -46,7 +46,7 @@ export function Navigation() {
           
           <div className="hidden md:flex items-center gap-1">
             <NavLink
-              to="/"
+              to="/simulators"
               end
               className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
               activeClassName="text-foreground bg-muted"
@@ -85,7 +85,7 @@ export function Navigation() {
             <SheetContent side="right" className="w-64">
               <nav className="flex flex-col gap-2 mt-8">
                 <NavLink
-                  to="/"
+                  to="/simulators"
                   end
                   onClick={() => setOpen(false)}
                   className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
