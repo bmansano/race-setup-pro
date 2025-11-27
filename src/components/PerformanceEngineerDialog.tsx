@@ -140,59 +140,61 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 px-6 h-[calc(85vh-220px)]">
-          {messages.length === 0 && isLoading ? (
-            <div className="flex flex-col items-center justify-center h-64 gap-4">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-muted-foreground text-center">
-                Analisando setup e gerando sugestão inicial...
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4 pb-4">
-              {messages.map((message, index) => (
-                <div key={index} className="space-y-2">
-                  <div
-                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
+        <div className="flex-1 min-h-0 px-6 overflow-hidden">
+          <ScrollArea className="h-full max-h-[50vh]">
+            {messages.length === 0 && isLoading ? (
+              <div className="flex flex-col items-center justify-center h-64 gap-4">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="text-muted-foreground text-center">
+                  Analisando setup e gerando sugestão inicial...
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4 py-4 pr-4">
+                {messages.map((message, index) => (
+                  <div key={index} className="space-y-2">
                     <div
-                      className={`max-w-[80%] rounded-lg p-4 ${
-                        message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
-                      }`}
+                      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      <p className="text-sm whitespace-pre-line leading-relaxed">{message.content}</p>
-                    </div>
-                  </div>
-                  {message.role === "assistant" && message.suggestedChanges && onApplySuggestions && (
-                    <div className="flex justify-start">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          onApplySuggestions(message.suggestedChanges);
-                          sonnerToast.success("Sugestões aplicadas ao setup");
-                        }}
-                        className="ml-2"
+                      <div
+                        className={`max-w-[80%] rounded-lg p-4 ${
+                          message.role === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
+                        }`}
                       >
-                        <CheckCircle className="mr-2 h-4 w-4" />
-                        Aplicar Sugestões
-                      </Button>
+                        <p className="text-sm whitespace-pre-line leading-relaxed">{message.content}</p>
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
-              {isLoading && (
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-lg p-4">
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {message.role === "assistant" && message.suggestedChanges && onApplySuggestions && (
+                      <div className="flex justify-start">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            onApplySuggestions(message.suggestedChanges);
+                            sonnerToast.success("Sugestões aplicadas ao setup");
+                          }}
+                          className="ml-2"
+                        >
+                          <CheckCircle className="mr-2 h-4 w-4" />
+                          Aplicar Sugestões
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
-            </div>
-          )}
-        </ScrollArea>
+                ))}
+                {isLoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted rounded-lg p-4">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </ScrollArea>
+        </div>
 
         <div className="flex gap-2 p-6 border-t">
           <Textarea
