@@ -1,13 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft, Settings } from "lucide-react";
 
 export default function Auth() {
   const navigate = useNavigate();
@@ -16,6 +17,19 @@ export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetSent, setResetSent] = useState(false);
+
+  // Load remembered email on mount
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem("apex_remembered_email");
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +43,18 @@ export default function Auth() {
           data: {
             name,
           },
+          emailRedirectTo: `${window.location.origin}/`,
         },
       });
 
       if (error) throw error;
+
+      // Handle remember me
+      if (rememberMe) {
+        localStorage.setItem("apex_remembered_email", email);
+      } else {
+        localStorage.removeItem("apex_remembered_email");
+      }
 
       toast({
         title: "Conta criada!",
@@ -63,6 +85,13 @@ export default function Auth() {
 
       if (error) throw error;
 
+      // Handle remember me
+      if (rememberMe) {
+        localStorage.setItem("apex_remembered_email", email);
+      } else {
+        localStorage.removeItem("apex_remembered_email");
+      }
+
       toast({
         title: "Login realizado!",
         description: "Bem-vindo de volta.",
@@ -80,10 +109,136 @@ export default function Auth() {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!resetEmail.trim()) {
+      toast({
+        title: "Email necessário",
+        description: "Por favor, insira seu email para redefinir a senha.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/auth?reset=true`,
+      });
+
+      if (error) throw error;
+
+      setResetSent(true);
+      toast({
+        title: "Email enviado!",
+        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar email",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Forgot Password View
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted">
+        <Card className="w-full max-w-md">
+          <CardHeader className="space-y-1">
+            <div className="flex items-center gap-2 mb-4">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => {
+                  setShowForgotPassword(false);
+                  setResetSent(false);
+                  setResetEmail("");
+                }}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <span className="text-sm text-muted-foreground">Voltar ao login</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                <Settings className="h-6 w-6 text-primary-foreground" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl font-bold text-center">Recuperar Senha</CardTitle>
+            <CardDescription className="text-center">
+              {resetSent 
+                ? "Email enviado com sucesso!" 
+                : "Insira seu email para receber o link de redefinição"
+              }
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {resetSent ? (
+              <div className="space-y-4 text-center">
+                <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+                  <p className="text-sm text-green-600 dark:text-green-400">
+                    Enviamos um email para <strong>{resetEmail}</strong> com instruções para redefinir sua senha.
+                  </p>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Não recebeu o email? Verifique sua pasta de spam ou tente novamente.
+                </p>
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => setResetSent(false)}
+                >
+                  Tentar novamente
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgotPassword} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="reset-email">Email</Label>
+                  <Input
+                    id="reset-email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : (
+                    "Enviar Link de Redefinição"
+                  )}
+                </Button>
+              </form>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
+          <Link to="/landing" className="flex items-center justify-center gap-2 mb-2 hover:opacity-80 transition-opacity">
+            <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <Settings className="h-6 w-6 text-primary-foreground" />
+            </div>
+          </Link>
           <CardTitle className="text-2xl font-bold text-center">Apex Engineer</CardTitle>
           <CardDescription className="text-center">
             Seu engenheiro de performance virtual
@@ -122,6 +277,34 @@ export default function Auth() {
                     disabled={isLoading}
                   />
                 </div>
+                
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="remember-me" 
+                      checked={rememberMe}
+                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                    />
+                    <Label 
+                      htmlFor="remember-me" 
+                      className="text-sm font-normal text-muted-foreground cursor-pointer"
+                    >
+                      Lembrar meus dados
+                    </Label>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="link"
+                    className="px-0 text-sm text-primary"
+                    onClick={() => {
+                      setShowForgotPassword(true);
+                      setResetEmail(email);
+                    }}
+                  >
+                    Esqueci minha senha
+                  </Button>
+                </div>
+
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
@@ -174,6 +357,21 @@ export default function Auth() {
                     minLength={6}
                   />
                 </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="remember-me-signup" 
+                    checked={rememberMe}
+                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                  />
+                  <Label 
+                    htmlFor="remember-me-signup" 
+                    className="text-sm font-normal text-muted-foreground cursor-pointer"
+                  >
+                    Lembrar meus dados
+                  </Label>
+                </div>
+
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
