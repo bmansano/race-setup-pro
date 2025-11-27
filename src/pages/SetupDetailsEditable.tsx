@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { SetupVersionHistory } from "@/components/SetupVersionHistory";
 import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
 import { useState, useEffect } from "react";
-import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Trash2, ImagePlus } from "lucide-react";
 import { getSimulatorFields } from "@/data/simulator-fields";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -30,6 +30,7 @@ export default function SetupDetailsEditable() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [setupName, setSetupName] = useState("");
   const [carImageUrl, setCarImageUrl] = useState<string | null>(null);
   
@@ -168,6 +169,40 @@ export default function SetupDetailsEditable() {
     });
   };
 
+  const handleGenerateImage = async () => {
+    if (!setupData) return;
+    
+    setIsGeneratingImage(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-car-image', {
+        body: { 
+          car: setupData.car,
+          simulator: setupData.simulator,
+          condition: setupData.condition
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.imageUrl) {
+        const { error: updateError } = await supabase
+          .from('setups')
+          .update({ car_image_url: data.imageUrl })
+          .eq('id', id);
+
+        if (updateError) throw updateError;
+
+        setCarImageUrl(data.imageUrl);
+        toast.success("Imagem do carro gerada com sucesso!");
+      }
+    } catch (error) {
+      console.error('Erro ao gerar imagem:', error);
+      toast.error("Erro ao gerar imagem do carro");
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="container max-w-6xl py-8">
@@ -217,6 +252,15 @@ export default function SetupDetailsEditable() {
           <Button variant="secondary" onClick={() => setEngineerDialogOpen(true)} className="gap-2">
             <Sparkles className="h-4 w-4" />
             Engenheiro de Performance
+          </Button>
+          <Button 
+            variant="outline" 
+            onClick={handleGenerateImage}
+            disabled={isGeneratingImage}
+            className="gap-2"
+          >
+            <ImagePlus className="h-4 w-4" />
+            {isGeneratingImage ? "Gerando..." : "Gerar Imagem"}
           </Button>
           <Button onClick={handleSave} className="gap-2 shadow-racing">
             <Save className="h-4 w-4" />
