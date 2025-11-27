@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { simulatorData } from "@/data/racing-data";
 import { getSimulatorFields } from "@/data/simulator-fields";
+import { getBaselineSetup } from "@/data/baseline-setups";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
@@ -46,9 +47,56 @@ export function AddSetupDialog() {
   const availableCars = selectedSimulator ? simulatorData[selectedSimulator]?.cars || [] : [];
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
 
-  // Atualiza a configuração quando o simulador muda
+  // Atualiza a configuração quando o simulador muda ou quando todos os campos necessários são preenchidos
   useEffect(() => {
-    if (formData.simulator) {
+    if (formData.simulator && formData.car && formData.track && formData.condition) {
+      // Busca o baseline setup baseado no simulador, carro, pista e condição
+      const baselineSetup = getBaselineSetup(
+        formData.simulator,
+        formData.car,
+        formData.track,
+        formData.condition
+      );
+
+      const newConfig: Record<string, Record<string, string>> = {
+        aero: {},
+        suspension: {},
+        tires: {},
+        brakes: {},
+        differential: {},
+      };
+
+      // Preenche com valores do baseline
+      if (baselineSetup.aero) {
+        Object.entries(baselineSetup.aero).forEach(([key, value]) => {
+          if (value) newConfig.aero[key] = value;
+        });
+      }
+      if (baselineSetup.suspension) {
+        Object.entries(baselineSetup.suspension).forEach(([key, value]) => {
+          if (value) newConfig.suspension[key] = value;
+        });
+      }
+      if (baselineSetup.tires) {
+        Object.entries(baselineSetup.tires).forEach(([key, value]) => {
+          if (value) newConfig.tires[key] = value;
+        });
+      }
+      if (baselineSetup.brake) {
+        Object.entries(baselineSetup.brake).forEach(([key, value]) => {
+          if (value) newConfig.brakes[key] = value;
+        });
+      }
+      if (baselineSetup.differential) {
+        Object.entries(baselineSetup.differential).forEach(([key, value]) => {
+          if (value) newConfig.differential[key] = value;
+        });
+      }
+
+      setConfiguration(newConfig);
+      toast.success("Configuração base carregada automaticamente!");
+    } else if (formData.simulator) {
+      // Se apenas o simulador foi selecionado, inicializa campos vazios
       const fields = getSimulatorFields(formData.simulator);
       const newConfig: Record<string, Record<string, string>> = {
         aero: {},
@@ -58,7 +106,6 @@ export function AddSetupDialog() {
         differential: {},
       };
 
-      // Inicializa todos os campos como strings vazias
       fields.aero.forEach(field => newConfig.aero[field.name] = "");
       fields.suspension.forEach(field => newConfig.suspension[field.name] = "");
       fields.tires.forEach(field => newConfig.tires[field.name] = "");
@@ -67,7 +114,7 @@ export function AddSetupDialog() {
 
       setConfiguration(newConfig);
     }
-  }, [formData.simulator]);
+  }, [formData.simulator, formData.car, formData.track, formData.condition]);
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.simulator || !formData.car || !formData.track || !formData.condition) {
