@@ -20,9 +20,9 @@ const simulators = [
   "iRacing",
   "Automobilista 2",
   "Assetto Corsa EVO",
-  "Assetto Corsa",
   "Assetto Corsa Competizione",
   "RaceRoom Racing Experience",
+  "Le Mans Ultimate",
 ];
 
 interface Setup {
@@ -159,8 +159,8 @@ export default function Simulators() {
             const setupImage = setup.car_image_url 
               ? setup.car_image_url
               : setup.car.includes("Camry") 
-                ? (setup.condition === "Pista Molhada" ? nascarWet : nascarDry)
-                : (setup.condition === "Pista Molhada" ? car2 : car1);
+                ? (setup.condition === "wet" ? nascarWet : nascarDry)
+                : (setup.condition === "wet" ? car2 : car1);
             
             return (
             <Card
@@ -176,10 +176,10 @@ export default function Simulators() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <Badge
-                  variant={setup.condition === "Pista Molhada" ? "secondary" : "default"}
+                  variant={setup.condition === "wet" ? "secondary" : "default"}
                   className="absolute top-3 right-3"
                 >
-                  {setup.condition === "Pista Molhada" ? (
+                  {setup.condition === "wet" ? (
                     <>
                       <Cloud className="h-3 w-3 mr-1" />
                       Molhada

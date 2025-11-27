@@ -81,6 +81,7 @@ export default function SetupDetailsEditable() {
         .from("setups")
         .update({
           name: setupName,
+          condition: setupData.condition,
           track_temp: setupData.trackTemp,
           lap_time: setupData.lapTime,
           comment: comment,
@@ -261,6 +262,17 @@ export default function SetupDetailsEditable() {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Categoria:</span>
               <span className="font-medium">{setupData.category}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground">Condição da Pista:</span>
+              <select
+                value={setupData.condition}
+                onChange={(e) => setSetupData({ ...setupData, condition: e.target.value })}
+                className="h-7 px-2 border rounded text-sm bg-background"
+              >
+                <option value="dry">Pista Seca</option>
+                <option value="wet">Pista Molhada</option>
+              </select>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Temperatura Pista:</span>
