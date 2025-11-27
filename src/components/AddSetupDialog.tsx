@@ -23,10 +23,23 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { simulatorData } from "@/data/racing-data";
-import { getSimulatorFields } from "@/data/simulator-fields";
+import { getSimulatorFields, getAvailableCategories } from "@/data/simulator-fields";
 import { getBaselineSetup } from "@/data/baseline-setups";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+
+// Lista de todos os simuladores suportados
+const SIMULATORS = [
+  "iRacing",
+  "Automobilista 2",
+  "Assetto Corsa Competizione",
+  "Assetto Corsa EVO",
+  "Assetto Corsa",
+  "Assetto Corsa Rally",
+  "RaceRoom Racing Experience",
+  "Le Mans Ultimate",
+  "Project Motor Racing",
+];
 
 export function AddSetupDialog() {
   const navigate = useNavigate();
@@ -46,6 +59,7 @@ export function AddSetupDialog() {
   const selectedSimulator = formData.simulator;
   const availableCars = selectedSimulator ? simulatorData[selectedSimulator]?.cars || [] : [];
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
+  const availableCategories = selectedSimulator ? getAvailableCategories(selectedSimulator) : [];
 
   // Atualiza a configuração quando o simulador muda ou quando todos os campos necessários são preenchidos
   useEffect(() => {
@@ -64,6 +78,8 @@ export function AddSetupDialog() {
         tires: {},
         brakes: {},
         differential: {},
+        electronics: {},
+        drivetrain: {},
       };
 
       // Preenche com valores do baseline
@@ -104,6 +120,8 @@ export function AddSetupDialog() {
         tires: {},
         brakes: {},
         differential: {},
+        electronics: {},
+        drivetrain: {},
       };
 
       fields.aero.forEach(field => newConfig.aero[field.name] = "");
@@ -111,6 +129,12 @@ export function AddSetupDialog() {
       fields.tires.forEach(field => newConfig.tires[field.name] = "");
       fields.brakes.forEach(field => newConfig.brakes[field.name] = "");
       fields.differential.forEach(field => newConfig.differential[field.name] = "");
+      if (fields.electronics) {
+        fields.electronics.forEach(field => newConfig.electronics[field.name] = "");
+      }
+      if (fields.drivetrain) {
+        fields.drivetrain.forEach(field => newConfig.drivetrain[field.name] = "");
+      }
 
       setConfiguration(newConfig);
     }
@@ -185,6 +209,37 @@ export function AddSetupDialog() {
     }
   };
 
+  const renderCategoryTab = (categoryKey: string, categoryLabel: string) => {
+    const fields = getSimulatorFields(formData.simulator);
+    const categoryFields = fields[categoryKey as keyof typeof fields];
+    
+    if (!categoryFields || !Array.isArray(categoryFields) || categoryFields.length === 0) {
+      return null;
+    }
+
+    return (
+      <TabsContent value={categoryKey} className="space-y-4">
+        <Card className="p-4">
+          <div className="grid grid-cols-2 gap-4">
+            {categoryFields.map((field) => (
+              <div key={field.name}>
+                <Label htmlFor={field.name}>{field.label}</Label>
+                <Input
+                  id={field.name}
+                  value={configuration[categoryKey]?.[field.name] || ""}
+                  onChange={(e) => setConfiguration({
+                    ...configuration,
+                    [categoryKey]: { ...configuration[categoryKey], [field.name]: e.target.value }
+                  })}
+                />
+              </div>
+            ))}
+          </div>
+        </Card>
+      </TabsContent>
+    );
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -225,12 +280,9 @@ export function AddSetupDialog() {
                   <SelectValue placeholder="Selecione o simulador" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="iRacing">iRacing</SelectItem>
-                  <SelectItem value="Automobilista 2">Automobilista 2</SelectItem>
-                  <SelectItem value="Assetto Corsa EVO">Assetto Corsa EVO</SelectItem>
-                  <SelectItem value="Assetto Corsa Competizione">Assetto Corsa Competizione</SelectItem>
-                  <SelectItem value="RaceRoom Racing Experience">RaceRoom Racing Experience</SelectItem>
-                  <SelectItem value="Le Mans Ultimate">Le Mans Ultimate</SelectItem>
+                  {SIMULATORS.map((sim) => (
+                    <SelectItem key={sim} value={sim}>{sim}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -291,125 +343,37 @@ export function AddSetupDialog() {
               </Select>
             </div>
 
-            <Tabs defaultValue="aero" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
-                <TabsTrigger value="aero">Aero</TabsTrigger>
-                <TabsTrigger value="suspension">Suspension</TabsTrigger>
-                <TabsTrigger value="tires">Tires</TabsTrigger>
-                <TabsTrigger value="brakes">Brakes</TabsTrigger>
-                <TabsTrigger value="differential">Differential</TabsTrigger>
-              </TabsList>
-              
-              {!formData.simulator && (
-                <div className="text-center py-8 text-muted-foreground">
-                  Selecione um simulador para ver os campos disponíveis
-                </div>
-              )}
+            {!formData.simulator && (
+              <div className="text-center py-8 text-muted-foreground">
+                Selecione um simulador para ver os campos disponíveis
+              </div>
+            )}
 
-              {formData.simulator && (
-                <>
-                  <TabsContent value="aero" className="space-y-4">
-                    <Card className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {getSimulatorFields(formData.simulator).aero.map((field) => (
-                          <div key={field.name}>
-                            <Label htmlFor={field.name}>{field.label}</Label>
-                            <Input
-                              id={field.name}
-                              value={configuration.aero?.[field.name] || ""}
-                              onChange={(e) => setConfiguration({
-                                ...configuration,
-                                aero: { ...configuration.aero, [field.name]: e.target.value }
-                              })}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  </TabsContent>
+            {formData.simulator && (
+              <Tabs defaultValue="aero" className="w-full">
+                <TabsList className={`grid w-full ${availableCategories.length <= 5 ? 'grid-cols-5' : 'grid-cols-7'}`}>
+                  <TabsTrigger value="aero">Aero</TabsTrigger>
+                  <TabsTrigger value="suspension">Suspensão</TabsTrigger>
+                  <TabsTrigger value="tires">Pneus</TabsTrigger>
+                  <TabsTrigger value="brakes">Freios</TabsTrigger>
+                  <TabsTrigger value="differential">Diferencial</TabsTrigger>
+                  {availableCategories.includes('electronics') && (
+                    <TabsTrigger value="electronics">Eletrônica</TabsTrigger>
+                  )}
+                  {availableCategories.includes('drivetrain') && (
+                    <TabsTrigger value="drivetrain">Transmissão</TabsTrigger>
+                  )}
+                </TabsList>
 
-                  <TabsContent value="suspension" className="space-y-4">
-                    <Card className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {getSimulatorFields(formData.simulator).suspension.map((field) => (
-                          <div key={field.name}>
-                            <Label htmlFor={field.name}>{field.label}</Label>
-                            <Input
-                              id={field.name}
-                              value={configuration.suspension?.[field.name] || ""}
-                              onChange={(e) => setConfiguration({
-                                ...configuration,
-                                suspension: { ...configuration.suspension, [field.name]: e.target.value }
-                              })}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="tires" className="space-y-4">
-                    <Card className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {getSimulatorFields(formData.simulator).tires.map((field) => (
-                          <div key={field.name}>
-                            <Label htmlFor={field.name}>{field.label}</Label>
-                            <Input
-                              id={field.name}
-                              value={configuration.tires?.[field.name] || ""}
-                              onChange={(e) => setConfiguration({
-                                ...configuration,
-                                tires: { ...configuration.tires, [field.name]: e.target.value }
-                              })}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="brakes" className="space-y-4">
-                    <Card className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {getSimulatorFields(formData.simulator).brakes.map((field) => (
-                          <div key={field.name}>
-                            <Label htmlFor={field.name}>{field.label}</Label>
-                            <Input
-                              id={field.name}
-                              value={configuration.brakes?.[field.name] || ""}
-                              onChange={(e) => setConfiguration({
-                                ...configuration,
-                                brakes: { ...configuration.brakes, [field.name]: e.target.value }
-                              })}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  </TabsContent>
-
-                  <TabsContent value="differential" className="space-y-4">
-                    <Card className="p-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        {getSimulatorFields(formData.simulator).differential.map((field) => (
-                          <div key={field.name}>
-                            <Label htmlFor={field.name}>{field.label}</Label>
-                            <Input
-                              id={field.name}
-                              value={configuration.differential?.[field.name] || ""}
-                              onChange={(e) => setConfiguration({
-                                ...configuration,
-                                differential: { ...configuration.differential, [field.name]: e.target.value }
-                              })}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </Card>
-                  </TabsContent>
-                </>
-              )}
-            </Tabs>
+                {renderCategoryTab('aero', 'Aero')}
+                {renderCategoryTab('suspension', 'Suspensão')}
+                {renderCategoryTab('tires', 'Pneus')}
+                {renderCategoryTab('brakes', 'Freios')}
+                {renderCategoryTab('differential', 'Diferencial')}
+                {availableCategories.includes('electronics') && renderCategoryTab('electronics', 'Eletrônica')}
+                {availableCategories.includes('drivetrain') && renderCategoryTab('drivetrain', 'Transmissão')}
+              </Tabs>
+            )}
           </div>
         </ScrollArea>
 
