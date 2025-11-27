@@ -266,21 +266,41 @@ export function AddSetupDialog() {
         return;
       }
 
-      // Generate car image using AI
-      toast.loading("Gerando imagem do carro...", { id: "car-image" });
-      const { data: imageData, error: imageError } = await supabase.functions.invoke("generate-car-image", {
-        body: {
-          car: formData.car,
-          simulator: formData.simulator,
-          condition: formData.condition,
-        },
-      });
+      let carImageUrl: string | null = null;
 
-      if (imageError) {
-        console.error("Error generating car image:", imageError);
-        toast.error("Erro ao gerar imagem do carro, mas o setup será criado", { id: "car-image" });
+      // Check if there's an existing setup with the same car and simulator
+      const { data: existingSetup } = await supabase
+        .from("setups")
+        .select("car_image_url")
+        .eq("user_id", user.id)
+        .eq("car", formData.car)
+        .eq("simulator", formData.simulator)
+        .not("car_image_url", "is", null)
+        .limit(1)
+        .maybeSingle();
+
+      if (existingSetup?.car_image_url) {
+        // Reuse existing car image
+        carImageUrl = existingSetup.car_image_url;
+        toast.success("Imagem do carro reutilizada de setup existente!", { id: "car-image" });
       } else {
-        toast.success("Imagem do carro gerada!", { id: "car-image" });
+        // Generate new car image using AI
+        toast.loading("Gerando imagem do carro...", { id: "car-image" });
+        const { data: imageData, error: imageError } = await supabase.functions.invoke("generate-car-image", {
+          body: {
+            car: formData.car,
+            simulator: formData.simulator,
+            condition: formData.condition,
+          },
+        });
+
+        if (imageError) {
+          console.error("Error generating car image:", imageError);
+          toast.error("Erro ao gerar imagem do carro, mas o setup será criado", { id: "car-image" });
+        } else {
+          carImageUrl = imageData?.imageUrl || null;
+          toast.success("Imagem do carro gerada!", { id: "car-image" });
+        }
       }
 
       // Get car category from the selected car
@@ -298,7 +318,7 @@ export function AddSetupDialog() {
           condition: formData.condition,
           configuration: configuration,
           user_id: user.id,
-          car_image_url: imageData?.imageUrl || null,
+          car_image_url: carImageUrl,
         })
         .select()
         .single();
