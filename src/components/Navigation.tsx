@@ -1,11 +1,11 @@
-import { User, Gamepad2, Settings, Menu, LogOut } from "lucide-react";
+import { User, Gamepad2, Settings, Menu, LogOut, Home } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 
 export function Navigation() {
@@ -37,14 +37,22 @@ export function Navigation() {
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-card/80 backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2">
+          <Link to="/landing" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Settings className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold tracking-tight">RaceSetup</span>
-          </div>
+            <span className="text-xl font-bold tracking-tight">Apex Engineer</span>
+          </Link>
           
           <div className="hidden md:flex items-center gap-1">
+            <NavLink
+              to="/landing"
+              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+              activeClassName="text-foreground bg-muted"
+            >
+              <Home className="h-4 w-4 inline mr-2" />
+              Início
+            </NavLink>
             <NavLink
               to="/"
               end
@@ -84,6 +92,15 @@ export function Navigation() {
             </SheetTrigger>
             <SheetContent side="right" className="w-64">
               <nav className="flex flex-col gap-2 mt-8">
+                <NavLink
+                  to="/landing"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+                  activeClassName="text-foreground bg-muted"
+                >
+                  <Home className="h-4 w-4 inline mr-2" />
+                  Início
+                </NavLink>
                 <NavLink
                   to="/"
                   end

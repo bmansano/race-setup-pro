@@ -84,9 +84,9 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">RaceSetup</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">Apex Engineer</CardTitle>
           <CardDescription className="text-center">
-            Gerencie suas configurações de corrida
+            Seu engenheiro de performance virtual
           </CardDescription>
         </CardHeader>
         <CardContent>
