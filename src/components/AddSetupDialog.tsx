@@ -23,7 +23,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { simulatorData } from "@/data/racing-data";
-import { getBaselineSetup } from "@/data/baseline-setups";
+import { getSimulatorFields } from "@/data/simulator-fields";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
@@ -39,125 +39,35 @@ export function AddSetupDialog() {
     condition: "",
   });
 
-  // State for all configuration fields
-  const [configuration, setConfiguration] = useState({
-    aero: {
-      frontWing: "",
-      rearWing: "",
-      diffuserHeight: "",
-      rake: "",
-      frontSplitter: "",
-      gurneyFlap: "",
-    },
-    suspension: {
-      frontSpring: "",
-      rearSpring: "",
-      frontBumpDamper: "",
-      rearBumpDamper: "",
-      frontReboundDamper: "",
-      rearReboundDamper: "",
-      frontAntiRollBar: "",
-      rearAntiRollBar: "",
-      frontRideHeight: "",
-      rearRideHeight: "",
-      frontCamber: "",
-      rearCamber: "",
-      frontToe: "",
-      rearToe: "",
-      caster: "",
-    },
-    tires: {
-      frontLeftPressure: "",
-      frontRightPressure: "",
-      rearLeftPressure: "",
-      rearRightPressure: "",
-      frontCompound: "",
-      rearCompound: "",
-    },
-    brakes: {
-      bias: "",
-      pressure: "",
-      frontDisc: "",
-      rearDisc: "",
-      frontPads: "",
-      rearPads: "",
-    },
-    differential: {
-      preload: "",
-      power: "",
-      coast: "",
-      finalRatio: "",
-    },
-  });
+  // Configuração dinâmica baseada no simulador selecionado
+  const [configuration, setConfiguration] = useState<Record<string, Record<string, string>>>({});
 
   const selectedSimulator = formData.simulator;
   const availableCars = selectedSimulator ? simulatorData[selectedSimulator]?.cars || [] : [];
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
 
-  // Auto-load baseline setup when all required fields are selected
+  // Atualiza a configuração quando o simulador muda
   useEffect(() => {
-    if (formData.simulator && formData.car && formData.track && formData.condition) {
-      const baseline = getBaselineSetup(
-        formData.simulator,
-        formData.car,
-        formData.track,
-        formData.condition
-      );
-      
-      // Apply baseline values to configuration
-      setConfiguration({
-        aero: {
-          frontWing: baseline.aero.frontWing || "",
-          rearWing: baseline.aero.rearWing || "",
-          diffuserHeight: baseline.aero.diffuserHeight || "",
-          rake: baseline.aero.rake || "",
-          frontSplitter: baseline.aero.frontSplitter || "",
-          gurneyFlap: baseline.aero.gurneyFlap || "",
-        },
-        suspension: {
-          frontSpring: baseline.suspension.frontSpring || "",
-          rearSpring: baseline.suspension.rearSpring || "",
-          frontBumpDamper: baseline.suspension.frontBump || "",
-          rearBumpDamper: baseline.suspension.rearBump || "",
-          frontReboundDamper: baseline.suspension.frontRebound || "",
-          rearReboundDamper: baseline.suspension.rearRebound || "",
-          frontAntiRollBar: baseline.suspension.frontARB || "",
-          rearAntiRollBar: baseline.suspension.rearARB || "",
-          frontRideHeight: baseline.suspension.frontHeight || "",
-          rearRideHeight: baseline.suspension.rearHeight || "",
-          frontCamber: baseline.suspension.frontCamber || "",
-          rearCamber: baseline.suspension.rearCamber || "",
-          frontToe: baseline.suspension.frontToe || "",
-          rearToe: baseline.suspension.rearToe || "",
-          caster: baseline.suspension.caster || "",
-        },
-        tires: {
-          frontLeftPressure: baseline.tires.frontLeftPressure || "",
-          frontRightPressure: baseline.tires.frontRightPressure || "",
-          rearLeftPressure: baseline.tires.rearLeftPressure || "",
-          rearRightPressure: baseline.tires.rearRightPressure || "",
-          frontCompound: baseline.tires.frontCompound || "",
-          rearCompound: baseline.tires.rearCompound || "",
-        },
-        brakes: {
-          bias: baseline.brake.bias || "",
-          pressure: baseline.brake.systemPressure || "",
-          frontDisc: baseline.brake.frontDisc || "",
-          rearDisc: baseline.brake.rearDisc || "",
-          frontPads: baseline.brake.frontPads || "",
-          rearPads: baseline.brake.rearPads || "",
-        },
-        differential: {
-          preload: baseline.differential.preload || "",
-          power: baseline.differential.power || "",
-          coast: baseline.differential.coast || "",
-          finalRatio: baseline.differential.finalRatio || "",
-        },
-      });
-      
-      toast.success("Setup baseline carregado automaticamente!");
+    if (formData.simulator) {
+      const fields = getSimulatorFields(formData.simulator);
+      const newConfig: Record<string, Record<string, string>> = {
+        aero: {},
+        suspension: {},
+        tires: {},
+        brakes: {},
+        differential: {},
+      };
+
+      // Inicializa todos os campos como strings vazias
+      fields.aero.forEach(field => newConfig.aero[field.name] = "");
+      fields.suspension.forEach(field => newConfig.suspension[field.name] = "");
+      fields.tires.forEach(field => newConfig.tires[field.name] = "");
+      fields.brakes.forEach(field => newConfig.brakes[field.name] = "");
+      fields.differential.forEach(field => newConfig.differential[field.name] = "");
+
+      setConfiguration(newConfig);
     }
-  }, [formData.simulator, formData.car, formData.track, formData.condition]);
+  }, [formData.simulator]);
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.simulator || !formData.car || !formData.track || !formData.condition) {
@@ -271,9 +181,9 @@ export function AddSetupDialog() {
                   <SelectItem value="iRacing">iRacing</SelectItem>
                   <SelectItem value="Automobilista 2">Automobilista 2</SelectItem>
                   <SelectItem value="Assetto Corsa EVO">Assetto Corsa EVO</SelectItem>
-                  <SelectItem value="Assetto Corsa">Assetto Corsa</SelectItem>
                   <SelectItem value="Assetto Corsa Competizione">Assetto Corsa Competizione</SelectItem>
                   <SelectItem value="RaceRoom Racing Experience">RaceRoom Racing Experience</SelectItem>
+                  <SelectItem value="Le Mans Ultimate">Le Mans Ultimate</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -337,256 +247,130 @@ export function AddSetupDialog() {
             <Tabs defaultValue="aero" className="w-full">
               <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="aero">Aero</TabsTrigger>
-                <TabsTrigger value="suspension">Suspensão</TabsTrigger>
-                <TabsTrigger value="tires">Pneus</TabsTrigger>
-                <TabsTrigger value="brake">Freios</TabsTrigger>
-                <TabsTrigger value="diff">Diferencial</TabsTrigger>
+                <TabsTrigger value="suspension">Suspension</TabsTrigger>
+                <TabsTrigger value="tires">Tires</TabsTrigger>
+                <TabsTrigger value="brakes">Brakes</TabsTrigger>
+                <TabsTrigger value="differential">Differential</TabsTrigger>
               </TabsList>
+              
+              {!formData.simulator && (
+                <div className="text-center py-8 text-muted-foreground">
+                  Selecione um simulador para ver os campos disponíveis
+                </div>
+              )}
 
-              <TabsContent value="aero">
-                <Card className="p-4">
-                  <h3 className="font-semibold mb-3">Configurações Aerodinâmicas</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Asa Dianteira</Label>
-                      <Input 
-                        type="number" 
-                        placeholder="Ex: 4"
-                        value={configuration.aero.frontWing}
-                        onChange={(e) => setConfiguration({
-                          ...configuration,
-                          aero: { ...configuration.aero, frontWing: e.target.value }
-                        })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Asa Traseira</Label>
-                      <Input 
-                        type="number" 
-                        placeholder="Ex: 7"
-                        value={configuration.aero.rearWing}
-                        onChange={(e) => setConfiguration({
-                          ...configuration,
-                          aero: { ...configuration.aero, rearWing: e.target.value }
-                        })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Altura do Diffuser</Label>
-                      <Input 
-                        type="text" 
-                        placeholder="Ex: 65mm"
-                        value={configuration.aero.diffuserHeight}
-                        onChange={(e) => setConfiguration({
-                          ...configuration,
-                          aero: { ...configuration.aero, diffuserHeight: e.target.value }
-                        })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Rake (Ângulo do Carro)</Label>
-                      <Input 
-                        type="text" 
-                        placeholder="Ex: +8mm"
-                        value={configuration.aero.rake}
-                        onChange={(e) => setConfiguration({
-                          ...configuration,
-                          aero: { ...configuration.aero, rake: e.target.value }
-                        })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Splitter Dianteiro</Label>
-                      <Input 
-                        type="number" 
-                        placeholder="Ex: 3"
-                        value={configuration.aero.frontSplitter}
-                        onChange={(e) => setConfiguration({
-                          ...configuration,
-                          aero: { ...configuration.aero, frontSplitter: e.target.value }
-                        })}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Gurney Flap</Label>
-                      <Input 
-                        type="text" 
-                        placeholder="Ex: Pequeno"
-                        value={configuration.aero.gurneyFlap}
-                        onChange={(e) => setConfiguration({
-                          ...configuration,
-                          aero: { ...configuration.aero, gurneyFlap: e.target.value }
-                        })}
-                      />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
+              {formData.simulator && (
+                <>
+                  <TabsContent value="aero" className="space-y-4">
+                    <Card className="p-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {getSimulatorFields(formData.simulator).aero.map((field) => (
+                          <div key={field.name}>
+                            <Label htmlFor={field.name}>{field.label}</Label>
+                            <Input
+                              id={field.name}
+                              value={configuration.aero?.[field.name] || ""}
+                              onChange={(e) => setConfiguration({
+                                ...configuration,
+                                aero: { ...configuration.aero, [field.name]: e.target.value }
+                              })}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </TabsContent>
 
-              <TabsContent value="suspension">
-                <Card className="p-4">
-                  <h3 className="font-semibold mb-3">Configurações de Suspensão</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Mola Dianteira</Label>
-                      <Input type="text" placeholder="Ex: 95,000 N/m" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Mola Traseira</Label>
-                      <Input type="text" placeholder="Ex: 88,000 N/m" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Amortecedor Diant. (Bump)</Label>
-                      <Input type="text" placeholder="Ex: 6 clicks" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Amortecedor Tras. (Bump)</Label>
-                      <Input type="text" placeholder="Ex: 5 clicks" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Amortecedor Diant. (Rebound)</Label>
-                      <Input type="text" placeholder="Ex: 8 clicks" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Amortecedor Tras. (Rebound)</Label>
-                      <Input type="text" placeholder="Ex: 7 clicks" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Barra Estabilizadora Diant.</Label>
-                      <Input type="text" placeholder="Ex: 3" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Barra Estabilizadora Tras.</Label>
-                      <Input type="text" placeholder="Ex: 2" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Altura Suspensão Diant.</Label>
-                      <Input type="text" placeholder="Ex: 55mm" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Altura Suspensão Tras.</Label>
-                      <Input type="text" placeholder="Ex: 60mm" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Camber Dianteiro</Label>
-                      <Input type="text" placeholder="Ex: -3.5°" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Camber Traseiro</Label>
-                      <Input type="text" placeholder="Ex: -2.8°" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Toe Dianteiro</Label>
-                      <Input type="text" placeholder="Ex: 0.05°" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Toe Traseiro</Label>
-                      <Input type="text" placeholder="Ex: 0.15°" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Caster</Label>
-                      <Input type="text" placeholder="Ex: 7.5°" />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
+                  <TabsContent value="suspension" className="space-y-4">
+                    <Card className="p-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {getSimulatorFields(formData.simulator).suspension.map((field) => (
+                          <div key={field.name}>
+                            <Label htmlFor={field.name}>{field.label}</Label>
+                            <Input
+                              id={field.name}
+                              value={configuration.suspension?.[field.name] || ""}
+                              onChange={(e) => setConfiguration({
+                                ...configuration,
+                                suspension: { ...configuration.suspension, [field.name]: e.target.value }
+                              })}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </TabsContent>
 
-              <TabsContent value="tires">
-                <Card className="p-4">
-                  <h3 className="font-semibold mb-3">Configurações de Pneus</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Pressão Diant. Esq.</Label>
-                      <Input type="text" placeholder="Ex: 27.8 PSI" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Pressão Diant. Dir.</Label>
-                      <Input type="text" placeholder="Ex: 27.8 PSI" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Pressão Tras. Esq.</Label>
-                      <Input type="text" placeholder="Ex: 26.5 PSI" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Pressão Tras. Dir.</Label>
-                      <Input type="text" placeholder="Ex: 26.5 PSI" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Composto Pneu Diant.</Label>
-                      <Input type="text" placeholder="Ex: Médio" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Composto Pneu Tras.</Label>
-                      <Input type="text" placeholder="Ex: Médio" />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
+                  <TabsContent value="tires" className="space-y-4">
+                    <Card className="p-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {getSimulatorFields(formData.simulator).tires.map((field) => (
+                          <div key={field.name}>
+                            <Label htmlFor={field.name}>{field.label}</Label>
+                            <Input
+                              id={field.name}
+                              value={configuration.tires?.[field.name] || ""}
+                              onChange={(e) => setConfiguration({
+                                ...configuration,
+                                tires: { ...configuration.tires, [field.name]: e.target.value }
+                              })}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </TabsContent>
 
-              <TabsContent value="brake">
-                <Card className="p-4">
-                  <h3 className="font-semibold mb-3">Configurações de Freios</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Bias (Balanço)</Label>
-                      <Input type="text" placeholder="Ex: 56.5%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Pressão do Sistema</Label>
-                      <Input type="text" placeholder="Ex: 85%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Disco Dianteiro</Label>
-                      <Input type="text" placeholder="Ex: 370mm" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Disco Traseiro</Label>
-                      <Input type="text" placeholder="Ex: 355mm" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Pastilhas Dianteiras</Label>
-                      <Input type="text" placeholder="Ex: Tipo 1" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Pastilhas Traseiras</Label>
-                      <Input type="text" placeholder="Ex: Tipo 2" />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
+                  <TabsContent value="brakes" className="space-y-4">
+                    <Card className="p-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {getSimulatorFields(formData.simulator).brakes.map((field) => (
+                          <div key={field.name}>
+                            <Label htmlFor={field.name}>{field.label}</Label>
+                            <Input
+                              id={field.name}
+                              value={configuration.brakes?.[field.name] || ""}
+                              onChange={(e) => setConfiguration({
+                                ...configuration,
+                                brakes: { ...configuration.brakes, [field.name]: e.target.value }
+                              })}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </TabsContent>
 
-              <TabsContent value="diff">
-                <Card className="p-4">
-                  <h3 className="font-semibold mb-3">Configurações do Diferencial</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-2">
-                      <Label>Preload</Label>
-                      <Input type="text" placeholder="Ex: 80 Nm" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Power (Aceleração)</Label>
-                      <Input type="text" placeholder="Ex: 65%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Coast (Desaceleração)</Label>
-                      <Input type="text" placeholder="Ex: 35%" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Relação Final</Label>
-                      <Input type="text" placeholder="Ex: 3.54" />
-                    </div>
-                  </div>
-                </Card>
-              </TabsContent>
+                  <TabsContent value="differential" className="space-y-4">
+                    <Card className="p-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {getSimulatorFields(formData.simulator).differential.map((field) => (
+                          <div key={field.name}>
+                            <Label htmlFor={field.name}>{field.label}</Label>
+                            <Input
+                              id={field.name}
+                              value={configuration.differential?.[field.name] || ""}
+                              onChange={(e) => setConfiguration({
+                                ...configuration,
+                                differential: { ...configuration.differential, [field.name]: e.target.value }
+                              })}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
+                  </TabsContent>
+                </>
+              )}
             </Tabs>
           </div>
         </ScrollArea>
 
-        <div className="flex gap-3 justify-end pt-4 border-t">
-          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+        <div className="flex justify-end gap-2 pt-4">
+          <Button variant="outline" onClick={() => setOpen(false)}>
             Cancelar
           </Button>
-          <Button onClick={handleSubmit} disabled={loading} className="shadow-racing">
+          <Button onClick={handleSubmit} disabled={loading}>
             {loading ? "Criando..." : "Criar Setup"}
           </Button>
         </div>

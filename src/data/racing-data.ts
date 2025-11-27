@@ -746,6 +746,54 @@ const raceroomTracks: Track[] = [
   { id: "raceroom-raceway", name: "RaceRoom Raceway", country: "Fictional" },
 ];
 
+// Le Mans Ultimate - Carros e pistas oficiais da WEC
+const leMansUltimateCars: Car[] = [
+  // Hypercar/LMH
+  { id: "ferrari-499p", name: "Ferrari 499P", category: "Hypercar" },
+  { id: "peugeot-9x8", name: "Peugeot 9X8", category: "Hypercar" },
+  { id: "toyota-gr010", name: "Toyota GR010 Hybrid", category: "Hypercar" },
+  { id: "porsche-963", name: "Porsche 963", category: "LMDh" },
+  { id: "cadillac-v-series", name: "Cadillac V-Series.R", category: "LMDh" },
+  { id: "bmw-m-hybrid", name: "BMW M Hybrid V8", category: "LMDh" },
+  { id: "alpine-a480", name: "Alpine A480 - Gibson", category: "LMP1" },
+  { id: "glickenhaus-007", name: "Glickenhaus 007 LMH", category: "Hypercar" },
+  { id: "vanwall-vandervell", name: "Vanwall Vandervell 680", category: "LMH" },
+  { id: "isotta-fraschini", name: "Isotta Fraschini Tipo6-C", category: "LMH" },
+  
+  // LMP2
+  { id: "oreca-07", name: "Oreca 07 - Gibson", category: "LMP2" },
+  { id: "ligier-jse-p2", name: "Ligier JS P2", category: "LMP2" },
+  { id: "dallara-p217", name: "Dallara P217 - Gibson", category: "LMP2" },
+  
+  // LMGTE Pro
+  { id: "ferrari-488-gte", name: "Ferrari 488 GTE Evo", category: "GTE" },
+  { id: "porsche-911-rsr", name: "Porsche 911 RSR-19", category: "GTE" },
+  { id: "corvette-c8r", name: "Chevrolet Corvette C8.R", category: "GTE" },
+  { id: "aston-vantage-gte", name: "Aston Martin Vantage GTE", category: "GTE" },
+  
+  // LMGTE Am
+  { id: "ferrari-488-gte-am", name: "Ferrari 488 GTE Am", category: "GTE" },
+  { id: "porsche-911-rsr-am", name: "Porsche 911 RSR Am", category: "GTE" },
+  { id: "aston-vantage-gte-am", name: "Aston Martin Vantage GTE Am", category: "GTE" },
+];
+
+const leMansUltimateTracks: Track[] = [
+  // WEC Calendar - Circuitos Oficiais
+  { id: "le-mans", name: "Circuit de la Sarthe (24 Heures du Mans)", country: "France" },
+  { id: "spa", name: "Circuit de Spa-Francorchamps (6 Hours)", country: "Belgium" },
+  { id: "monza", name: "Autodromo Nazionale Monza", country: "Italy" },
+  { id: "imola", name: "Autodromo Enzo e Dino Ferrari (Imola)", country: "Italy" },
+  { id: "portimao", name: "Autódromo Internacional do Algarve (Portimão)", country: "Portugal" },
+  { id: "sebring", name: "Sebring International Raceway (12 Hours)", country: "USA" },
+  { id: "cota", name: "Circuit of The Americas (COTA)", country: "USA" },
+  { id: "bahrain", name: "Bahrain International Circuit (8 Hours)", country: "Bahrain" },
+  { id: "fuji", name: "Fuji Speedway (6 Hours)", country: "Japan" },
+  { id: "shanghai", name: "Shanghai International Circuit", country: "China" },
+  { id: "paul-ricard", name: "Circuit Paul Ricard", country: "France" },
+  { id: "silverstone", name: "Silverstone Circuit", country: "United Kingdom" },
+  { id: "interlagos", name: "Autódromo José Carlos Pace (Interlagos)", country: "Brazil" },
+];
+
 export const simulatorData: Record<string, SimulatorData> = {
   "iRacing": {
     cars: iRacingCars,
@@ -759,10 +807,6 @@ export const simulatorData: Record<string, SimulatorData> = {
     cars: assettoConaEVOCars,
     tracks: assettoConaEVOTracks,
   },
-  "Assetto Corsa": {
-    cars: assettoCorsaCars,
-    tracks: assettoCorsaTracks,
-  },
   "Assetto Corsa Competizione": {
     cars: accCars,
     tracks: accTracks,
@@ -770,6 +814,10 @@ export const simulatorData: Record<string, SimulatorData> = {
   "RaceRoom Racing Experience": {
     cars: raceroomCars,
     tracks: raceroomTracks,
+  },
+  "Le Mans Ultimate": {
+    cars: leMansUltimateCars,
+    tracks: leMansUltimateTracks,
   },
 };
 
