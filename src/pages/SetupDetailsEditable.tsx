@@ -4,7 +4,7 @@ import { SetupVersionHistory } from "@/components/SetupVersionHistory";
 import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
 import { useState, useEffect } from "react";
 import { ArrowLeft, Save, Trash2, ImagePlus } from "lucide-react";
-import { getSimulatorFields } from "@/data/simulator-fields";
+import { getSimulatorFields, getAvailableCategories } from "@/data/simulator-fields";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -203,6 +203,36 @@ export default function SetupDetailsEditable() {
     }
   };
 
+  const renderCategoryTab = (categoryKey: string) => {
+    if (!setupData) return null;
+    
+    const fields = getSimulatorFields(setupData.simulator);
+    const categoryFields = fields[categoryKey as keyof typeof fields];
+    
+    if (!categoryFields || !Array.isArray(categoryFields) || categoryFields.length === 0) {
+      return null;
+    }
+
+    return (
+      <TabsContent value={categoryKey} className="space-y-4">
+        <Card className="p-6">
+          <div className="grid grid-cols-2 gap-4">
+            {categoryFields.map((field) => (
+              <div key={field.name}>
+                <Label htmlFor={field.name}>{field.label}</Label>
+                <Input
+                  id={field.name}
+                  value={(setupData.configuration[categoryKey] as Record<string, string>)?.[field.name] || ""}
+                  onChange={(e) => updateSetupData(categoryKey, field.name, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        </Card>
+      </TabsContent>
+    );
+  };
+
   if (loading) {
     return (
       <div className="container max-w-6xl py-8">
@@ -228,6 +258,11 @@ export default function SetupDetailsEditable() {
     : setupData.car.includes("Camry") 
       ? (setupData.condition === "wet" ? nascarWet : nascarDry)
       : (setupData.condition === "wet" ? car2 : car1);
+
+  const availableCategories = getAvailableCategories(setupData.simulator);
+  const hasElectronics = availableCategories.includes('electronics');
+  const hasDrivetrain = availableCategories.includes('drivetrain');
+  const totalTabs = 5 + (hasElectronics ? 1 : 0) + (hasDrivetrain ? 1 : 0);
 
   return (
     <div className="container max-w-6xl py-8 space-y-6">
@@ -345,102 +380,23 @@ export default function SetupDetailsEditable() {
       </div>
 
       <Tabs defaultValue="aero" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className={`grid w-full grid-cols-${totalTabs}`} style={{ gridTemplateColumns: `repeat(${totalTabs}, minmax(0, 1fr))` }}>
           <TabsTrigger value="aero">Aero</TabsTrigger>
-          <TabsTrigger value="suspension">Suspension</TabsTrigger>
-          <TabsTrigger value="tires">Tires</TabsTrigger>
-          <TabsTrigger value="brakes">Brakes</TabsTrigger>
-          <TabsTrigger value="differential">Differential</TabsTrigger>
+          <TabsTrigger value="suspension">Suspensão</TabsTrigger>
+          <TabsTrigger value="tires">Pneus</TabsTrigger>
+          <TabsTrigger value="brakes">Freios</TabsTrigger>
+          <TabsTrigger value="differential">Diferencial</TabsTrigger>
+          {hasElectronics && <TabsTrigger value="electronics">Eletrônica</TabsTrigger>}
+          {hasDrivetrain && <TabsTrigger value="drivetrain">Transmissão</TabsTrigger>}
         </TabsList>
 
-        {setupData && (
-          <>
-            <TabsContent value="aero" className="space-y-4">
-              <Card className="p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  {getSimulatorFields(setupData.simulator).aero.map((field) => (
-                    <div key={field.name}>
-                      <Label htmlFor={field.name}>{field.label}</Label>
-                      <Input
-                        id={field.name}
-                        value={(setupData.configuration.aero as Record<string, string>)?.[field.name] || ""}
-                        onChange={(e) => updateSetupData('aero', field.name, e.target.value)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="suspension" className="space-y-4">
-              <Card className="p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  {getSimulatorFields(setupData.simulator).suspension.map((field) => (
-                    <div key={field.name}>
-                      <Label htmlFor={field.name}>{field.label}</Label>
-                      <Input
-                        id={field.name}
-                        value={(setupData.configuration.suspension as Record<string, string>)?.[field.name] || ""}
-                        onChange={(e) => updateSetupData('suspension', field.name, e.target.value)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="tires" className="space-y-4">
-              <Card className="p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  {getSimulatorFields(setupData.simulator).tires.map((field) => (
-                    <div key={field.name}>
-                      <Label htmlFor={field.name}>{field.label}</Label>
-                      <Input
-                        id={field.name}
-                        value={(setupData.configuration.tires as Record<string, string>)?.[field.name] || ""}
-                        onChange={(e) => updateSetupData('tires', field.name, e.target.value)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="brakes" className="space-y-4">
-              <Card className="p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  {getSimulatorFields(setupData.simulator).brakes.map((field) => (
-                    <div key={field.name}>
-                      <Label htmlFor={field.name}>{field.label}</Label>
-                      <Input
-                        id={field.name}
-                        value={(setupData.configuration.brakes as Record<string, string>)?.[field.name] || ""}
-                        onChange={(e) => updateSetupData('brakes', field.name, e.target.value)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="differential" className="space-y-4">
-              <Card className="p-6">
-                <div className="grid grid-cols-2 gap-4">
-                  {getSimulatorFields(setupData.simulator).differential.map((field) => (
-                    <div key={field.name}>
-                      <Label htmlFor={field.name}>{field.label}</Label>
-                      <Input
-                        id={field.name}
-                        value={(setupData.configuration.differential as Record<string, string>)?.[field.name] || ""}
-                        onChange={(e) => updateSetupData('differential', field.name, e.target.value)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </TabsContent>
-          </>
-        )}
+        {renderCategoryTab('aero')}
+        {renderCategoryTab('suspension')}
+        {renderCategoryTab('tires')}
+        {renderCategoryTab('brakes')}
+        {renderCategoryTab('differential')}
+        {hasElectronics && renderCategoryTab('electronics')}
+        {hasDrivetrain && renderCategoryTab('drivetrain')}
       </Tabs>
 
       <Card className="p-6">
@@ -481,13 +437,15 @@ export default function SetupDetailsEditable() {
             onChange={(e) => setDeleteConfirmation(e.target.value)}
           />
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
-            <Button
-              variant="destructive"
+            <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>
+              Cancelar
+            </AlertDialogCancel>
+            <Button 
+              variant="destructive" 
               onClick={handleDeleteSetup}
               disabled={deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()}
             >
-              Excluir
+              Excluir Setup
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
