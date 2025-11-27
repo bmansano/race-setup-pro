@@ -1,4 +1,10 @@
-import { ArrowLeft, Save, Sparkles, History, Trash2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate, useParams } from "react-router-dom";
+import { SetupVersionHistory } from "@/components/SetupVersionHistory";
+import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
+import { useState, useEffect } from "react";
+import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { getSimulatorFields } from "@/data/simulator-fields";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,21 +14,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import car1 from "@/assets/car-1.jpg";
 import car2 from "@/assets/car-2.jpg";
 import nascarDry from "@/assets/nascar-camry-dry.jpg";
 import nascarWet from "@/assets/nascar-camry-wet.jpg";
 import { toast } from "sonner";
-import { PerformanceEngineerDialog } from "@/components/PerformanceEngineerDialog";
-import { SetupVersionHistory } from "@/components/SetupVersionHistory";
-import { supabase } from "@/integrations/supabase/client";
+import { Sparkles, History } from "lucide-react";
+
 export default function SetupDetailsEditable() {
   const navigate = useNavigate();
-  const {
-    id
-  } = useParams();
+  const { id } = useParams();
   const [comment, setComment] = useState("");
   const [engineerDialogOpen, setEngineerDialogOpen] = useState(false);
   const [versionHistoryOpen, setVersionHistoryOpen] = useState(false);
@@ -31,76 +32,26 @@ export default function SetupDetailsEditable() {
   const [loading, setLoading] = useState(true);
   const [setupName, setSetupName] = useState("");
   const [carImageUrl, setCarImageUrl] = useState<string | null>(null);
-  const [setupData, setSetupData] = useState({
-    car: "",
-    track: "",
-    category: "",
-    simulator: "",
-    condition: "",
-    trackTemp: "",
-    lapTime: "",
-    aero: {
-      frontWing: "",
-      rearWing: "",
-      diffuserHeight: "",
-      rake: "",
-      frontSplitter: "",
-      gurneyFlap: ""
-    },
-    suspension: {
-      frontSpring: "",
-      rearSpring: "",
-      frontBump: "",
-      rearBump: "",
-      frontRebound: "",
-      rearRebound: "",
-      frontARB: "",
-      rearARB: "",
-      frontHeight: "",
-      rearHeight: "",
-      frontCamber: "",
-      rearCamber: "",
-      frontToe: "",
-      rearToe: "",
-      caster: ""
-    },
-    tires: {
-      frontLeftPressure: "",
-      frontRightPressure: "",
-      rearLeftPressure: "",
-      rearRightPressure: "",
-      frontCompound: "",
-      rearCompound: ""
-    },
-    brake: {
-      bias: "",
-      systemPressure: "",
-      frontDisc: "",
-      rearDisc: "",
-      frontPads: "",
-      rearPads: ""
-    },
-    differential: {
-      preload: "",
-      power: "",
-      coast: "",
-      finalRatio: ""
-    }
-  });
+  
+  const [setupData, setSetupData] = useState<any>(null);
+
   useEffect(() => {
     loadSetup();
   }, [id]);
+
   const loadSetup = async () => {
     if (!id) return;
     setLoading(true);
     try {
-      const {
-        data,
-        error
-      } = await supabase.from("setups").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase
+        .from("setups")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
       if (error) throw error;
+
       if (data) {
-        const config = data.configuration as any || {};
         setSetupName(data.name);
         setComment(data.comment || "");
         setCarImageUrl(data.car_image_url || null);
@@ -112,53 +63,7 @@ export default function SetupDetailsEditable() {
           condition: data.condition,
           trackTemp: data.track_temp || "",
           lapTime: data.lap_time || "",
-          aero: {
-            frontWing: config.aero?.frontWing || "",
-            rearWing: config.aero?.rearWing || "",
-            diffuserHeight: config.aero?.diffuserHeight || "",
-            rake: config.aero?.rake || "",
-            frontSplitter: config.aero?.frontSplitter || "",
-            gurneyFlap: config.aero?.gurneyFlap || ""
-          },
-          suspension: {
-            frontSpring: config.suspension?.frontSpring || "",
-            rearSpring: config.suspension?.rearSpring || "",
-            frontBump: config.suspension?.frontBumpDamper || config.suspension?.frontBump || "",
-            rearBump: config.suspension?.rearBumpDamper || config.suspension?.rearBump || "",
-            frontRebound: config.suspension?.frontReboundDamper || config.suspension?.frontRebound || "",
-            rearRebound: config.suspension?.rearReboundDamper || config.suspension?.rearRebound || "",
-            frontARB: config.suspension?.frontAntiRollBar || config.suspension?.frontARB || "",
-            rearARB: config.suspension?.rearAntiRollBar || config.suspension?.rearARB || "",
-            frontHeight: config.suspension?.frontRideHeight || config.suspension?.frontHeight || "",
-            rearHeight: config.suspension?.rearRideHeight || config.suspension?.rearHeight || "",
-            frontCamber: config.suspension?.frontCamber || "",
-            rearCamber: config.suspension?.rearCamber || "",
-            frontToe: config.suspension?.frontToe || "",
-            rearToe: config.suspension?.rearToe || "",
-            caster: config.suspension?.caster || ""
-          },
-          tires: {
-            frontLeftPressure: config.tires?.frontLeftPressure || "",
-            frontRightPressure: config.tires?.frontRightPressure || "",
-            rearLeftPressure: config.tires?.rearLeftPressure || "",
-            rearRightPressure: config.tires?.rearRightPressure || "",
-            frontCompound: config.tires?.frontCompound || "",
-            rearCompound: config.tires?.rearCompound || ""
-          },
-          brake: {
-            bias: config.brakes?.bias || config.brake?.bias || "",
-            systemPressure: config.brakes?.pressure || config.brake?.systemPressure || "",
-            frontDisc: config.brakes?.frontDisc || config.brake?.frontDisc || "",
-            rearDisc: config.brakes?.rearDisc || config.brake?.rearDisc || "",
-            frontPads: config.brakes?.frontPads || config.brake?.frontPads || "",
-            rearPads: config.brakes?.rearPads || config.brake?.rearPads || ""
-          },
-          differential: {
-            preload: config.differential?.preload || "",
-            power: config.differential?.power || "",
-            coast: config.differential?.coast || "",
-            finalRatio: config.differential?.finalRatio || ""
-          }
+          configuration: data.configuration || {},
         });
       }
     } catch (error) {
@@ -168,32 +73,22 @@ export default function SetupDetailsEditable() {
       setLoading(false);
     }
   };
+
   const handleSave = async () => {
-    if (!id) return;
+    if (!id || !setupData) return;
     try {
-      const {
-        aero,
-        suspension,
-        tires,
-        brake,
-        differential
-      } = setupData;
-      const {
-        error
-      } = await supabase.from("setups").update({
-        name: setupName,
-        track_temp: setupData.trackTemp,
-        lap_time: setupData.lapTime,
-        comment: comment,
-        configuration: {
-          aero,
-          suspension,
-          tires,
-          brake,
-          differential
-        },
-        updated_at: new Date().toISOString()
-      }).eq("id", id);
+      const { error } = await supabase
+        .from("setups")
+        .update({
+          name: setupName,
+          track_temp: setupData.trackTemp,
+          lap_time: setupData.lapTime,
+          comment: comment,
+          configuration: setupData.configuration,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", id);
+
       if (error) throw error;
       toast.success("Setup salvo com sucesso!");
     } catch (error) {
@@ -205,7 +100,6 @@ export default function SetupDetailsEditable() {
   const handleDeleteSetup = async () => {
     if (!id) return;
     
-    // Validate confirmation before proceeding
     if (deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()) {
       toast.error("O nome digitado não corresponde ao nome do setup");
       return;
@@ -231,36 +125,39 @@ export default function SetupDetailsEditable() {
   };
 
   const handleRestoreVersion = (configuration: any) => {
-    setSetupData(configuration);
-    toast.success("Versão restaurada com sucesso!");
+    if (setupData) {
+      setSetupData({ ...setupData, configuration });
+      toast.success("Versão restaurada com sucesso!");
+    }
   };
+
   const updateSetupData = (category: string, field: string, value: string) => {
-    setSetupData(prev => {
-      const categoryData = prev[category as keyof typeof prev];
-      if (typeof categoryData === 'object' && categoryData !== null) {
-        return {
-          ...prev,
-          [category]: {
-            ...categoryData,
-            [field]: value
-          }
-        };
-      }
-      return prev;
-    });
+    if (!setupData) return;
+    
+    setSetupData((prev: any) => ({
+      ...prev,
+      configuration: {
+        ...prev.configuration,
+        [category]: {
+          ...prev.configuration[category],
+          [field]: value,
+        },
+      },
+    }));
   };
 
   const handleApplySuggestions = (changes: any) => {
-    setSetupData(prev => {
+    if (!setupData) return;
+    
+    setSetupData((prev: any) => {
       const updated = { ...prev };
       
-      // Aplicar alterações em cada categoria
       Object.keys(changes).forEach(key => {
         if (key === 'trackTemp' || key === 'lapTime') {
           updated[key] = changes[key] || prev[key];
         } else if (typeof changes[key] === 'object' && changes[key] !== null) {
-          updated[key as keyof typeof prev] = {
-            ...(prev[key as keyof typeof prev] as any),
+          updated.configuration[key] = {
+            ...(prev.configuration[key] || {}),
             ...changes[key]
           };
         }
@@ -269,6 +166,7 @@ export default function SetupDetailsEditable() {
       return updated;
     });
   };
+
   if (loading) {
     return (
       <div className="container max-w-6xl py-8">
@@ -279,12 +177,22 @@ export default function SetupDetailsEditable() {
     );
   }
 
-  // Use AI-generated image if available, otherwise use default images
+  if (!setupData) {
+    return (
+      <div className="container max-w-6xl py-8">
+        <div className="text-center py-12 text-muted-foreground">
+          Setup não encontrado
+        </div>
+      </div>
+    );
+  }
+
   const setupImage = carImageUrl 
     ? carImageUrl
     : setupData.car.includes("Camry") 
-      ? (setupData.condition === "Pista Molhada" ? nascarWet : nascarDry)
-      : (setupData.condition === "Pista Molhada" ? car2 : car1);
+      ? (setupData.condition === "wet" ? nascarWet : nascarDry)
+      : (setupData.condition === "wet" ? car2 : car1);
+
   return (
     <div className="container max-w-6xl py-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
@@ -326,12 +234,18 @@ export default function SetupDetailsEditable() {
             <div className="space-y-3">
               <div>
                 <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
-                <Input value={setupName} onChange={e => setSetupName(e.target.value)} className="text-2xl font-bold h-auto py-2 border-0 pl-2 pr-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                <Input
+                  value={setupName}
+                  onChange={(e) => setSetupName(e.target.value)}
+                  className="text-2xl font-bold h-auto py-2 border-0 pl-2 pr-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
                 <p className="text-lg mt-2 font-normal">{setupData.car}</p>
               </div>
               <p className="text-muted-foreground">{setupData.track}</p>
               <div className="flex flex-wrap gap-2">
-                <Badge className="whitespace-nowrap">{setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}</Badge>
+                <Badge className="whitespace-nowrap">
+                  {setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}
+                </Badge>
                 <Badge variant="outline" className="whitespace-nowrap">{setupData.category}</Badge>
               </div>
             </div>
@@ -350,266 +264,166 @@ export default function SetupDetailsEditable() {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Temperatura Pista:</span>
-              <Input value={setupData.trackTemp} onChange={e => setSetupData({
-              ...setupData,
-              trackTemp: e.target.value
-            })} className="h-7 w-24 text-right" />
+              <Input
+                value={setupData.trackTemp}
+                onChange={(e) => setSetupData({ ...setupData, trackTemp: e.target.value })}
+                className="h-7 w-24 text-right"
+              />
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Tempo de Volta:</span>
-              <Input value={setupData.lapTime} onChange={e => setSetupData({
-              ...setupData,
-              lapTime: e.target.value
-            })} className="h-7 w-28 text-right" />
+              <Input
+                value={setupData.lapTime}
+                onChange={(e) => setSetupData({ ...setupData, lapTime: e.target.value })}
+                className="h-7 w-28 text-right"
+              />
             </div>
           </div>
         </Card>
       </div>
 
-      <Tabs defaultValue="aero" className="w-full">
+      <Tabs defaultValue="aero" className="space-y-4">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="aero">Aero</TabsTrigger>
-          <TabsTrigger value="suspension">Suspensão</TabsTrigger>
-          <TabsTrigger value="tires">Pneus</TabsTrigger>
-          <TabsTrigger value="brake">Freios</TabsTrigger>
-          <TabsTrigger value="differential">Diferencial</TabsTrigger>
+          <TabsTrigger value="suspension">Suspension</TabsTrigger>
+          <TabsTrigger value="tires">Tires</TabsTrigger>
+          <TabsTrigger value="brakes">Brakes</TabsTrigger>
+          <TabsTrigger value="differential">Differential</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="aero" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Configurações Aerodinâmicas</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Asa Dianteira</Label>
-                <Input value={setupData.aero.frontWing} onChange={e => updateSetupData("aero", "frontWing", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Asa Traseira</Label>
-                <Input value={setupData.aero.rearWing} onChange={e => updateSetupData("aero", "rearWing", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Altura do Diffuser</Label>
-                <Input value={setupData.aero.diffuserHeight} onChange={e => updateSetupData("aero", "diffuserHeight", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Rake</Label>
-                <Input value={setupData.aero.rake} onChange={e => updateSetupData("aero", "rake", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Splitter Dianteiro</Label>
-                <Input value={setupData.aero.frontSplitter} onChange={e => updateSetupData("aero", "frontSplitter", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Gurney Flap</Label>
-                <Input value={setupData.aero.gurneyFlap} onChange={e => updateSetupData("aero", "gurneyFlap", e.target.value)} />
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
+        {setupData && (
+          <>
+            <TabsContent value="aero" className="space-y-4">
+              <Card className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  {getSimulatorFields(setupData.simulator).aero.map((field) => (
+                    <div key={field.name}>
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <Input
+                        id={field.name}
+                        value={(setupData.configuration.aero as Record<string, string>)?.[field.name] || ""}
+                        onChange={(e) => updateSetupData('aero', field.name, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
 
-        <TabsContent value="suspension" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Configurações de Suspensão</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Mola Dianteira</Label>
-                <Input value={setupData.suspension.frontSpring} onChange={e => updateSetupData("suspension", "frontSpring", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Mola Traseira</Label>
-                <Input value={setupData.suspension.rearSpring} onChange={e => updateSetupData("suspension", "rearSpring", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Amortecedor Diant. (Bump)</Label>
-                <Input value={setupData.suspension.frontBump} onChange={e => updateSetupData("suspension", "frontBump", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Amortecedor Tras. (Bump)</Label>
-                <Input value={setupData.suspension.rearBump} onChange={e => updateSetupData("suspension", "rearBump", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Amortecedor Diant. (Rebound)</Label>
-                <Input value={setupData.suspension.frontRebound} onChange={e => updateSetupData("suspension", "frontRebound", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Amortecedor Tras. (Rebound)</Label>
-                <Input value={setupData.suspension.rearRebound} onChange={e => updateSetupData("suspension", "rearRebound", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Barra Estabilizadora Diant.</Label>
-                <Input value={setupData.suspension.frontARB} onChange={e => updateSetupData("suspension", "frontARB", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Barra Estabilizadora Tras.</Label>
-                <Input value={setupData.suspension.rearARB} onChange={e => updateSetupData("suspension", "rearARB", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Altura Suspensão Diant.</Label>
-                <Input value={setupData.suspension.frontHeight} onChange={e => updateSetupData("suspension", "frontHeight", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Altura Suspensão Tras.</Label>
-                <Input value={setupData.suspension.rearHeight} onChange={e => updateSetupData("suspension", "rearHeight", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Camber Dianteiro</Label>
-                <Input value={setupData.suspension.frontCamber} onChange={e => updateSetupData("suspension", "frontCamber", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Camber Traseiro</Label>
-                <Input value={setupData.suspension.rearCamber} onChange={e => updateSetupData("suspension", "rearCamber", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Toe Dianteiro</Label>
-                <Input value={setupData.suspension.frontToe} onChange={e => updateSetupData("suspension", "frontToe", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Toe Traseiro</Label>
-                <Input value={setupData.suspension.rearToe} onChange={e => updateSetupData("suspension", "rearToe", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Caster</Label>
-                <Input value={setupData.suspension.caster} onChange={e => updateSetupData("suspension", "caster", e.target.value)} />
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
+            <TabsContent value="suspension" className="space-y-4">
+              <Card className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  {getSimulatorFields(setupData.simulator).suspension.map((field) => (
+                    <div key={field.name}>
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <Input
+                        id={field.name}
+                        value={(setupData.configuration.suspension as Record<string, string>)?.[field.name] || ""}
+                        onChange={(e) => updateSetupData('suspension', field.name, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
 
-        <TabsContent value="tires" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Configurações de Pneus</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Pressão Diant. Esq.</Label>
-                <Input value={setupData.tires.frontLeftPressure} onChange={e => updateSetupData("tires", "frontLeftPressure", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Pressão Diant. Dir.</Label>
-                <Input value={setupData.tires.frontRightPressure} onChange={e => updateSetupData("tires", "frontRightPressure", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Pressão Tras. Esq.</Label>
-                <Input value={setupData.tires.rearLeftPressure} onChange={e => updateSetupData("tires", "rearLeftPressure", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Pressão Tras. Dir.</Label>
-                <Input value={setupData.tires.rearRightPressure} onChange={e => updateSetupData("tires", "rearRightPressure", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Composto Pneu Diant.</Label>
-                <Input value={setupData.tires.frontCompound} onChange={e => updateSetupData("tires", "frontCompound", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Composto Pneu Tras.</Label>
-                <Input value={setupData.tires.rearCompound} onChange={e => updateSetupData("tires", "rearCompound", e.target.value)} />
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
+            <TabsContent value="tires" className="space-y-4">
+              <Card className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  {getSimulatorFields(setupData.simulator).tires.map((field) => (
+                    <div key={field.name}>
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <Input
+                        id={field.name}
+                        value={(setupData.configuration.tires as Record<string, string>)?.[field.name] || ""}
+                        onChange={(e) => updateSetupData('tires', field.name, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
 
-        <TabsContent value="brake" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Configurações de Freios</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Bias</Label>
-                <Input value={setupData.brake.bias} onChange={e => updateSetupData("brake", "bias", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Pressão do Sistema</Label>
-                <Input value={setupData.brake.systemPressure} onChange={e => updateSetupData("brake", "systemPressure", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Disco Dianteiro</Label>
-                <Input value={setupData.brake.frontDisc} onChange={e => updateSetupData("brake", "frontDisc", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Disco Traseiro</Label>
-                <Input value={setupData.brake.rearDisc} onChange={e => updateSetupData("brake", "rearDisc", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Pastilhas Dianteiras</Label>
-                <Input value={setupData.brake.frontPads} onChange={e => updateSetupData("brake", "frontPads", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Pastilhas Traseiras</Label>
-                <Input value={setupData.brake.rearPads} onChange={e => updateSetupData("brake", "rearPads", e.target.value)} />
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
+            <TabsContent value="brakes" className="space-y-4">
+              <Card className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  {getSimulatorFields(setupData.simulator).brakes.map((field) => (
+                    <div key={field.name}>
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <Input
+                        id={field.name}
+                        value={(setupData.configuration.brakes as Record<string, string>)?.[field.name] || ""}
+                        onChange={(e) => updateSetupData('brakes', field.name, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
 
-        <TabsContent value="differential" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Configurações do Diferencial</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Preload</Label>
-                <Input value={setupData.differential.preload} onChange={e => updateSetupData("differential", "preload", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Power (Aceleração)</Label>
-                <Input value={setupData.differential.power} onChange={e => updateSetupData("differential", "power", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Coast (Desaceleração)</Label>
-                <Input value={setupData.differential.coast} onChange={e => updateSetupData("differential", "coast", e.target.value)} />
-              </div>
-              <div className="space-y-2">
-                <Label>Relação Final</Label>
-                <Input value={setupData.differential.finalRatio} onChange={e => updateSetupData("differential", "finalRatio", e.target.value)} />
-              </div>
-            </div>
-          </Card>
-        </TabsContent>
+            <TabsContent value="differential" className="space-y-4">
+              <Card className="p-6">
+                <div className="grid grid-cols-2 gap-4">
+                  {getSimulatorFields(setupData.simulator).differential.map((field) => (
+                    <div key={field.name}>
+                      <Label htmlFor={field.name}>{field.label}</Label>
+                      <Input
+                        id={field.name}
+                        value={(setupData.configuration.differential as Record<string, string>)?.[field.name] || ""}
+                        onChange={(e) => updateSetupData('differential', field.name, e.target.value)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </TabsContent>
+          </>
+        )}
       </Tabs>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Comentários e Observações</h3>
-        <div className="space-y-2">
-          <Label htmlFor="comment">
-            Adicione anotações sobre o setup, condições da pista, ou observações importantes
-          </Label>
-          <Textarea id="comment" value={comment} onChange={e => setComment(e.target.value)} placeholder="Ex: Setup funciona muito bem em pista seca e temperatura acima de 25°C. Ajustar asa traseira para +1 se houver vento forte..." className="min-h-[120px]" />
-        </div>
+        <h3 className="text-lg font-semibold mb-4">Comentários e Notas</h3>
+        <Textarea
+          placeholder="Adicione observações sobre este setup..."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          className="min-h-[120px]"
+        />
       </Card>
 
-      <PerformanceEngineerDialog 
-        open={engineerDialogOpen} 
-        onOpenChange={setEngineerDialogOpen} 
+      <PerformanceEngineerDialog
+        open={engineerDialogOpen}
+        onOpenChange={setEngineerDialogOpen}
         setup={setupData}
         onApplySuggestions={handleApplySuggestions}
       />
 
-      <SetupVersionHistory open={versionHistoryOpen} onOpenChange={setVersionHistoryOpen} setupId={id || ""} onRestore={handleRestoreVersion} />
+      <SetupVersionHistory
+        open={versionHistoryOpen}
+        onOpenChange={setVersionHistoryOpen}
+        setupId={id || ""}
+        onRestore={handleRestoreVersion}
+      />
 
-      <AlertDialog open={deleteDialogOpen} onOpenChange={(open) => {
-        setDeleteDialogOpen(open);
-        if (!open) setDeleteConfirmation("");
-      }}>
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
-            <AlertDialogDescription className="space-y-4">
-              <p>Esta ação não pode ser desfeita e todas as versões do setup também serão removidas.</p>
-              <p>Para confirmar, digite o nome do setup:</p>
-              <p className="font-semibold text-foreground">
-                {setupName}
-              </p>
-              <Input
-                value={deleteConfirmation}
-                onChange={(e) => setDeleteConfirmation(e.target.value)}
-                placeholder="Digite o nome do setup"
-                className="mt-2"
-              />
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. Para confirmar, digite o nome do setup: <strong>{setupName}</strong>
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <Input
+            placeholder="Digite o nome do setup"
+            value={deleteConfirmation}
+            onChange={(e) => setDeleteConfirmation(e.target.value)}
+          />
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
-            <Button 
-              onClick={handleDeleteSetup} 
+            <Button
+              variant="destructive"
+              onClick={handleDeleteSetup}
               disabled={deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Excluir
             </Button>
