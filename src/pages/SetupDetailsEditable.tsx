@@ -253,15 +253,6 @@ export default function SetupDetailsEditable() {
             <Sparkles className="h-4 w-4" />
             Engenheiro de Performance
           </Button>
-          <Button 
-            variant="outline" 
-            onClick={handleGenerateImage}
-            disabled={isGeneratingImage}
-            className="gap-2"
-          >
-            <ImagePlus className="h-4 w-4" />
-            {isGeneratingImage ? "Gerando..." : "Gerar Imagem"}
-          </Button>
           <Button onClick={handleSave} className="gap-2 shadow-racing">
             <Save className="h-4 w-4" />
             Salvar Alterações
@@ -279,11 +270,23 @@ export default function SetupDetailsEditable() {
             <div className="space-y-3">
               <div>
                 <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
-                <Input
-                  value={setupName}
-                  onChange={(e) => setSetupName(e.target.value)}
-                  className="text-2xl font-bold h-auto py-2 border-0 pl-2 pr-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
+                <div className="flex gap-2 items-start">
+                  <Input
+                    value={setupName}
+                    onChange={(e) => setSetupName(e.target.value)}
+                    className="text-2xl font-bold h-auto py-2 border-0 pl-2 pr-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={handleGenerateImage}
+                    disabled={isGeneratingImage}
+                    title="Gerar Imagem do Carro"
+                    className="shrink-0"
+                  >
+                    <ImagePlus className="h-4 w-4" />
+                  </Button>
+                </div>
                 <p className="text-lg mt-2 font-normal">{setupData.car}</p>
               </div>
               <p className="text-muted-foreground">{setupData.track}</p>
