@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { DemoDialog } from "@/components/DemoDialog";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Settings, 
   Zap, 
@@ -13,7 +14,8 @@ import {
   Trophy,
   Timer,
   Gamepad2,
-  Wrench
+  Wrench,
+  LogOut
 } from "lucide-react";
 import heroImage from "@/assets/hero-gt3.jpg";
 import featureFerrari from "@/assets/feature-ferrari.jpg";
@@ -44,26 +46,76 @@ const simulatorLogos = [
 
 export default function Landing() {
   const [demoOpen, setDemoOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setIsLoggedIn(true);
+        setUserName(user.user_metadata?.name || user.email?.split('@')[0] || "Usuário");
+      }
+    };
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        setIsLoggedIn(true);
+        setUserName(session.user.user_metadata?.name || session.user.email?.split('@')[0] || "Usuário");
+      } else {
+        setIsLoggedIn(false);
+        setUserName(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsLoggedIn(false);
+    setUserName(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg">
         <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Settings className="h-5 w-5 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold tracking-tight">Apex Engineer</span>
-          </div>
+          </Link>
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Link to="/auth">
-              <Button variant="outline" size="sm">Entrar</Button>
-            </Link>
-            <Link to="/auth">
-              <Button size="sm" className="shadow-racing">Começar grátis</Button>
-            </Link>
+            {isLoggedIn ? (
+              <>
+                {userName && (
+                  <span className="hidden sm:inline text-sm text-muted-foreground">
+                    Olá, {userName}
+                  </span>
+                )}
+                <Link to="/simulators">
+                  <Button variant="outline" size="sm">Meus setups</Button>
+                </Link>
+                <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="outline" size="sm">Entrar</Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="sm" className="shadow-racing">Começar grátis</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
