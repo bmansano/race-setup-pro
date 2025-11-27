@@ -321,7 +321,7 @@ export default function Landing() {
               <span className="text-xl font-bold">Apex Engineer</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2024 Apex Engineer. Todos os direitos reservados.
+              © 2026 Apex Engineer. Todos os direitos reservados.
             </p>
           </div>
         </div>
