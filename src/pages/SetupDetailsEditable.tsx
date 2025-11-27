@@ -267,7 +267,7 @@ export default function SetupDetailsEditable() {
   return (
     <div className="container max-w-6xl py-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
-        <Button variant="ghost" onClick={() => navigate("/")} className="gap-2">
+        <Button variant="ghost" onClick={() => navigate("/simulators")} className="gap-2">
           <ArrowLeft className="h-4 w-4" />
           Voltar para Setups
         </Button>
