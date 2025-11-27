@@ -61,8 +61,157 @@ export function AddSetupDialog() {
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
   const availableCategories = selectedSimulator ? getAvailableCategories(selectedSimulator) : [];
 
+  // Função para mapear nomes de campos do baseline para campos do simulador
+  const mapBaselineToSimulatorFields = (
+    baselineSetup: ReturnType<typeof getBaselineSetup>,
+    simulatorFields: ReturnType<typeof getSimulatorFields>
+  ): Record<string, Record<string, string>> => {
+    const newConfig: Record<string, Record<string, string>> = {
+      aero: {},
+      suspension: {},
+      tires: {},
+      brakes: {},
+      differential: {},
+      electronics: {},
+      drivetrain: {},
+    };
+
+    // Mapeamento de nomes de campos do baseline para campos do simulador
+    const fieldMappings: Record<string, Record<string, string>> = {
+      aero: {
+        frontWing: 'frontWing',
+        rearWing: 'rearWing',
+        frontSplitter: 'frontSplitter',
+        gurneyFlap: 'rearGurney',
+        rake: 'rake',
+        diffuserHeight: 'diffuserHeight',
+      },
+      suspension: {
+        frontSpring: 'frontSpring',
+        rearSpring: 'rearSpring',
+        frontBump: 'frontBump',
+        rearBump: 'rearBump',
+        frontRebound: 'frontRebound',
+        rearRebound: 'rearRebound',
+        frontARB: 'frontARB',
+        rearARB: 'rearARB',
+        frontHeight: 'frontRideHeight',
+        rearHeight: 'rearRideHeight',
+        frontCamber: 'frontCamber',
+        rearCamber: 'rearCamber',
+        frontToe: 'frontToe',
+        rearToe: 'rearToe',
+        caster: 'caster',
+      },
+      tires: {
+        frontLeftPressure: 'lfPressure',
+        frontRightPressure: 'rfPressure',
+        rearLeftPressure: 'lrPressure',
+        rearRightPressure: 'rrPressure',
+        frontCompound: 'tireCompound',
+        rearCompound: 'tireCompound',
+      },
+      brake: {
+        bias: 'brakeBias',
+        systemPressure: 'brakePressure',
+        frontDisc: 'brakeDiscType',
+        rearDisc: 'brakeDiscType',
+        frontPads: 'brakePadFront',
+        rearPads: 'brakePadRear',
+      },
+      differential: {
+        preload: 'preload',
+        power: 'power',
+        coast: 'coast',
+        finalRatio: 'gearFinal',
+      },
+    };
+
+    // Para cada categoria do baseline, mapeia os valores para os campos do simulador
+    const categories = ['aero', 'suspension', 'tires', 'brakes', 'differential', 'electronics', 'drivetrain'] as const;
+    
+    // Primeiro inicializa todos os campos do simulador com valores vazios
+    simulatorFields.aero.forEach(field => newConfig.aero[field.name] = "");
+    simulatorFields.suspension.forEach(field => newConfig.suspension[field.name] = "");
+    simulatorFields.tires.forEach(field => newConfig.tires[field.name] = "");
+    simulatorFields.brakes.forEach(field => newConfig.brakes[field.name] = "");
+    simulatorFields.differential.forEach(field => newConfig.differential[field.name] = "");
+    if (simulatorFields.electronics) {
+      simulatorFields.electronics.forEach(field => newConfig.electronics[field.name] = "");
+    }
+    if (simulatorFields.drivetrain) {
+      simulatorFields.drivetrain.forEach(field => newConfig.drivetrain[field.name] = "");
+    }
+
+    // Mapeia valores do baseline aero
+    if (baselineSetup.aero) {
+      Object.entries(baselineSetup.aero).forEach(([key, value]) => {
+        if (value) {
+          const mappedKey = fieldMappings.aero[key] || key;
+          if (simulatorFields.aero.some(f => f.name === mappedKey)) {
+            newConfig.aero[mappedKey] = value;
+          }
+        }
+      });
+    }
+
+    // Mapeia valores do baseline suspension
+    if (baselineSetup.suspension) {
+      Object.entries(baselineSetup.suspension).forEach(([key, value]) => {
+        if (value) {
+          const mappedKey = fieldMappings.suspension[key] || key;
+          if (simulatorFields.suspension.some(f => f.name === mappedKey)) {
+            newConfig.suspension[mappedKey] = value;
+          }
+        }
+      });
+    }
+
+    // Mapeia valores do baseline tires
+    if (baselineSetup.tires) {
+      Object.entries(baselineSetup.tires).forEach(([key, value]) => {
+        if (value) {
+          const mappedKey = fieldMappings.tires[key] || key;
+          if (simulatorFields.tires.some(f => f.name === mappedKey)) {
+            newConfig.tires[mappedKey] = value;
+          }
+        }
+      });
+    }
+
+    // Mapeia valores do baseline brake para brakes
+    if (baselineSetup.brake) {
+      Object.entries(baselineSetup.brake).forEach(([key, value]) => {
+        if (value) {
+          const mappedKey = fieldMappings.brake[key] || key;
+          if (simulatorFields.brakes.some(f => f.name === mappedKey)) {
+            newConfig.brakes[mappedKey] = value;
+          }
+        }
+      });
+    }
+
+    // Mapeia valores do baseline differential
+    if (baselineSetup.differential) {
+      Object.entries(baselineSetup.differential).forEach(([key, value]) => {
+        if (value) {
+          const mappedKey = fieldMappings.differential[key] || key;
+          if (simulatorFields.differential.some(f => f.name === mappedKey)) {
+            newConfig.differential[mappedKey] = value;
+          } else if (mappedKey === 'gearFinal' && simulatorFields.drivetrain?.some(f => f.name === 'gearFinal')) {
+            newConfig.drivetrain['gearFinal'] = value;
+          }
+        }
+      });
+    }
+
+    return newConfig;
+  };
+
   // Atualiza a configuração quando o simulador muda ou quando todos os campos necessários são preenchidos
   useEffect(() => {
+    const fields = getSimulatorFields(formData.simulator);
+    
     if (formData.simulator && formData.car && formData.track && formData.condition) {
       // Busca o baseline setup baseado no simulador, carro, pista e condição
       const baselineSetup = getBaselineSetup(
@@ -72,48 +221,11 @@ export function AddSetupDialog() {
         formData.condition
       );
 
-      const newConfig: Record<string, Record<string, string>> = {
-        aero: {},
-        suspension: {},
-        tires: {},
-        brakes: {},
-        differential: {},
-        electronics: {},
-        drivetrain: {},
-      };
-
-      // Preenche com valores do baseline
-      if (baselineSetup.aero) {
-        Object.entries(baselineSetup.aero).forEach(([key, value]) => {
-          if (value) newConfig.aero[key] = value;
-        });
-      }
-      if (baselineSetup.suspension) {
-        Object.entries(baselineSetup.suspension).forEach(([key, value]) => {
-          if (value) newConfig.suspension[key] = value;
-        });
-      }
-      if (baselineSetup.tires) {
-        Object.entries(baselineSetup.tires).forEach(([key, value]) => {
-          if (value) newConfig.tires[key] = value;
-        });
-      }
-      if (baselineSetup.brake) {
-        Object.entries(baselineSetup.brake).forEach(([key, value]) => {
-          if (value) newConfig.brakes[key] = value;
-        });
-      }
-      if (baselineSetup.differential) {
-        Object.entries(baselineSetup.differential).forEach(([key, value]) => {
-          if (value) newConfig.differential[key] = value;
-        });
-      }
-
+      const newConfig = mapBaselineToSimulatorFields(baselineSetup, fields);
       setConfiguration(newConfig);
       toast.success("Configuração base carregada automaticamente!");
     } else if (formData.simulator) {
       // Se apenas o simulador foi selecionado, inicializa campos vazios
-      const fields = getSimulatorFields(formData.simulator);
       const newConfig: Record<string, Record<string, string>> = {
         aero: {},
         suspension: {},

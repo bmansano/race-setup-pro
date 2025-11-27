@@ -402,6 +402,135 @@ const raceRoomGT3Baseline: BaselineSetup = {
   trackTemp: "20-30°C",
 };
 
+// Le Mans Ultimate Hypercar/LMDh baseline
+const lmuHypercarBaseline: BaselineSetup = {
+  aero: {
+    frontWing: "Medium-High",
+    rearWing: "Medium-High",
+    rake: "Low (15-25mm)",
+  },
+  suspension: {
+    frontSpring: "180-220 N/mm",
+    rearSpring: "150-190 N/mm",
+    frontBump: "Medium-Stiff",
+    rearBump: "Medium",
+    frontRebound: "Stiff",
+    rearRebound: "Medium-Stiff",
+    frontARB: "Stiff",
+    rearARB: "Medium",
+    frontHeight: "45-55mm",
+    rearHeight: "55-65mm",
+    frontCamber: "-3.5° to -4.0°",
+    rearCamber: "-2.5° to -3.0°",
+    frontToe: "-0.10°",
+    rearToe: "+0.20°",
+    caster: "12.0-14.0°",
+  },
+  tires: {
+    frontLeftPressure: "170-180 kPa",
+    frontRightPressure: "170-180 kPa",
+    rearLeftPressure: "160-170 kPa",
+    rearRightPressure: "160-170 kPa",
+    frontCompound: "Soft/Medium",
+    rearCompound: "Soft/Medium",
+  },
+  brake: {
+    bias: "54-58%",
+    systemPressure: "95-100%",
+  },
+  differential: {
+    preload: "80-120 Nm",
+    power: "65-80%",
+    coast: "35-55%",
+  },
+  trackTemp: "20-35°C",
+};
+
+// Le Mans Ultimate GT3 baseline
+const lmuGT3Baseline: BaselineSetup = {
+  aero: {
+    frontWing: "Medium",
+    rearWing: "Medium-High",
+  },
+  suspension: {
+    frontSpring: "100-130 N/mm",
+    rearSpring: "90-120 N/mm",
+    frontBump: "Medium",
+    rearBump: "Medium-Soft",
+    frontRebound: "Medium-Stiff",
+    rearRebound: "Medium",
+    frontARB: "Medium",
+    rearARB: "Medium-Soft",
+    frontHeight: "55-60mm",
+    rearHeight: "60-68mm",
+    frontCamber: "-3.5° to -4.0°",
+    rearCamber: "-2.8° to -3.2°",
+    frontToe: "0.00°",
+    rearToe: "+0.15°",
+    caster: "11.0-12.0°",
+  },
+  tires: {
+    frontLeftPressure: "175-185 kPa",
+    frontRightPressure: "175-185 kPa",
+    rearLeftPressure: "165-175 kPa",
+    rearRightPressure: "165-175 kPa",
+    frontCompound: "Dry Slick",
+    rearCompound: "Dry Slick",
+  },
+  brake: {
+    bias: "56-58%",
+    systemPressure: "85-95%",
+  },
+  differential: {
+    preload: "90-110 Nm",
+    power: "70-80%",
+    coast: "40-50%",
+  },
+  trackTemp: "20-35°C",
+};
+
+// Project Motor Racing GT baseline
+const pmrGTBaseline: BaselineSetup = {
+  aero: {
+    frontWing: "Medium",
+    rearWing: "Medium",
+  },
+  suspension: {
+    frontSpring: "Medium",
+    rearSpring: "Medium",
+    frontBump: "Medium",
+    rearBump: "Medium",
+    frontRebound: "Medium",
+    rearRebound: "Medium",
+    frontARB: "Medium",
+    rearARB: "Medium",
+    frontHeight: "50-55mm",
+    rearHeight: "55-60mm",
+    frontCamber: "-3.0°",
+    rearCamber: "-2.5°",
+    frontToe: "0.00°",
+    rearToe: "+0.10°",
+  },
+  tires: {
+    frontLeftPressure: "26 psi",
+    frontRightPressure: "26 psi",
+    rearLeftPressure: "25 psi",
+    rearRightPressure: "25 psi",
+    frontCompound: "Medium",
+    rearCompound: "Medium",
+  },
+  brake: {
+    bias: "56-58%",
+    systemPressure: "90%",
+  },
+  differential: {
+    preload: "Medium",
+    power: "75%",
+    coast: "45%",
+  },
+  trackTemp: "20-30°C",
+};
+
 // Generic baseline for other cars/tracks
 const genericBaseline: BaselineSetup = {
   aero: {
@@ -492,6 +621,35 @@ export function getBaselineSetup(
     if (car.includes("GT3") || car.includes("DTM")) {
       return raceRoomGT3Baseline;
     }
+    return raceRoomGT3Baseline; // Default to GT3 baseline
+  }
+
+  // Le Mans Ultimate detection
+  if (simulator === "Le Mans Ultimate") {
+    // Hypercar and LMDh cars
+    if (
+      car.includes("Hypercar") ||
+      car.includes("LMDh") ||
+      car.includes("LMH") ||
+      car.includes("Porsche 963") ||
+      car.includes("Toyota GR010") ||
+      car.includes("Peugeot 9X8") ||
+      car.includes("Ferrari 499P") ||
+      car.includes("Cadillac V-Series.R") ||
+      car.includes("BMW M Hybrid V8")
+    ) {
+      return lmuHypercarBaseline;
+    }
+    // GT3 cars
+    if (car.includes("GT3")) {
+      return lmuGT3Baseline;
+    }
+    return lmuHypercarBaseline; // Default to Hypercar baseline
+  }
+
+  // Project Motor Racing detection
+  if (simulator === "Project Motor Racing") {
+    return pmrGTBaseline;
   }
 
   // iRacing NASCAR Next Gen detection
@@ -518,6 +676,16 @@ export function getBaselineSetup(
     ) {
       return nascarNextGenOvalIntermediate;
     }
+  }
+
+  // iRacing generic detection
+  if (simulator === "iRacing") {
+    return genericBaseline;
+  }
+
+  // Assetto Corsa Rally detection
+  if (simulator === "Assetto Corsa Rally") {
+    return acGenericBaseline;
   }
 
   // Default to generic baseline for unknown combinations
