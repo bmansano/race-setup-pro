@@ -244,7 +244,10 @@ export default function SetupDetailsEditable() {
               </div>
               <p className="text-muted-foreground">{setupData.track}</p>
               <div className="flex flex-wrap gap-2">
-                <Badge className="whitespace-nowrap">
+                <Badge 
+                  variant={setupData.condition === "wet" ? "secondary" : "default"}
+                  className="whitespace-nowrap"
+                >
                   {setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}
                 </Badge>
                 <Badge variant="outline" className="whitespace-nowrap">{setupData.category}</Badge>
