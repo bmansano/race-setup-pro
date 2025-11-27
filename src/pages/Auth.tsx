@@ -43,7 +43,7 @@ export default function Auth() {
           data: {
             name,
           },
-          emailRedirectTo: `${window.location.origin}/`,
+          emailRedirectTo: `${window.location.origin}/simulators`,
         },
       });
 
@@ -61,7 +61,7 @@ export default function Auth() {
         description: "Você foi autenticado automaticamente.",
       });
 
-      navigate("/");
+      navigate("/simulators");
     } catch (error: any) {
       toast({
         title: "Erro ao criar conta",
@@ -97,7 +97,7 @@ export default function Auth() {
         description: "Bem-vindo de volta.",
       });
 
-      navigate("/");
+      navigate("/simulators");
     } catch (error: any) {
       toast({
         title: "Erro ao fazer login",
@@ -234,7 +234,7 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <Link to="/landing" className="flex items-center justify-center gap-2 mb-2 hover:opacity-80 transition-opacity">
+          <Link to="/" className="flex items-center justify-center gap-2 mb-2 hover:opacity-80 transition-opacity">
             <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Settings className="h-6 w-6 text-primary-foreground" />
             </div>
