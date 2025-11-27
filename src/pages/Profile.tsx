@@ -1,29 +1,121 @@
-import { useState } from "react";
-import { Camera, Save } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Camera, Save, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import defaultEngineer from "@/assets/default-engineer.jpg";
 import defaultDriver from "@/assets/default-driver.jpg";
 
 export default function Profile() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [profileType, setProfileType] = useState<"engineer" | "driver">("engineer");
-  const [teamName, setTeamName] = useState("Veloce Racing Team");
-  const [engineerName, setEngineerName] = useState("Marco Silva");
-  const [driverName, setDriverName] = useState("João Santos");
+  const [teamName, setTeamName] = useState("");
+  const [engineerName, setEngineerName] = useState("");
+  const [driverName, setDriverName] = useState("");
   const [avatarUrl, setAvatarUrl] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [profileExists, setProfileExists] = useState(false);
 
   const defaultAvatar = profileType === "engineer" ? defaultEngineer : defaultDriver;
 
-  const handleSave = () => {
-    toast({
-      title: "Perfil atualizado",
-      description: "Suas informações foram salvas com sucesso.",
-    });
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+      
+      setUserId(user.id);
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error loading profile:", error);
+        toast.error("Erro ao carregar perfil");
+        setLoading(false);
+        return;
+      }
+
+      if (data) {
+        setProfileExists(true);
+        setTeamName(data.team_name || "");
+        setEngineerName(data.engineer_name || "");
+        setDriverName(data.driver_name || "");
+        setProfileType((data.profile_type as "engineer" | "driver") || "engineer");
+        setAvatarUrl(data.avatar_url || "");
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error);
+      toast.error("Erro ao carregar perfil");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleSave = async () => {
+    if (!userId) {
+      toast.error("Você precisa estar logado para salvar o perfil");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const profileData = {
+        user_id: userId,
+        team_name: teamName,
+        engineer_name: engineerName,
+        driver_name: driverName,
+        profile_type: profileType,
+        avatar_url: avatarUrl || null,
+      };
+
+      if (profileExists) {
+        const { error } = await supabase
+          .from("profiles")
+          .update(profileData)
+          .eq("user_id", userId);
+
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from("profiles")
+          .insert(profileData);
+
+        if (error) throw error;
+        setProfileExists(true);
+      }
+
+      toast.success("Perfil atualizado com sucesso!");
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      toast.error("Erro ao salvar perfil");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="container max-w-4xl py-8 flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="container max-w-4xl py-8 space-y-8">
@@ -103,9 +195,13 @@ export default function Profile() {
         </div>
 
         <div className="flex justify-end pt-4 border-t">
-          <Button onClick={handleSave} className="shadow-racing">
-            <Save className="h-4 w-4 mr-2" />
-            Salvar Alterações
+          <Button onClick={handleSave} disabled={saving} className="shadow-racing">
+            {saving ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
+            {saving ? "Salvando..." : "Salvar Alterações"}
           </Button>
         </div>
       </Card>
