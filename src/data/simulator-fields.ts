@@ -389,7 +389,7 @@ export const assettoCorsaRallyFields: SimulatorFields = {
 };
 
 // =====================================
-// RACEROOM RACING EXPERIENCE - Campos simplificados do R3E
+// RACEROOM - Campos simplificados do R3E
 // =====================================
 export const raceroomFields: SimulatorFields = {
   aero: [
@@ -566,15 +566,14 @@ export const projectMotorRacingFields: SimulatorFields = {
 // Mapa de simuladores para seus campos específicos
 // =====================================
 export const simulatorFieldsMap: Record<string, SimulatorFields> = {
-  'iRacing': iRacingFields,
-  'Automobilista 2': automobilista2Fields,
   'Assetto Corsa Competizione': accFields,
   'Assetto Corsa EVO': assettoCornaEVOFields,
-  'Assetto Corsa': assettoCorsa1Fields,
   'Assetto Corsa Rally': assettoCorsaRallyFields,
-  'RaceRoom Racing Experience': raceroomFields,
+  'Automobilista 2': automobilista2Fields,
+  'iRacing': iRacingFields,
   'Le Mans Ultimate': leMansUltimateFields,
   'Project Motor Racing': projectMotorRacingFields,
+  'RaceRoom': raceroomFields,
 };
 
 // =====================================

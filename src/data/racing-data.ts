@@ -619,7 +619,7 @@ const assettoConaEVOTracks: Track[] = [
   { id: "suzuka", name: "Suzuka International Racing Course", country: "Japan" },
 ];
 
-// RaceRoom Racing Experience - 150+ carros
+// RaceRoom - 150+ carros
 const raceroomCars: Car[] = [
   // DTM (múltiplas gerações)
   { id: "mercedes-c-dtm-1995", name: "Mercedes-Benz C-Class DTM 1995", category: "DTM" },
@@ -794,30 +794,73 @@ const leMansUltimateTracks: Track[] = [
   { id: "interlagos", name: "Autódromo José Carlos Pace (Interlagos)", country: "Brazil" },
 ];
 
+// Dados para Assetto Corsa Rally
+const assettoCorsaRallyCars: Car[] = [
+  { id: "ac-rally-wrc-2024", name: "WRC 2024 Generic", category: "Rally" },
+  { id: "ac-rally-wrc2-2024", name: "WRC2 2024 Generic", category: "Rally" },
+  { id: "ac-rally-r5", name: "Rally2/R5 Generic", category: "Rally" },
+  { id: "ac-rally-group-a", name: "Group A Lancer Evo VI", category: "Historic Rally" },
+  { id: "ac-rally-group-b", name: "Group B Audi Quattro S1", category: "Historic Rally" },
+  { id: "ac-rally-rgt", name: "RGT Porsche 911 GT3", category: "RGT" },
+];
+
+const assettoCorsaRallyTracks: Track[] = [
+  { id: "ac-rally-monte", name: "Monte Carlo - Col de Turini", country: "Monaco" },
+  { id: "ac-rally-sweden", name: "Rally Sweden - Hagfors", country: "Sweden" },
+  { id: "ac-rally-finland", name: "Rally Finland - Ouninpohja", country: "Finland" },
+  { id: "ac-rally-wales", name: "Wales Rally GB - Sweet Lamb", country: "United Kingdom" },
+  { id: "ac-rally-portugal", name: "Rally Portugal - Fafe", country: "Portugal" },
+  { id: "ac-rally-sardinia", name: "Rally Sardinia - Monte Lerno", country: "Italy" },
+];
+
+// Dados para Project Motor Racing
+const projectMotorRacingCars: Car[] = [
+  { id: "pmr-gt3-generic", name: "GT3 Generic Prototype", category: "GT3" },
+  { id: "pmr-lmp2", name: "LMP2 Prototype", category: "LMP2" },
+  { id: "pmr-hypercar", name: "Hypercar Prototype", category: "Hypercar" },
+  { id: "pmr-formula", name: "Formula Generic", category: "Formula" },
+  { id: "pmr-touring", name: "Touring Car Generic", category: "Touring Car" },
+];
+
+const projectMotorRacingTracks: Track[] = [
+  { id: "pmr-generic-1", name: "Circuit Alpha", country: "Generic" },
+  { id: "pmr-generic-2", name: "Circuit Beta", country: "Generic" },
+  { id: "pmr-generic-3", name: "Circuit Gamma", country: "Generic" },
+  { id: "pmr-oval", name: "Oval Speedway", country: "Generic" },
+];
+
 export const simulatorData: Record<string, SimulatorData> = {
-  "iRacing": {
-    cars: iRacingCars,
-    tracks: iRacingTracks,
-  },
-  "Automobilista 2": {
-    cars: automobilista2Cars,
-    tracks: automobilista2Tracks,
+  "Assetto Corsa Competizione": {
+    cars: accCars,
+    tracks: accTracks,
   },
   "Assetto Corsa EVO": {
     cars: assettoConaEVOCars,
     tracks: assettoConaEVOTracks,
   },
-  "Assetto Corsa Competizione": {
-    cars: accCars,
-    tracks: accTracks,
+  "Assetto Corsa Rally": {
+    cars: assettoCorsaRallyCars,
+    tracks: assettoCorsaRallyTracks,
   },
-  "RaceRoom Racing Experience": {
-    cars: raceroomCars,
-    tracks: raceroomTracks,
+  "Automobilista 2": {
+    cars: automobilista2Cars,
+    tracks: automobilista2Tracks,
+  },
+  "iRacing": {
+    cars: iRacingCars,
+    tracks: iRacingTracks,
   },
   "Le Mans Ultimate": {
     cars: leMansUltimateCars,
     tracks: leMansUltimateTracks,
+  },
+  "Project Motor Racing": {
+    cars: projectMotorRacingCars,
+    tracks: projectMotorRacingTracks,
+  },
+  "RaceRoom": {
+    cars: raceroomCars,
+    tracks: raceroomTracks,
   },
 };
 

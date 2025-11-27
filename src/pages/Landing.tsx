@@ -19,14 +19,14 @@ import featureCockpit from "@/assets/feature-cockpit.jpg";
 import featureEngineer from "@/assets/feature-engineer.jpg";
 
 const simulators = [
-  "iRacing",
-  "Assetto Corsa Competizione", 
-  "Automobilista 2",
-  "Le Mans Ultimate",
-  "RaceRoom",
+  "Assetto Corsa Competizione",
   "Assetto Corsa EVO",
+  "Assetto Corsa Rally",
+  "Automobilista 2",
+  "iRacing",
+  "Le Mans Ultimate",
   "Project Motor Racing",
-  "Assetto Corsa Rally"
+  "RaceRoom"
 ];
 
 export default function Landing() {

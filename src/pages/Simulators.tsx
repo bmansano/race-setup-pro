@@ -17,12 +17,14 @@ import nascarDry from "@/assets/nascar-camry-dry.jpg";
 import nascarWet from "@/assets/nascar-camry-wet.jpg";
 
 const simulators = [
-  "iRacing",
-  "Automobilista 2",
-  "Assetto Corsa EVO",
   "Assetto Corsa Competizione",
-  "RaceRoom Racing Experience",
+  "Assetto Corsa EVO",
+  "Assetto Corsa Rally",
+  "Automobilista 2",
+  "iRacing",
   "Le Mans Ultimate",
+  "Project Motor Racing",
+  "RaceRoom",
 ];
 
 interface Setup {

@@ -387,7 +387,7 @@ export default function SetupDetailsEditable() {
           <TabsTrigger value="brakes">Freios</TabsTrigger>
           <TabsTrigger value="differential">Diferencial</TabsTrigger>
           {hasElectronics && <TabsTrigger value="electronics">Eletrônica</TabsTrigger>}
-          {hasDrivetrain && <TabsTrigger value="drivetrain">Transmissão</TabsTrigger>}
+          {hasDrivetrain && <TabsTrigger value="drivetrain">Geral</TabsTrigger>}
         </TabsList>
 
         {renderCategoryTab('aero')}
