@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -38,7 +38,25 @@ export default function Landing() {
   const [demoOpen, setDemoOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState<string | null>(null);
+  const [parallaxOffset, setParallaxOffset] = useState(0);
+  const parallaxRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (parallaxRef.current) {
+        const rect = parallaxRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const elementCenter = rect.top + rect.height / 2;
+        const offset = (windowHeight / 2 - elementCenter) * 0.15;
+        setParallaxOffset(offset);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -300,12 +318,13 @@ export default function Landing() {
               </div>
             </div>
             
-            <div className="relative">
+            <div className="relative" ref={parallaxRef}>
               <div className="aspect-square rounded-2xl overflow-hidden border border-border/50">
                 <img 
                   src={alfaRomeoDtm} 
                   alt="Alfa Romeo 155 V6 TI DTM 1995" 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover scale-110 transition-transform duration-100 ease-out"
+                  style={{ transform: `scale(1.1) translateY(${parallaxOffset}px)` }}
                 />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-xl p-4 shadow-lg">
