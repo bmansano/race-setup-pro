@@ -344,16 +344,16 @@ export default function Landing() {
             Suporte completo para os principais simuladores de corrida do mercado
           </p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {simulatorLogos.map((sim) => (
               <div 
                 key={sim.name}
-                className="group p-6 rounded-xl bg-card border border-border/50 hover:border-primary/50 transition-all cursor-default"
+                className="group flex items-center justify-center p-4 transition-all cursor-default"
               >
                 <img 
                   src={sim.logo} 
                   alt={sim.name}
-                  className="w-full h-16 object-contain opacity-80 group-hover:opacity-100 transition-opacity"
+                  className="w-full h-12 object-contain brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity"
                 />
               </div>
             ))}
