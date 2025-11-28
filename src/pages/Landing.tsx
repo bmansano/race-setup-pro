@@ -353,7 +353,7 @@ export default function Landing() {
                 <img 
                   src={sim.logo} 
                   alt={sim.name}
-                  className="w-full h-12 object-contain brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity"
+                  className="w-full h-16 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
                 />
               </div>
             ))}
