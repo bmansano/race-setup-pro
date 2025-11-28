@@ -23,25 +23,15 @@ import featureEngineer from "@/assets/feature-engineer.jpg";
 import featureVersionHistory from "@/assets/feature-version-history.jpg";
 import alfaRomeoDtm from "@/assets/alfa-romeo-155-dtm.jpg";
 
-// Simulator logos
-import logoAcc from "@/assets/logos/logo-acc.png";
-import logoAcEvo from "@/assets/logos/logo-ac-evo.png";
-import logoAcRally from "@/assets/logos/logo-ac-rally.png";
-import logoAms2 from "@/assets/logos/logo-ams2.png";
-import logoIracing from "@/assets/logos/logo-iracing.png";
-import logoLmu from "@/assets/logos/logo-lmu.png";
-import logoPmr from "@/assets/logos/logo-pmr.png";
-import logoRaceroom from "@/assets/logos/logo-raceroom.png";
-
-const simulatorLogos = [
-  { name: "Assetto Corsa Competizione", logo: logoAcc },
-  { name: "Assetto Corsa EVO", logo: logoAcEvo },
-  { name: "Assetto Corsa Rally", logo: logoAcRally },
-  { name: "Automobilista 2", logo: logoAms2 },
-  { name: "iRacing", logo: logoIracing },
-  { name: "Le Mans Ultimate", logo: logoLmu },
-  { name: "Project Motor Racing", logo: logoPmr },
-  { name: "RaceRoom", logo: logoRaceroom },
+const simulators = [
+  "Assetto Corsa Competizione",
+  "Assetto Corsa EVO",
+  "Assetto Corsa Rally",
+  "Automobilista 2",
+  "iRacing",
+  "Le Mans Ultimate",
+  "Project Motor Racing",
+  "RaceRoom",
 ];
 
 export default function Landing() {
@@ -344,17 +334,15 @@ export default function Landing() {
             Suporte completo para os principais simuladores de corrida do mercado
           </p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {simulatorLogos.map((sim) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {simulators.map((name) => (
               <div 
-                key={sim.name}
-                className="group flex items-center justify-center p-4 transition-all cursor-default"
+                key={name}
+                className="group flex items-center justify-center p-4 rounded-xl bg-card/50 border border-border/50 hover:border-primary/50 hover:bg-card transition-all duration-300"
               >
-                <img 
-                  src={sim.logo} 
-                  alt={sim.name}
-                  className="w-full h-16 object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
-                />
+                <span className="text-sm md:text-base font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">
+                  {name}
+                </span>
               </div>
             ))}
           </div>
