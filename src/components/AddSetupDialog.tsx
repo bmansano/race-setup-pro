@@ -350,11 +350,11 @@ export function AddSetupDialog() {
 
     return (
       <TabsContent value={categoryKey} className="space-y-4">
-        <Card className="p-4">
-          <div className="grid grid-cols-2 gap-4">
+        <Card className="p-3 sm:p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {categoryFields.map((field) => (
               <div key={field.name}>
-                <Label htmlFor={field.name}>{field.label}</Label>
+                <Label htmlFor={field.name} className="text-xs sm:text-sm">{field.label}</Label>
                 <Input
                   id={field.name}
                   value={configuration[categoryKey]?.[field.name] || ""}
@@ -362,6 +362,7 @@ export function AddSetupDialog() {
                     ...configuration,
                     [categoryKey]: { ...configuration[categoryKey], [field.name]: e.target.value }
                   })}
+                  className="text-sm"
                 />
               </div>
             ))}
@@ -374,20 +375,21 @@ export function AddSetupDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2 shadow-racing">
+        <Button className="gap-2 shadow-racing text-xs sm:text-sm">
           <Plus className="h-4 w-4" />
-          Adicionar Novo Setup
+          <span className="hidden sm:inline">Adicionar Novo Setup</span>
+          <span className="sm:hidden">Novo Setup</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh]">
+      <DialogContent className="max-w-4xl max-h-[90vh] w-[95vw] sm:w-full">
         <DialogHeader>
-          <DialogTitle>Adicionar Novo Setup</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-lg sm:text-xl">Adicionar Novo Setup</DialogTitle>
+          <DialogDescription className="text-xs sm:text-sm">
             Configure todos os parâmetros do setup do seu carro.
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="max-h-[65vh] pr-4">
+        <ScrollArea className="max-h-[60vh] sm:max-h-[65vh] pr-4">
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="name">Nome do Setup</Label>
@@ -482,19 +484,21 @@ export function AddSetupDialog() {
 
             {formData.simulator && (
               <Tabs defaultValue="aero" className="w-full">
-                <TabsList className={`grid w-full ${availableCategories.length <= 5 ? 'grid-cols-5' : 'grid-cols-7'}`}>
-                  <TabsTrigger value="aero">Aero</TabsTrigger>
-                  <TabsTrigger value="suspension">Suspensão</TabsTrigger>
-                  <TabsTrigger value="tires">Pneus</TabsTrigger>
-                  <TabsTrigger value="brakes">Freios</TabsTrigger>
-                  <TabsTrigger value="differential">Diferencial</TabsTrigger>
-                  {availableCategories.includes('electronics') && (
-                    <TabsTrigger value="electronics">Eletrônica</TabsTrigger>
-                  )}
-                  {availableCategories.includes('drivetrain') && (
-                    <TabsTrigger value="drivetrain">Geral</TabsTrigger>
-                  )}
-                </TabsList>
+                <div className="overflow-x-auto -mx-4 px-4 pb-2">
+                  <TabsList className={`inline-flex w-max min-w-full sm:w-full sm:grid ${availableCategories.length <= 5 ? 'sm:grid-cols-5' : 'sm:grid-cols-7'}`}>
+                    <TabsTrigger value="aero" className="text-xs sm:text-sm px-2 sm:px-3">Aero</TabsTrigger>
+                    <TabsTrigger value="suspension" className="text-xs sm:text-sm px-2 sm:px-3">Suspensão</TabsTrigger>
+                    <TabsTrigger value="tires" className="text-xs sm:text-sm px-2 sm:px-3">Pneus</TabsTrigger>
+                    <TabsTrigger value="brakes" className="text-xs sm:text-sm px-2 sm:px-3">Freios</TabsTrigger>
+                    <TabsTrigger value="differential" className="text-xs sm:text-sm px-2 sm:px-3">Diferencial</TabsTrigger>
+                    {availableCategories.includes('electronics') && (
+                      <TabsTrigger value="electronics" className="text-xs sm:text-sm px-2 sm:px-3">Eletrônica</TabsTrigger>
+                    )}
+                    {availableCategories.includes('drivetrain') && (
+                      <TabsTrigger value="drivetrain" className="text-xs sm:text-sm px-2 sm:px-3">Geral</TabsTrigger>
+                    )}
+                  </TabsList>
+                </div>
 
                 {renderCategoryTab('aero', 'Aero')}
                 {renderCategoryTab('suspension', 'Suspensão')}
