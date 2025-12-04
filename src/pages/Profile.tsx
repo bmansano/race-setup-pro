@@ -118,18 +118,18 @@ export default function Profile() {
   }
 
   return (
-    <div className="container max-w-4xl py-8 space-y-8">
+    <div className="container max-w-4xl py-4 sm:py-8 px-4 space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight mb-2">Configurações de Perfil</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Configurações de Perfil</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
           Gerencie as informações da sua equipe e perfil profissional
         </p>
       </div>
 
-      <Card className="p-6 space-y-6">
-        <div className="flex flex-col md:flex-row gap-8">
+      <Card className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+        <div className="flex flex-col md:flex-row gap-6 sm:gap-8">
           <div className="flex flex-col items-center gap-4">
-            <Avatar className="h-32 w-32 ring-2 ring-border">
+            <Avatar className="h-24 w-24 sm:h-32 sm:w-32 ring-2 ring-border">
               <AvatarImage src={avatarUrl || defaultAvatar} alt="Profile" />
               <AvatarFallback>
                 {profileType === "engineer" ? "EN" : "DR"}
@@ -141,7 +141,7 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 onClick={() => setProfileType("engineer")}
-                className={profileType === "engineer" ? "bg-muted" : ""}
+                className={`text-xs sm:text-sm ${profileType === "engineer" ? "bg-muted" : ""}`}
               >
                 Engenheiro
               </Button>
@@ -149,53 +149,56 @@ export default function Profile() {
                 variant="outline"
                 size="sm"
                 onClick={() => setProfileType("driver")}
-                className={profileType === "driver" ? "bg-muted" : ""}
+                className={`text-xs sm:text-sm ${profileType === "driver" ? "bg-muted" : ""}`}
               >
                 Piloto
               </Button>
             </div>
 
-            <Button variant="outline" size="sm" className="w-full">
+            <Button variant="outline" size="sm" className="w-full text-xs sm:text-sm">
               <Camera className="h-4 w-4 mr-2" />
               Upload Foto
             </Button>
           </div>
 
-          <div className="flex-1 space-y-4">
+          <div className="flex-1 space-y-3 sm:space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="team">Nome da Equipe</Label>
+              <Label htmlFor="team" className="text-xs sm:text-sm">Nome da Equipe</Label>
               <Input
                 id="team"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
                 placeholder="Digite o nome da equipe"
+                className="text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="engineer">Nome do Engenheiro</Label>
+              <Label htmlFor="engineer" className="text-xs sm:text-sm">Nome do Engenheiro</Label>
               <Input
                 id="engineer"
                 value={engineerName}
                 onChange={(e) => setEngineerName(e.target.value)}
                 placeholder="Digite o nome do engenheiro"
+                className="text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="driver">Nome do Piloto</Label>
+              <Label htmlFor="driver" className="text-xs sm:text-sm">Nome do Piloto</Label>
               <Input
                 id="driver"
                 value={driverName}
                 onChange={(e) => setDriverName(e.target.value)}
                 placeholder="Digite o nome do piloto"
+                className="text-sm"
               />
             </div>
           </div>
         </div>
 
         <div className="flex justify-end pt-4 border-t">
-          <Button onClick={handleSave} disabled={saving} className="shadow-racing">
+          <Button onClick={handleSave} disabled={saving} className="shadow-racing text-sm">
             {saving ? (
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
             ) : (
@@ -206,9 +209,9 @@ export default function Profile() {
         </div>
       </Card>
 
-      <Card className="p-6 bg-gradient-carbon border-primary/20">
-        <h3 className="text-lg font-semibold mb-2">Sobre o Apex Engineer</h3>
-        <p className="text-sm text-muted-foreground">
+      <Card className="p-4 sm:p-6 bg-gradient-carbon border-primary/20">
+        <h3 className="text-base sm:text-lg font-semibold mb-2">Sobre o Apex Engineer</h3>
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Sistema profissional de gerenciamento de setups para simuladores de corrida com 
           engenheiro de IA. Compatível com iRacing, Automobilista 2, Assetto Corsa e mais.
         </p>

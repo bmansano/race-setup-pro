@@ -91,36 +91,42 @@ export default function Landing() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg">
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <Settings className="h-5 w-5 text-primary-foreground" />
+            <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold tracking-tight">Apex Engineer</span>
+            <span className="text-lg sm:text-xl font-bold tracking-tight">Apex Engineer</span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <ThemeToggle />
             {isLoggedIn ? (
               <>
                 {userName && (
-                  <span className="hidden sm:inline text-sm text-muted-foreground">
+                  <span className="hidden md:inline text-sm text-muted-foreground">
                     Olá, {userName}
                   </span>
                 )}
                 <Link to="/simulators">
-                  <Button variant="outline" size="sm">Meus setups</Button>
+                  <Button variant="outline" size="sm" className="text-xs sm:text-sm px-2 sm:px-3">
+                    <span className="hidden sm:inline">Meus setups</span>
+                    <span className="sm:hidden">Setups</span>
+                  </Button>
                 </Link>
-                <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
-                  <LogOut className="h-5 w-5" />
+                <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair" className="h-8 w-8 sm:h-9 sm:w-9">
+                  <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </>
             ) : (
               <>
-                <Link to="/auth">
+                <Link to="/auth" className="hidden sm:block">
                   <Button variant="outline" size="sm">Entrar</Button>
                 </Link>
                 <Link to="/auth">
-                  <Button size="sm" className="shadow-racing">Começar grátis</Button>
+                  <Button size="sm" className="shadow-racing text-xs sm:text-sm px-3 sm:px-4">
+                    <span className="hidden sm:inline">Começar grátis</span>
+                    <span className="sm:hidden">Entrar</span>
+                  </Button>
                 </Link>
               </>
             )}
@@ -129,39 +135,39 @@ export default function Landing() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-14 sm:pt-16">
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background" />
         
-        <div className="container relative z-10 text-center py-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
-            <Zap className="h-4 w-4 text-primary" />
-            <span className="text-sm font-medium text-primary">Powered by AI</span>
+        <div className="container relative z-10 text-center py-12 sm:py-20 px-4">
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 border border-primary/20 mb-6 sm:mb-8">
+            <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-primary" />
+            <span className="text-xs sm:text-sm font-medium text-primary">Powered by AI</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
             Seu engenheiro de<br />performance virtual
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10">
+          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 sm:mb-10 px-2">
             Transforme seus tempos de volta com setups otimizados por inteligência artificial. 
             O parceiro perfeito para pilotos e engenheiros de sim racing.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link to="/auth">
-              <Button size="lg" className="text-lg px-8 py-6 shadow-racing group">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
+            <Link to="/auth" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 shadow-racing group">
                 Começar agora
-                <ChevronRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <Button 
               size="lg" 
               variant="outline" 
-              className="text-lg px-8 py-6"
+              className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6"
               onClick={() => setDemoOpen(true)}
             >
               Ver demo
@@ -169,7 +175,7 @@ export default function Landing() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {[
               { value: "8+", label: "Simuladores" },
               { value: "500+", label: "Carros suportados" },
@@ -177,8 +183,8 @@ export default function Landing() {
               { value: "IA", label: "Engenheiro 24/7" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-1">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -186,13 +192,13 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-muted/30">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+      <section className="py-12 sm:py-24 bg-muted/30">
+        <div className="container px-4">
+          <div className="text-center mb-10 sm:mb-16">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
               Tudo que você precisa para <span className="text-primary">vencer</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
               Ferramentas profissionais de gerenciamento de setup combinadas com 
               inteligência artificial de última geração
             </p>
@@ -273,21 +279,21 @@ export default function Landing() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-24">
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <section className="py-12 sm:py-24">
+        <div className="container px-4">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
                 Ganhe segundos,<br />
                 <span className="text-primary">não milésimos</span>
               </h2>
-              <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-sm sm:text-lg text-muted-foreground mb-6 sm:mb-8">
                 Enquanto outros perdem horas testando configurações aleatórias, 
                 você terá um engenheiro de performance dedicado analisando seu 
                 feedback e sugerindo ajustes precisos.
               </p>
               
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {[
                   {
                     icon: Trophy,
@@ -305,20 +311,20 @@ export default function Landing() {
                     description: "Suporte para os principais simuladores do mercado"
                   },
                 ].map((benefit) => (
-                  <div key={benefit.title} className="flex gap-4">
-                    <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <benefit.icon className="h-6 w-6 text-primary" />
+                  <div key={benefit.title} className="flex gap-3 sm:gap-4">
+                    <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <benefit.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-1">{benefit.title}</h4>
-                      <p className="text-muted-foreground">{benefit.description}</p>
+                      <h4 className="font-semibold mb-1 text-sm sm:text-base">{benefit.title}</h4>
+                      <p className="text-muted-foreground text-xs sm:text-base">{benefit.description}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="relative" ref={parallaxRef}>
+            <div className="relative order-first lg:order-last" ref={parallaxRef}>
               <div className="aspect-square rounded-2xl overflow-hidden border border-border/50">
                 <img 
                   src={alfaRomeoDtm} 
@@ -327,14 +333,14 @@ export default function Landing() {
                   style={{ transform: `scale(1.1) translateY(${parallaxOffset}px)` }}
                 />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-card border border-border rounded-xl p-4 shadow-lg">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-green-500/10 flex items-center justify-center">
-                    <Zap className="h-5 w-5 text-green-500" />
+              <div className="absolute -bottom-4 -left-2 sm:-bottom-6 sm:-left-6 bg-card border border-border rounded-xl p-3 sm:p-4 shadow-lg">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                    <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium">Setup otimizado</div>
-                    <div className="text-xs text-muted-foreground">-1.2s no tempo de volta</div>
+                    <div className="text-xs sm:text-sm font-medium">Setup otimizado</div>
+                    <div className="text-[10px] sm:text-xs text-muted-foreground">-1.2s no tempo de volta</div>
                   </div>
                 </div>
               </div>
@@ -344,22 +350,22 @@ export default function Landing() {
       </section>
 
       {/* Simulators Section */}
-      <section className="py-24 bg-muted/30">
-        <div className="container text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+      <section className="py-12 sm:py-24 bg-muted/30">
+        <div className="container text-center px-4">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
             Compatível com seus <span className="text-primary">simuladores favoritos</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-12">
+          <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12 px-2">
             Suporte completo para os principais simuladores de corrida do mercado
           </p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {simulators.map((name) => (
               <div 
                 key={name}
-                className="group flex items-center justify-center p-4 rounded-xl bg-card/50 border border-border/50 hover:border-primary/50 hover:bg-card transition-all duration-300"
+                className="group flex items-center justify-center p-3 sm:p-4 rounded-xl bg-card/50 border border-border/50 hover:border-primary/50 hover:bg-card transition-all duration-300"
               >
-                <span className="text-sm md:text-base font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">
+                <span className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground group-hover:text-foreground transition-colors text-center">
                   {name}
                 </span>
               </div>
@@ -369,23 +375,23 @@ export default function Landing() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24">
-        <div className="container">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border border-primary/20 p-12 md:p-20 text-center">
+      <section className="py-12 sm:py-24">
+        <div className="container px-4">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border border-primary/20 p-6 sm:p-12 md:p-20 text-center">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
             
             <div className="relative z-10">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
                 Pronto para dominar as pistas?
               </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10">
+              <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-10 px-2">
                 Junte-se a milhares de pilotos que já estão usando o Apex Engineer 
                 para alcançar tempos de volta mais rápidos.
               </p>
               <Link to="/auth">
-                <Button size="lg" className="text-lg px-10 py-6 shadow-racing">
+                <Button size="lg" className="text-base sm:text-lg px-6 sm:px-10 py-5 sm:py-6 shadow-racing">
                   Criar conta gratuita
-                  <ChevronRight className="ml-2 h-5 w-5" />
+                  <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </Link>
             </div>
@@ -394,16 +400,16 @@ export default function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-border py-12">
-        <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+      <footer className="border-t border-border py-8 sm:py-12">
+        <div className="container px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-                <Settings className="h-5 w-5 text-primary-foreground" />
+              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+                <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">Apex Engineer</span>
+              <span className="text-lg sm:text-xl font-bold">Apex Engineer</span>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground text-center">
               © 2026 Apex Engineer. Todos os direitos reservados.
             </p>
           </div>

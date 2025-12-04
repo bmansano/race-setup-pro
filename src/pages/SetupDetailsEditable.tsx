@@ -215,15 +215,16 @@ export default function SetupDetailsEditable() {
 
     return (
       <TabsContent value={categoryKey} className="space-y-4">
-        <Card className="p-6">
-          <div className="grid grid-cols-2 gap-4">
+        <Card className="p-4 sm:p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {categoryFields.map((field) => (
               <div key={field.name}>
-                <Label htmlFor={field.name}>{field.label}</Label>
+                <Label htmlFor={field.name} className="text-xs sm:text-sm">{field.label}</Label>
                 <Input
                   id={field.name}
                   value={(setupData.configuration[categoryKey] as Record<string, string>)?.[field.name] || ""}
                   onChange={(e) => updateSetupData(categoryKey, field.name, e.target.value)}
+                  className="text-sm"
                 />
               </div>
             ))}
@@ -265,42 +266,45 @@ export default function SetupDetailsEditable() {
   const totalTabs = 5 + (hasElectronics ? 1 : 0) + (hasDrivetrain ? 1 : 0);
 
   return (
-    <div className="container max-w-6xl py-8 space-y-6">
-      <div className="flex items-center justify-between mb-4">
-        <Button variant="ghost" onClick={() => navigate("/simulators")} className="gap-2">
+    <div className="container max-w-6xl py-4 sm:py-8 px-4 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <Button variant="ghost" onClick={() => navigate("/simulators")} className="gap-2 w-fit">
           <ArrowLeft className="h-4 w-4" />
-          Voltar para Setups
+          <span className="hidden sm:inline">Voltar para Setups</span>
+          <span className="sm:hidden">Voltar</span>
         </Button>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button 
             variant="outline" 
             onClick={() => setDeleteDialogOpen(true)} 
-            className="gap-2 text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="gap-1 sm:gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 text-xs sm:text-sm px-2 sm:px-3"
+            size="sm"
           >
-            <Trash2 className="h-4 w-4" />
-            Excluir
+            <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Excluir</span>
           </Button>
-          <Button variant="outline" onClick={() => setVersionHistoryOpen(true)} className="gap-2">
-            <History className="h-4 w-4" />
-            Histórico
+          <Button variant="outline" onClick={() => setVersionHistoryOpen(true)} className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3" size="sm">
+            <History className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Histórico</span>
           </Button>
-          <Button variant="secondary" onClick={() => setEngineerDialogOpen(true)} className="gap-2">
-            <Sparkles className="h-4 w-4" />
-            Engenheiro de Performance
+          <Button variant="secondary" onClick={() => setEngineerDialogOpen(true)} className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3" size="sm">
+            <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden md:inline">Engenheiro de Performance</span>
+            <span className="md:hidden">IA</span>
           </Button>
-          <Button onClick={handleSave} className="gap-2 shadow-racing">
-            <Save className="h-4 w-4" />
-            Salvar Alterações
+          <Button onClick={handleSave} className="gap-1 sm:gap-2 shadow-racing text-xs sm:text-sm px-2 sm:px-3" size="sm">
+            <Save className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Salvar</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <Card className="overflow-hidden">
+      <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+        <Card className="overflow-hidden aspect-video md:aspect-auto">
           <img src={setupImage} alt={setupData.car} className="w-full h-full object-cover" />
         </Card>
 
-        <Card className="p-6 space-y-4">
+        <Card className="p-4 sm:p-6 space-y-4">
           <div>
             <div className="space-y-3">
               <div>
@@ -380,15 +384,17 @@ export default function SetupDetailsEditable() {
       </div>
 
       <Tabs defaultValue="aero" className="space-y-4">
-        <TabsList className={`grid w-full grid-cols-${totalTabs}`} style={{ gridTemplateColumns: `repeat(${totalTabs}, minmax(0, 1fr))` }}>
-          <TabsTrigger value="aero">Aero</TabsTrigger>
-          <TabsTrigger value="suspension">Suspensão</TabsTrigger>
-          <TabsTrigger value="tires">Pneus</TabsTrigger>
-          <TabsTrigger value="brakes">Freios</TabsTrigger>
-          <TabsTrigger value="differential">Diferencial</TabsTrigger>
-          {hasElectronics && <TabsTrigger value="electronics">Eletrônica</TabsTrigger>}
-          {hasDrivetrain && <TabsTrigger value="drivetrain">Geral</TabsTrigger>}
-        </TabsList>
+        <div className="overflow-x-auto -mx-4 px-4 pb-2">
+          <TabsList className="inline-flex w-max min-w-full sm:w-full sm:grid" style={{ gridTemplateColumns: `repeat(${totalTabs}, minmax(0, 1fr))` }}>
+            <TabsTrigger value="aero" className="text-xs sm:text-sm px-2 sm:px-3">Aero</TabsTrigger>
+            <TabsTrigger value="suspension" className="text-xs sm:text-sm px-2 sm:px-3">Suspensão</TabsTrigger>
+            <TabsTrigger value="tires" className="text-xs sm:text-sm px-2 sm:px-3">Pneus</TabsTrigger>
+            <TabsTrigger value="brakes" className="text-xs sm:text-sm px-2 sm:px-3">Freios</TabsTrigger>
+            <TabsTrigger value="differential" className="text-xs sm:text-sm px-2 sm:px-3">Diferencial</TabsTrigger>
+            {hasElectronics && <TabsTrigger value="electronics" className="text-xs sm:text-sm px-2 sm:px-3">Eletrônica</TabsTrigger>}
+            {hasDrivetrain && <TabsTrigger value="drivetrain" className="text-xs sm:text-sm px-2 sm:px-3">Geral</TabsTrigger>}
+          </TabsList>
+        </div>
 
         {renderCategoryTab('aero')}
         {renderCategoryTab('suspension')}

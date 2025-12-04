@@ -233,28 +233,28 @@ export default function Auth() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
+        <CardHeader className="space-y-1 px-4 sm:px-6">
           <Link to="/" className="flex items-center justify-center gap-2 mb-2 hover:opacity-80 transition-opacity">
-            <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <Settings className="h-6 w-6 text-primary-foreground" />
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <Settings className="h-5 w-5 sm:h-6 sm:w-6 text-primary-foreground" />
             </div>
           </Link>
-          <CardTitle className="text-2xl font-bold text-center">Apex Engineer</CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-xl sm:text-2xl font-bold text-center">Apex Engineer</CardTitle>
+          <CardDescription className="text-center text-xs sm:text-sm">
             Seu engenheiro de performance virtual
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6">
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Login</TabsTrigger>
-              <TabsTrigger value="signup">Criar Conta</TabsTrigger>
+              <TabsTrigger value="signin" className="text-xs sm:text-sm">Login</TabsTrigger>
+              <TabsTrigger value="signup" className="text-xs sm:text-sm">Criar Conta</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
+              <form onSubmit={handleSignIn} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
+                  <Label htmlFor="signin-email" className="text-xs sm:text-sm">Email</Label>
                   <Input
                     id="signin-email"
                     type="email"
@@ -263,10 +263,11 @@ export default function Auth() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
+                    className="text-sm"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password">Senha</Label>
+                  <Label htmlFor="signin-password" className="text-xs sm:text-sm">Senha</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -275,10 +276,11 @@ export default function Auth() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     disabled={isLoading}
+                    className="text-sm"
                   />
                 </div>
                 
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       id="remember-me" 
@@ -287,7 +289,7 @@ export default function Auth() {
                     />
                     <Label 
                       htmlFor="remember-me" 
-                      className="text-sm font-normal text-muted-foreground cursor-pointer"
+                      className="text-xs sm:text-sm font-normal text-muted-foreground cursor-pointer"
                     >
                       Lembrar meus dados
                     </Label>
@@ -295,7 +297,7 @@ export default function Auth() {
                   <Button
                     type="button"
                     variant="link"
-                    className="px-0 text-sm text-primary"
+                    className="px-0 text-xs sm:text-sm text-primary h-auto py-0"
                     onClick={() => {
                       setShowForgotPassword(true);
                       setResetEmail(email);
@@ -305,7 +307,7 @@ export default function Auth() {
                   </Button>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full text-sm" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -319,9 +321,9 @@ export default function Auth() {
             </TabsContent>
 
             <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
+              <form onSubmit={handleSignUp} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nome</Label>
+                  <Label htmlFor="signup-name" className="text-xs sm:text-sm">Nome</Label>
                   <Input
                     id="signup-name"
                     type="text"
@@ -330,10 +332,11 @@ export default function Auth() {
                     onChange={(e) => setName(e.target.value)}
                     required
                     disabled={isLoading}
+                    className="text-sm"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
+                  <Label htmlFor="signup-email" className="text-xs sm:text-sm">Email</Label>
                   <Input
                     id="signup-email"
                     type="email"
@@ -342,10 +345,11 @@ export default function Auth() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     disabled={isLoading}
+                    className="text-sm"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Senha</Label>
+                  <Label htmlFor="signup-password" className="text-xs sm:text-sm">Senha</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -355,6 +359,7 @@ export default function Auth() {
                     required
                     disabled={isLoading}
                     minLength={6}
+                    className="text-sm"
                   />
                 </div>
                 
@@ -366,13 +371,13 @@ export default function Auth() {
                   />
                   <Label 
                     htmlFor="remember-me-signup" 
-                    className="text-sm font-normal text-muted-foreground cursor-pointer"
+                    className="text-xs sm:text-sm font-normal text-muted-foreground cursor-pointer"
                   >
                     Lembrar meus dados
                   </Label>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full text-sm" disabled={isLoading}>
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />

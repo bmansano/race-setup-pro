@@ -35,59 +35,59 @@ export function Navigation() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-card/80 backdrop-blur-lg">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center gap-8">
+      <div className="container flex h-14 sm:h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-4 sm:gap-8">
           <Link to="/simulators" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <div className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
-              <Settings className="h-5 w-5 text-primary-foreground" />
+            <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-gradient-primary flex items-center justify-center">
+              <Settings className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold tracking-tight">Apex Engineer</span>
+            <span className="text-lg sm:text-xl font-bold tracking-tight hidden xs:inline">Apex Engineer</span>
           </Link>
           
           <div className="hidden md:flex items-center gap-1">
             <NavLink
               to="/"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+              className="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
               activeClassName="text-foreground bg-muted"
             >
-              <Home className="h-4 w-4 inline mr-2" />
+              <Home className="h-4 w-4 inline mr-1 sm:mr-2" />
               Início
             </NavLink>
             <NavLink
               to="/simulators"
               end
-              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+              className="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
               activeClassName="text-foreground bg-muted"
             >
-              <Gamepad2 className="h-4 w-4 inline mr-2" />
+              <Gamepad2 className="h-4 w-4 inline mr-1 sm:mr-2" />
               Simuladores
             </NavLink>
             <NavLink
               to="/profile"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
+              className="px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium text-muted-foreground transition-all hover:text-foreground hover:bg-muted"
               activeClassName="text-foreground bg-muted"
             >
-              <User className="h-4 w-4 inline mr-2" />
+              <User className="h-4 w-4 inline mr-1 sm:mr-2" />
               Perfil
             </NavLink>
           </div>
         </div>
         
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           {userName && (
-            <span className="hidden sm:inline text-sm text-muted-foreground">
+            <span className="hidden lg:inline text-xs sm:text-sm text-muted-foreground">
               Olá, {userName}
             </span>
           )}
-          <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair">
-            <LogOut className="h-5 w-5" />
+          <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair" className="h-8 w-8 sm:h-9 sm:w-9">
+            <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
           <ThemeToggle />
           
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-9 sm:w-9">
+                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-64">
