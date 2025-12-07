@@ -57,14 +57,14 @@ export default function Auth() {
       }
 
       toast({
-        title: "Conta criada!",
-        description: "Você foi autenticado automaticamente.",
+        title: "Account created!",
+        description: "You have been automatically signed in.",
       });
 
       navigate("/simulators");
     } catch (error: any) {
       toast({
-        title: "Erro ao criar conta",
+        title: "Error creating account",
         description: error.message,
         variant: "destructive",
       });
@@ -93,14 +93,14 @@ export default function Auth() {
       }
 
       toast({
-        title: "Login realizado!",
-        description: "Bem-vindo de volta.",
+        title: "Signed in!",
+        description: "Welcome back.",
       });
 
       navigate("/simulators");
     } catch (error: any) {
       toast({
-        title: "Erro ao fazer login",
+        title: "Error signing in",
         description: error.message,
         variant: "destructive",
       });
@@ -114,8 +114,8 @@ export default function Auth() {
     
     if (!resetEmail.trim()) {
       toast({
-        title: "Email necessário",
-        description: "Por favor, insira seu email para redefinir a senha.",
+        title: "Email required",
+        description: "Please enter your email to reset your password.",
         variant: "destructive",
       });
       return;
@@ -132,12 +132,12 @@ export default function Auth() {
 
       setResetSent(true);
       toast({
-        title: "Email enviado!",
-        description: "Verifique sua caixa de entrada para redefinir sua senha.",
+        title: "Email sent!",
+        description: "Check your inbox to reset your password.",
       });
     } catch (error: any) {
       toast({
-        title: "Erro ao enviar email",
+        title: "Error sending email",
         description: error.message,
         variant: "destructive",
       });
@@ -164,18 +164,18 @@ export default function Auth() {
               >
                 <ArrowLeft className="h-4 w-4" />
               </Button>
-              <span className="text-sm text-muted-foreground">Voltar ao login</span>
+              <span className="text-sm text-muted-foreground">Back to sign in</span>
             </div>
             <div className="flex items-center justify-center gap-2 mb-2">
               <div className="h-10 w-10 rounded-lg bg-gradient-primary flex items-center justify-center">
                 <Settings className="h-6 w-6 text-primary-foreground" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center">Recuperar Senha</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Reset Password</CardTitle>
             <CardDescription className="text-center">
               {resetSent 
-                ? "Email enviado com sucesso!" 
-                : "Insira seu email para receber o link de redefinição"
+                ? "Email sent successfully!" 
+                : "Enter your email to receive the reset link"
               }
             </CardDescription>
           </CardHeader>
@@ -184,18 +184,18 @@ export default function Auth() {
               <div className="space-y-4 text-center">
                 <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                   <p className="text-sm text-green-600 dark:text-green-400">
-                    Enviamos um email para <strong>{resetEmail}</strong> com instruções para redefinir sua senha.
+                    We sent an email to <strong>{resetEmail}</strong> with instructions to reset your password.
                   </p>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Não recebeu o email? Verifique sua pasta de spam ou tente novamente.
+                  Didn't receive the email? Check your spam folder or try again.
                 </p>
                 <Button 
                   variant="outline" 
                   className="w-full"
                   onClick={() => setResetSent(false)}
                 >
-                  Tentar novamente
+                  Try again
                 </Button>
               </div>
             ) : (
@@ -205,7 +205,7 @@ export default function Auth() {
                   <Input
                     id="reset-email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder="your@email.com"
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
                     required
@@ -216,10 +216,10 @@ export default function Auth() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Enviando...
+                      Sending...
                     </>
                   ) : (
-                    "Enviar Link de Redefinição"
+                    "Send Reset Link"
                   )}
                 </Button>
               </form>
@@ -241,14 +241,14 @@ export default function Auth() {
           </Link>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center">Apex Engineer</CardTitle>
           <CardDescription className="text-center text-xs sm:text-sm">
-            Seu engenheiro de performance virtual
+            Your virtual performance engineer
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 sm:px-6">
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin" className="text-xs sm:text-sm">Login</TabsTrigger>
-              <TabsTrigger value="signup" className="text-xs sm:text-sm">Criar Conta</TabsTrigger>
+              <TabsTrigger value="signin" className="text-xs sm:text-sm">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="text-xs sm:text-sm">Create Account</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
@@ -258,7 +258,7 @@ export default function Auth() {
                   <Input
                     id="signin-email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -267,7 +267,7 @@ export default function Auth() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signin-password" className="text-xs sm:text-sm">Senha</Label>
+                  <Label htmlFor="signin-password" className="text-xs sm:text-sm">Password</Label>
                   <Input
                     id="signin-password"
                     type="password"
@@ -291,7 +291,7 @@ export default function Auth() {
                       htmlFor="remember-me" 
                       className="text-xs sm:text-sm font-normal text-muted-foreground cursor-pointer"
                     >
-                      Lembrar meus dados
+                      Remember me
                     </Label>
                   </div>
                   <Button
@@ -303,7 +303,7 @@ export default function Auth() {
                       setResetEmail(email);
                     }}
                   >
-                    Esqueci minha senha
+                    Forgot password
                   </Button>
                 </div>
 
@@ -311,10 +311,10 @@ export default function Auth() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Entrando...
+                      Signing in...
                     </>
                   ) : (
-                    "Entrar"
+                    "Sign In"
                   )}
                 </Button>
               </form>
@@ -323,11 +323,11 @@ export default function Auth() {
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name" className="text-xs sm:text-sm">Nome</Label>
+                  <Label htmlFor="signup-name" className="text-xs sm:text-sm">Name</Label>
                   <Input
                     id="signup-name"
                     type="text"
-                    placeholder="Seu nome"
+                    placeholder="Your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -340,7 +340,7 @@ export default function Auth() {
                   <Input
                     id="signup-email"
                     type="email"
-                    placeholder="seu@email.com"
+                    placeholder="your@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -349,7 +349,7 @@ export default function Auth() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password" className="text-xs sm:text-sm">Senha</Label>
+                  <Label htmlFor="signup-password" className="text-xs sm:text-sm">Password</Label>
                   <Input
                     id="signup-password"
                     type="password"
@@ -373,7 +373,7 @@ export default function Auth() {
                     htmlFor="remember-me-signup" 
                     className="text-xs sm:text-sm font-normal text-muted-foreground cursor-pointer"
                   >
-                    Lembrar meus dados
+                    Remember me
                   </Label>
                 </div>
 
@@ -381,10 +381,10 @@ export default function Auth() {
                   {isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Criando conta...
+                      Creating account...
                     </>
                   ) : (
-                    "Criar Conta"
+                    "Create Account"
                   )}
                 </Button>
               </form>

@@ -39,7 +39,7 @@ interface Setup {
 }
 
 export default function Simulators() {
-  const [selectedSimulator, setSelectedSimulator] = useState("Todos os simuladores");
+  const [selectedSimulator, setSelectedSimulator] = useState("All Simulators");
   const [setups, setSetups] = useState<Setup[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -67,7 +67,7 @@ export default function Simulators() {
         .eq("user_id", user.id);
 
       // Only filter by simulator if a specific one is selected
-      if (selectedSimulator !== "Todos os simuladores") {
+      if (selectedSimulator !== "All Simulators") {
         query = query.eq("simulator", selectedSimulator);
       }
 
@@ -77,7 +77,7 @@ export default function Simulators() {
 
       setSetups(data || []);
     } catch (error) {
-      console.error("Erro ao carregar setups:", error);
+      console.error("Error loading setups:", error);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ export default function Simulators() {
     // Validate confirmation before proceeding
     const setupName = setups.find(s => s.id === setupToDelete)?.name.trim().toLowerCase() || "";
     if (deleteConfirmation.trim().toLowerCase() !== setupName) {
-      toast.error("O nome digitado não corresponde ao nome do setup");
+      toast.error("The typed name does not match the setup name");
       return;
     }
 
@@ -101,12 +101,12 @@ export default function Simulators() {
 
       if (error) throw error;
 
-      toast.success("Setup excluído com sucesso!");
+      toast.success("Setup deleted successfully!");
       setDeleteDialogOpen(false);
       setSetups(setups.filter(s => s.id !== setupToDelete));
     } catch (error) {
-      console.error("Erro ao excluir setup:", error);
-      toast.error("Erro ao excluir setup");
+      console.error("Error deleting setup:", error);
+      toast.error("Error deleting setup");
     } finally {
       setSetupToDelete(null);
       setDeleteConfirmation("");
@@ -117,20 +117,20 @@ export default function Simulators() {
     <div className="container py-4 sm:py-8 px-4 space-y-6 sm:space-y-8">
       <div className="flex flex-col gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Setups Disponíveis</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Available Setups</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            Selecione o simulador e escolha um setup otimizado
+            Select the simulator and choose an optimized setup
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full">
           <Select value={selectedSimulator} onValueChange={setSelectedSimulator}>
             <SelectTrigger className="w-full sm:w-[280px]">
-              <SelectValue placeholder="Selecione o simulador" />
+              <SelectValue placeholder="Select simulator" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Todos os simuladores">
-                Todos os simuladores
+              <SelectItem value="All Simulators">
+                All Simulators
               </SelectItem>
               {simulators.map((sim) => (
                 <SelectItem key={sim} value={sim}>
@@ -146,13 +146,13 @@ export default function Simulators() {
 
       {loading ? (
         <div className="text-center py-12 text-muted-foreground">
-          Carregando setups...
+          Loading setups...
         </div>
       ) : setups.length === 0 ? (
         <div className="text-center py-12 text-muted-foreground">
-          {selectedSimulator === "Todos os simuladores" 
-            ? "Nenhum setup encontrado. Crie seu primeiro setup!" 
-            : `Nenhum setup encontrado para ${selectedSimulator}. Crie seu primeiro setup!`}
+          {selectedSimulator === "All Simulators" 
+            ? "No setups found. Create your first setup!" 
+            : `No setups found for ${selectedSimulator}. Create your first setup!`}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -184,12 +184,12 @@ export default function Simulators() {
                   {setup.condition === "wet" ? (
                     <>
                       <Cloud className="h-3 w-3 mr-1" />
-                      Molhada
+                      Wet
                     </>
                   ) : (
                     <>
                       <Sun className="h-3 w-3 mr-1" />
-                      Seca
+                      Dry
                     </>
                   )}
                 </Badge>
@@ -235,28 +235,28 @@ export default function Simulators() {
       }}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription className="space-y-4">
-              <p>Esta ação não pode ser desfeita. Para confirmar, digite o nome do setup:</p>
+              <p>This action cannot be undone. To confirm, type the setup name:</p>
               <p className="font-semibold text-foreground">
                 {setups.find(s => s.id === setupToDelete)?.name}
               </p>
               <Input
                 value={deleteConfirmation}
                 onChange={(e) => setDeleteConfirmation(e.target.value)}
-                placeholder="Digite o nome do setup"
+                placeholder="Type the setup name"
                 className="mt-2"
               />
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>Cancel</AlertDialogCancel>
             <Button 
               onClick={handleDeleteSetup} 
               disabled={deleteConfirmation.trim().toLowerCase() !== (setups.find(s => s.id === setupToDelete)?.name.trim().toLowerCase() || "")}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Excluir
+              Delete
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

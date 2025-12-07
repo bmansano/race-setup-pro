@@ -46,7 +46,7 @@ export default function Profile() {
 
       if (error) {
         console.error("Error loading profile:", error);
-        toast.error("Erro ao carregar perfil");
+        toast.error("Error loading profile");
         setLoading(false);
         return;
       }
@@ -61,7 +61,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error("Error loading profile:", error);
-      toast.error("Erro ao carregar perfil");
+      toast.error("Error loading profile");
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export default function Profile() {
 
   const handleSave = async () => {
     if (!userId) {
-      toast.error("Você precisa estar logado para salvar o perfil");
+      toast.error("You need to be logged in to save your profile");
       return;
     }
 
@@ -100,10 +100,10 @@ export default function Profile() {
         setProfileExists(true);
       }
 
-      toast.success("Perfil atualizado com sucesso!");
+      toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error saving profile:", error);
-      toast.error("Erro ao salvar perfil");
+      toast.error("Error saving profile");
     } finally {
       setSaving(false);
     }
@@ -120,9 +120,9 @@ export default function Profile() {
   return (
     <div className="container max-w-4xl py-4 sm:py-8 px-4 space-y-6 sm:space-y-8">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Configurações de Perfil</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">Profile Settings</h1>
         <p className="text-sm sm:text-base text-muted-foreground">
-          Gerencie as informações da sua equipe e perfil profissional
+          Manage your team information and professional profile
         </p>
       </div>
 
@@ -143,7 +143,7 @@ export default function Profile() {
                 onClick={() => setProfileType("engineer")}
                 className={`text-xs sm:text-sm ${profileType === "engineer" ? "bg-muted" : ""}`}
               >
-                Engenheiro
+                Engineer
               </Button>
               <Button
                 variant="outline"
@@ -151,46 +151,46 @@ export default function Profile() {
                 onClick={() => setProfileType("driver")}
                 className={`text-xs sm:text-sm ${profileType === "driver" ? "bg-muted" : ""}`}
               >
-                Piloto
+                Driver
               </Button>
             </div>
 
             <Button variant="outline" size="sm" className="w-full text-xs sm:text-sm">
               <Camera className="h-4 w-4 mr-2" />
-              Upload Foto
+              Upload Photo
             </Button>
           </div>
 
           <div className="flex-1 space-y-3 sm:space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="team" className="text-xs sm:text-sm">Nome da Equipe</Label>
+              <Label htmlFor="team" className="text-xs sm:text-sm">Team Name</Label>
               <Input
                 id="team"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
-                placeholder="Digite o nome da equipe"
+                placeholder="Enter team name"
                 className="text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="engineer" className="text-xs sm:text-sm">Nome do Engenheiro</Label>
+              <Label htmlFor="engineer" className="text-xs sm:text-sm">Engineer Name</Label>
               <Input
                 id="engineer"
                 value={engineerName}
                 onChange={(e) => setEngineerName(e.target.value)}
-                placeholder="Digite o nome do engenheiro"
+                placeholder="Enter engineer name"
                 className="text-sm"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="driver" className="text-xs sm:text-sm">Nome do Piloto</Label>
+              <Label htmlFor="driver" className="text-xs sm:text-sm">Driver Name</Label>
               <Input
                 id="driver"
                 value={driverName}
                 onChange={(e) => setDriverName(e.target.value)}
-                placeholder="Digite o nome do piloto"
+                placeholder="Enter driver name"
                 className="text-sm"
               />
             </div>
@@ -204,16 +204,16 @@ export default function Profile() {
             ) : (
               <Save className="h-4 w-4 mr-2" />
             )}
-            {saving ? "Salvando..." : "Salvar Alterações"}
+            {saving ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </Card>
 
       <Card className="p-4 sm:p-6 bg-gradient-carbon border-primary/20">
-        <h3 className="text-base sm:text-lg font-semibold mb-2">Sobre o Apex Engineer</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-2">About Apex Engineer</h3>
         <p className="text-xs sm:text-sm text-muted-foreground">
-          Sistema profissional de gerenciamento de setups para simuladores de corrida com 
-          engenheiro de IA. Compatível com iRacing, Automobilista 2, Assetto Corsa e mais.
+          Professional setup management system for racing simulators with 
+          AI engineer. Compatible with iRacing, Automobilista 2, Assetto Corsa and more.
         </p>
       </Card>
     </div>
