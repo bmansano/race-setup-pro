@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { History, RotateCcw, Eye } from "lucide-react";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 
 interface Version {
   id: string;
@@ -60,8 +60,8 @@ export const SetupVersionHistory = ({
     } catch (error) {
       console.error("Error loading versions:", error);
       toast({
-        title: "Erro",
-        description: "Não foi possível carregar o histórico de versões.",
+        title: "Error",
+        description: "Could not load version history.",
         variant: "destructive",
       });
     } finally {
@@ -79,30 +79,30 @@ export const SetupVersionHistory = ({
       });
       
       toast({
-        title: "Versão restaurada",
-        description: `Setup restaurado para a versão ${version.version_number}`,
+        title: "Version restored",
+        description: `Setup restored to version ${version.version_number}`,
       });
       
       onOpenChange(false);
     } catch (error) {
       console.error("Error restoring version:", error);
       toast({
-        title: "Erro",
-        description: "Não foi possível restaurar esta versão.",
+        title: "Error",
+        description: "Could not restore this version.",
         variant: "destructive",
       });
     }
   };
 
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR });
+    return format(new Date(dateString), "MM/dd/yyyy 'at' HH:mm", { locale: enUS });
   };
 
   const getChangeSummary = (config: any) => {
     const categories = Object.keys(config).filter(key => 
       typeof config[key] === 'object' && config[key] !== null
     );
-    return `${categories.length} categorias configuradas`;
+    return `${categories.length} categories configured`;
   };
 
   return (
@@ -111,24 +111,24 @@ export const SetupVersionHistory = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <History className="h-5 w-5" />
-            Histórico de Versões
+            Version History
           </DialogTitle>
           <DialogDescription>
-            Visualize, compare e restaure versões anteriores do seu setup
+            View, compare and restore previous versions of your setup
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="flex-1 pr-4">
           {isLoading ? (
             <div className="flex items-center justify-center h-32">
-              <p className="text-muted-foreground">Carregando histórico...</p>
+              <p className="text-muted-foreground">Loading history...</p>
             </div>
           ) : versions.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 gap-2">
               <History className="h-12 w-12 text-muted-foreground/50" />
-              <p className="text-muted-foreground">Nenhuma versão anterior encontrada</p>
+              <p className="text-muted-foreground">No previous versions found</p>
               <p className="text-sm text-muted-foreground">
-                As versões são salvas automaticamente quando você modifica o setup
+                Versions are saved automatically when you modify the setup
               </p>
             </div>
           ) : (
@@ -139,9 +139,9 @@ export const SetupVersionHistory = ({
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
                         <CardTitle className="text-base flex items-center gap-2">
-                          Versão {version.version_number}
+                          Version {version.version_number}
                           {index === 0 && (
-                            <Badge variant="secondary">Mais recente</Badge>
+                            <Badge variant="secondary">Latest</Badge>
                           )}
                         </CardTitle>
                         <CardDescription>
@@ -163,7 +163,7 @@ export const SetupVersionHistory = ({
                           onClick={() => handleRestore(version)}
                         >
                           <RotateCcw className="h-4 w-4 mr-2" />
-                          Restaurar
+                          Restore
                         </Button>
                       </div>
                     </div>
@@ -174,13 +174,13 @@ export const SetupVersionHistory = ({
                       <div className="grid grid-cols-2 gap-4">
                         {version.track_temp && (
                           <div>
-                            <span className="text-muted-foreground">Temperatura:</span>
+                            <span className="text-muted-foreground">Temperature:</span>
                             <span className="ml-2 font-medium">{version.track_temp}</span>
                           </div>
                         )}
                         {version.lap_time && (
                           <div>
-                            <span className="text-muted-foreground">Tempo de volta:</span>
+                            <span className="text-muted-foreground">Lap time:</span>
                             <span className="ml-2 font-medium">{version.lap_time}</span>
                           </div>
                         )}
@@ -188,7 +188,7 @@ export const SetupVersionHistory = ({
                       
                       {version.comment && (
                         <div className="pt-2 border-t">
-                          <p className="text-muted-foreground mb-1">Comentário:</p>
+                          <p className="text-muted-foreground mb-1">Comment:</p>
                           <p className="text-foreground">{version.comment}</p>
                         </div>
                       )}

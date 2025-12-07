@@ -15,23 +15,23 @@ interface DemoDialogProps {
 
 const demoSteps = [
   {
-    title: "1. Crie um novo setup",
-    description: "Selecione o simulador, carro e pista desejados. O sistema carrega automaticamente um setup base otimizado para começar.",
+    title: "1. Create a new setup",
+    description: "Select the desired simulator, car, and track. The system automatically loads an optimized base setup to get you started.",
     icon: Settings,
   },
   {
-    title: "2. Converse com o engenheiro",
-    description: "Descreva o comportamento do carro: subesterço, sobresterço, falta de tração. O engenheiro de IA analisa e sugere ajustes específicos.",
+    title: "2. Chat with the engineer",
+    description: "Describe the car's behavior: understeer, oversteer, lack of traction. The AI engineer analyzes and suggests specific adjustments.",
     icon: MessageSquare,
   },
   {
-    title: "3. Aplique os ajustes",
-    description: "Com um clique, as sugestões do engenheiro são aplicadas diretamente no seu setup. Compare versões e reverta se necessário.",
+    title: "3. Apply the adjustments",
+    description: "With one click, the engineer's suggestions are applied directly to your setup. Compare versions and revert if needed.",
     icon: Wrench,
   },
   {
-    title: "4. Teste e itere",
-    description: "Volte para a pista, teste as mudanças e repita o processo. O histórico de versões mantém todas as suas configurações salvas.",
+    title: "4. Test and iterate",
+    description: "Go back to the track, test the changes, and repeat the process. The version history keeps all your configurations saved.",
     icon: CheckCircle,
   },
 ];
@@ -58,7 +58,7 @@ export function DemoDialog({ open, onOpenChange }: DemoDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>Como funciona o Apex Engineer</DialogTitle>
+          <DialogTitle>How Apex Engineer Works</DialogTitle>
         </DialogHeader>
         
         <div className="py-8">
@@ -97,16 +97,16 @@ export function DemoDialog({ open, onOpenChange }: DemoDialogProps) {
             disabled={currentStep === 0}
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Anterior
+            Previous
           </Button>
           
           {currentStep === demoSteps.length - 1 ? (
             <Button onClick={() => onOpenChange(false)}>
-              Começar agora
+              Get Started
             </Button>
           ) : (
             <Button onClick={nextStep}>
-              Próximo
+              Next
               <ChevronRight className="h-4 w-4 ml-1" />
             </Button>
           )}

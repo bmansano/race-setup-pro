@@ -60,7 +60,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
 
       if (data?.error) {
         toast({
-          title: "Erro",
+          title: "Error",
           description: data.error,
           variant: "destructive",
         });
@@ -78,8 +78,8 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
     } catch (error) {
       console.error("Error calling performance engineer:", error);
       toast({
-        title: "Erro",
-        description: "Não foi possível obter sugestões do engenheiro de performance.",
+        title: "Error",
+        description: "Could not get suggestions from the performance engineer.",
         variant: "destructive",
       });
       setMessages(prev => prev.slice(0, -1));
@@ -103,7 +103,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
 
       if (data?.error) {
         toast({
-          title: "Erro",
+          title: "Error",
           description: data.error,
           variant: "destructive",
         });
@@ -120,8 +120,8 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
     } catch (error) {
       console.error("Error getting initial analysis:", error);
       toast({
-        title: "Erro",
-        description: "Não foi possível obter análise inicial.",
+        title: "Error",
+        description: "Could not get initial analysis.",
         variant: "destructive",
       });
     } finally {
@@ -133,9 +133,9 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl h-[85vh] flex flex-col p-0">
         <DialogHeader className="px-6 pt-6 pb-4 shrink-0">
-          <DialogTitle>Engenheiro de Performance</DialogTitle>
+          <DialogTitle>Performance Engineer</DialogTitle>
           <DialogDescription>
-            Converse com o engenheiro de IA para otimizar seu setup baseado no comportamento do carro
+            Chat with the AI engineer to optimize your setup based on the car's behavior
           </DialogDescription>
         </DialogHeader>
 
@@ -144,7 +144,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
             <div className="flex flex-col items-center justify-center h-64 gap-4">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <p className="text-muted-foreground text-center">
-                Analisando setup e gerando sugestão inicial...
+                Analyzing setup and generating initial suggestion...
               </p>
             </div>
           ) : (
@@ -171,12 +171,12 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
                         size="sm"
                         onClick={() => {
                           onApplySuggestions(message.suggestedChanges);
-                          sonnerToast.success("Sugestões aplicadas ao setup");
+                          sonnerToast.success("Suggestions applied to setup");
                         }}
                         className="ml-2"
                       >
                         <CheckCircle className="mr-2 h-4 w-4" />
-                        Aplicar Sugestões
+                        Apply Suggestions
                       </Button>
                     </div>
                   )}
@@ -195,7 +195,7 @@ export const PerformanceEngineerDialog = ({ open, onOpenChange, setup, onApplySu
 
         <div className="flex gap-2 p-6 border-t shrink-0">
           <Textarea
-            placeholder="Descreva o comportamento do carro (ex: 'O carro está subesterçando na entrada das curvas')"
+            placeholder="Describe the car's behavior (e.g., 'The car is understeering on corner entry')"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {

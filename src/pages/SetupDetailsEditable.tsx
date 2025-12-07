@@ -68,8 +68,8 @@ export default function SetupDetailsEditable() {
         });
       }
     } catch (error) {
-      console.error("Erro ao carregar setup:", error);
-      toast.error("Erro ao carregar setup");
+      console.error("Error loading setup:", error);
+      toast.error("Error loading setup");
     } finally {
       setLoading(false);
     }
@@ -92,10 +92,10 @@ export default function SetupDetailsEditable() {
         .eq("id", id);
 
       if (error) throw error;
-      toast.success("Setup salvo com sucesso!");
+      toast.success("Setup saved successfully!");
     } catch (error) {
-      console.error("Erro ao salvar setup:", error);
-      toast.error("Erro ao salvar setup");
+      console.error("Error saving setup:", error);
+      toast.error("Error saving setup");
     }
   };
 
@@ -103,7 +103,7 @@ export default function SetupDetailsEditable() {
     if (!id) return;
     
     if (deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()) {
-      toast.error("O nome digitado não corresponde ao nome do setup");
+      toast.error("The typed name does not match the setup name");
       return;
     }
 
@@ -115,12 +115,12 @@ export default function SetupDetailsEditable() {
 
       if (error) throw error;
 
-      toast.success("Setup excluído com sucesso!");
+      toast.success("Setup deleted successfully!");
       setDeleteDialogOpen(false);
       navigate("/");
     } catch (error) {
-      console.error("Erro ao excluir setup:", error);
-      toast.error("Erro ao excluir setup");
+      console.error("Error deleting setup:", error);
+      toast.error("Error deleting setup");
     } finally {
       setDeleteConfirmation("");
     }
@@ -129,7 +129,7 @@ export default function SetupDetailsEditable() {
   const handleRestoreVersion = (configuration: any) => {
     if (setupData) {
       setSetupData({ ...setupData, configuration });
-      toast.success("Versão restaurada com sucesso!");
+      toast.success("Version restored successfully!");
     }
   };
 
@@ -193,11 +193,11 @@ export default function SetupDetailsEditable() {
         if (updateError) throw updateError;
 
         setCarImageUrl(data.imageUrl);
-        toast.success("Imagem do carro gerada com sucesso!");
+        toast.success("Car image generated successfully!");
       }
     } catch (error) {
-      console.error('Erro ao gerar imagem:', error);
-      toast.error("Erro ao gerar imagem do carro");
+      console.error('Error generating image:', error);
+      toast.error("Error generating car image");
     } finally {
       setIsGeneratingImage(false);
     }
@@ -238,7 +238,7 @@ export default function SetupDetailsEditable() {
     return (
       <div className="container max-w-6xl py-8">
         <div className="text-center py-12 text-muted-foreground">
-          Carregando setup...
+          Loading setup...
         </div>
       </div>
     );
@@ -248,7 +248,7 @@ export default function SetupDetailsEditable() {
     return (
       <div className="container max-w-6xl py-8">
         <div className="text-center py-12 text-muted-foreground">
-          Setup não encontrado
+          Setup not found
         </div>
       </div>
     );
@@ -270,8 +270,8 @@ export default function SetupDetailsEditable() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <Button variant="ghost" onClick={() => navigate("/simulators")} className="gap-2 w-fit">
           <ArrowLeft className="h-4 w-4" />
-          <span className="hidden sm:inline">Voltar para Setups</span>
-          <span className="sm:hidden">Voltar</span>
+          <span className="hidden sm:inline">Back to Setups</span>
+          <span className="sm:hidden">Back</span>
         </Button>
         <div className="flex flex-wrap gap-2">
           <Button 
@@ -281,20 +281,20 @@ export default function SetupDetailsEditable() {
             size="sm"
           >
             <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Excluir</span>
+            <span className="hidden sm:inline">Delete</span>
           </Button>
           <Button variant="outline" onClick={() => setVersionHistoryOpen(true)} className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3" size="sm">
             <History className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Histórico</span>
+            <span className="hidden sm:inline">History</span>
           </Button>
           <Button variant="secondary" onClick={() => setEngineerDialogOpen(true)} className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3" size="sm">
             <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="hidden md:inline">Engenheiro de Performance</span>
-            <span className="md:hidden">IA</span>
+            <span className="hidden md:inline">Performance Engineer</span>
+            <span className="md:hidden">AI</span>
           </Button>
           <Button onClick={handleSave} className="gap-1 sm:gap-2 shadow-racing text-xs sm:text-sm px-2 sm:px-3" size="sm">
             <Save className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Salvar</span>
+            <span className="hidden sm:inline">Save</span>
           </Button>
         </div>
       </div>
@@ -308,7 +308,7 @@ export default function SetupDetailsEditable() {
           <div>
             <div className="space-y-3">
               <div>
-                <Label className="text-xs text-muted-foreground mb-1">Nome do Setup</Label>
+                <Label className="text-xs text-muted-foreground mb-1">Setup Name</Label>
                 <div className="flex gap-2 items-start">
                   <Input
                     value={setupName}
@@ -320,7 +320,7 @@ export default function SetupDetailsEditable() {
                     size="icon"
                     onClick={handleGenerateImage}
                     disabled={isGeneratingImage}
-                    title="Gerar Imagem do Carro"
+                    title="Generate Car Image"
                     className="shrink-0"
                   >
                     <ImagePlus className="h-4 w-4" />
@@ -334,7 +334,7 @@ export default function SetupDetailsEditable() {
                   variant={setupData.condition === "wet" ? "secondary" : "default"}
                   className="whitespace-nowrap"
                 >
-                  {setupData.condition === "dry" ? "Pista Seca" : "Pista Molhada"}
+                  {setupData.condition === "dry" ? "Dry Track" : "Wet Track"}
                 </Badge>
                 <Badge variant="outline" className="whitespace-nowrap">{setupData.category}</Badge>
               </div>
@@ -345,26 +345,26 @@ export default function SetupDetailsEditable() {
 
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Simulador:</span>
+              <span className="text-muted-foreground">Simulator:</span>
               <span className="font-medium">{setupData.simulator}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Categoria:</span>
+              <span className="text-muted-foreground">Category:</span>
               <span className="font-medium">{setupData.category}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">Condição da Pista:</span>
+              <span className="text-muted-foreground">Track Condition:</span>
               <select
                 value={setupData.condition}
                 onChange={(e) => setSetupData({ ...setupData, condition: e.target.value })}
                 className="h-7 px-2 border rounded text-sm bg-background"
               >
-                <option value="dry">Pista Seca</option>
-                <option value="wet">Pista Molhada</option>
+                <option value="dry">Dry Track</option>
+                <option value="wet">Wet Track</option>
               </select>
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Temperatura Pista:</span>
+              <span className="text-muted-foreground">Track Temperature:</span>
               <Input
                 value={setupData.trackTemp}
                 onChange={(e) => setSetupData({ ...setupData, trackTemp: e.target.value })}
@@ -372,7 +372,7 @@ export default function SetupDetailsEditable() {
               />
             </div>
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Tempo de Volta:</span>
+              <span className="text-muted-foreground">Lap Time:</span>
               <Input
                 value={setupData.lapTime}
                 onChange={(e) => setSetupData({ ...setupData, lapTime: e.target.value })}
@@ -387,12 +387,12 @@ export default function SetupDetailsEditable() {
         <div className="overflow-x-auto -mx-4 px-4 pb-2">
           <TabsList className="inline-flex w-max min-w-full sm:w-full sm:grid" style={{ gridTemplateColumns: `repeat(${totalTabs}, minmax(0, 1fr))` }}>
             <TabsTrigger value="aero" className="text-xs sm:text-sm px-2 sm:px-3">Aero</TabsTrigger>
-            <TabsTrigger value="suspension" className="text-xs sm:text-sm px-2 sm:px-3">Suspensão</TabsTrigger>
-            <TabsTrigger value="tires" className="text-xs sm:text-sm px-2 sm:px-3">Pneus</TabsTrigger>
-            <TabsTrigger value="brakes" className="text-xs sm:text-sm px-2 sm:px-3">Freios</TabsTrigger>
-            <TabsTrigger value="differential" className="text-xs sm:text-sm px-2 sm:px-3">Diferencial</TabsTrigger>
-            {hasElectronics && <TabsTrigger value="electronics" className="text-xs sm:text-sm px-2 sm:px-3">Eletrônica</TabsTrigger>}
-            {hasDrivetrain && <TabsTrigger value="drivetrain" className="text-xs sm:text-sm px-2 sm:px-3">Geral</TabsTrigger>}
+            <TabsTrigger value="suspension" className="text-xs sm:text-sm px-2 sm:px-3">Suspension</TabsTrigger>
+            <TabsTrigger value="tires" className="text-xs sm:text-sm px-2 sm:px-3">Tires</TabsTrigger>
+            <TabsTrigger value="brakes" className="text-xs sm:text-sm px-2 sm:px-3">Brakes</TabsTrigger>
+            <TabsTrigger value="differential" className="text-xs sm:text-sm px-2 sm:px-3">Differential</TabsTrigger>
+            {hasElectronics && <TabsTrigger value="electronics" className="text-xs sm:text-sm px-2 sm:px-3">Electronics</TabsTrigger>}
+            {hasDrivetrain && <TabsTrigger value="drivetrain" className="text-xs sm:text-sm px-2 sm:px-3">Drivetrain</TabsTrigger>}
           </TabsList>
         </div>
 
@@ -406,9 +406,9 @@ export default function SetupDetailsEditable() {
       </Tabs>
 
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Comentários e Notas</h3>
+        <h3 className="text-lg font-semibold mb-4">Comments and Notes</h3>
         <Textarea
-          placeholder="Adicione observações sobre este setup..."
+          placeholder="Add notes about this setup..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           className="min-h-[120px]"
@@ -432,26 +432,26 @@ export default function SetupDetailsEditable() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação não pode ser desfeita. Para confirmar, digite o nome do setup: <strong>{setupName}</strong>
+              This action cannot be undone. To confirm, type the setup name: <strong>{setupName}</strong>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <Input
-            placeholder="Digite o nome do setup"
+            placeholder="Type the setup name"
             value={deleteConfirmation}
             onChange={(e) => setDeleteConfirmation(e.target.value)}
           />
           <AlertDialogFooter>
             <AlertDialogCancel onClick={() => setDeleteConfirmation("")}>
-              Cancelar
+              Cancel
             </AlertDialogCancel>
             <Button 
               variant="destructive" 
               onClick={handleDeleteSetup}
               disabled={deleteConfirmation.trim().toLowerCase() !== setupName.trim().toLowerCase()}
             >
-              Excluir Setup
+              Delete Setup
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

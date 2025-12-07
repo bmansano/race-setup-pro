@@ -63,7 +63,7 @@ export default function Landing() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setIsLoggedIn(true);
-        setUserName(user.user_metadata?.name || user.email?.split('@')[0] || "Usuário");
+        setUserName(user.user_metadata?.name || user.email?.split('@')[0] || "User");
       }
     };
     checkAuth();
@@ -71,7 +71,7 @@ export default function Landing() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
         setIsLoggedIn(true);
-        setUserName(session.user.user_metadata?.name || session.user.email?.split('@')[0] || "Usuário");
+        setUserName(session.user.user_metadata?.name || session.user.email?.split('@')[0] || "User");
       } else {
         setIsLoggedIn(false);
         setUserName(null);
@@ -104,28 +104,28 @@ export default function Landing() {
               <>
                 {userName && (
                   <span className="hidden md:inline text-sm text-muted-foreground">
-                    Olá, {userName}
+                    Hi, {userName}
                   </span>
                 )}
                 <Link to="/simulators">
                   <Button variant="outline" size="sm" className="text-xs sm:text-sm px-2 sm:px-3">
-                    <span className="hidden sm:inline">Meus setups</span>
+                    <span className="hidden sm:inline">My Setups</span>
                     <span className="sm:hidden">Setups</span>
                   </Button>
                 </Link>
-                <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair" className="h-8 w-8 sm:h-9 sm:w-9">
+                <Button variant="ghost" size="icon" onClick={handleLogout} title="Sign Out" className="h-8 w-8 sm:h-9 sm:w-9">
                   <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </>
             ) : (
               <>
                 <Link to="/auth" className="hidden sm:block">
-                  <Button variant="outline" size="sm">Entrar</Button>
+                  <Button variant="outline" size="sm">Sign In</Button>
                 </Link>
                 <Link to="/auth">
                   <Button size="sm" className="shadow-racing text-xs sm:text-sm px-3 sm:px-4">
-                    <span className="hidden sm:inline">Começar grátis</span>
-                    <span className="sm:hidden">Entrar</span>
+                    <span className="hidden sm:inline">Get Started Free</span>
+                    <span className="sm:hidden">Sign In</span>
                   </Button>
                 </Link>
               </>
@@ -149,18 +149,18 @@ export default function Landing() {
           </div>
           
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-4 sm:mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-            Seu engenheiro de<br />performance virtual
+            Your virtual performance<br />engineer
           </h1>
           
           <p className="text-base sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 sm:mb-10 px-2">
-            Transforme seus tempos de volta com setups otimizados por inteligência artificial. 
-            O parceiro perfeito para pilotos e engenheiros de sim racing.
+            Transform your lap times with AI-optimized setups. 
+            The perfect partner for sim racing drivers and engineers.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16">
             <Link to="/auth" className="w-full sm:w-auto">
               <Button size="lg" className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 shadow-racing group">
-                Começar agora
+                Get Started
                 <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
@@ -170,17 +170,17 @@ export default function Landing() {
               className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6"
               onClick={() => setDemoOpen(true)}
             >
-              Ver demo
+              Watch Demo
             </Button>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 max-w-4xl mx-auto">
             {[
-              { value: "8+", label: "Simuladores" },
-              { value: "500+", label: "Carros suportados" },
-              { value: "200+", label: "Pistas" },
-              { value: "IA", label: "Engenheiro 24/7" },
+              { value: "8+", label: "Simulators" },
+              { value: "500+", label: "Supported Cars" },
+              { value: "200+", label: "Tracks" },
+              { value: "AI", label: "24/7 Engineer" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-1">{stat.value}</div>
@@ -196,11 +196,11 @@ export default function Landing() {
         <div className="container px-4">
           <div className="text-center mb-10 sm:mb-16">
             <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-              Tudo que você precisa para <span className="text-primary">vencer</span>
+              Everything you need to <span className="text-primary">win</span>
             </h2>
             <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
-              Ferramentas profissionais de gerenciamento de setup combinadas com 
-              inteligência artificial de última geração
+              Professional setup management tools combined with 
+              cutting-edge artificial intelligence
             </p>
           </div>
 
@@ -219,12 +219,12 @@ export default function Landing() {
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Brain className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold">Engenheiro de IA</h3>
+                  <h3 className="text-xl font-semibold">AI Engineer</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Converse com nosso engenheiro virtual para receber sugestões 
-                  personalizadas baseadas no comportamento do seu carro. Ajustes 
-                  aplicados com um clique.
+                  Chat with our virtual engineer to receive personalized 
+                  suggestions based on your car's behavior. Apply adjustments 
+                  with a single click.
                 </p>
               </div>
             </Card>
@@ -243,11 +243,11 @@ export default function Landing() {
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Wrench className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold">Gestão de setups</h3>
+                  <h3 className="text-xl font-semibold">Setup Management</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Organize todos os seus setups em um só lugar. Campos específicos 
-                  para cada simulador e carro, exatamente como no jogo.
+                  Organize all your setups in one place. Specific fields 
+                  for each simulator and car, exactly like in the game.
                 </p>
               </div>
             </Card>
@@ -266,11 +266,11 @@ export default function Landing() {
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <History className="h-5 w-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold">Histórico de versões</h3>
+                  <h3 className="text-xl font-semibold">Version History</h3>
                 </div>
                 <p className="text-muted-foreground">
-                  Nunca perca uma configuração que funcionou. Compare diferentes 
-                  versões e volte atrás quando precisar.
+                  Never lose a configuration that worked. Compare different 
+                  versions and roll back when needed.
                 </p>
               </div>
             </Card>
@@ -284,31 +284,31 @@ export default function Landing() {
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-16 items-center">
             <div>
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-                Ganhe segundos,<br />
-                <span className="text-primary">não milésimos</span>
+                Gain seconds,<br />
+                <span className="text-primary">not milliseconds</span>
               </h2>
               <p className="text-sm sm:text-lg text-muted-foreground mb-6 sm:mb-8">
-                Enquanto outros perdem horas testando configurações aleatórias, 
-                você terá um engenheiro de performance dedicado analisando seu 
-                feedback e sugerindo ajustes precisos.
+                While others waste hours testing random configurations, 
+                you'll have a dedicated performance engineer analyzing your 
+                feedback and suggesting precise adjustments.
               </p>
               
               <div className="space-y-4 sm:space-y-6">
                 {[
                   {
                     icon: Trophy,
-                    title: "Setups competitivos",
-                    description: "Configurações baseadas em dados reais dos melhores pilotos"
+                    title: "Competitive Setups",
+                    description: "Configurations based on real data from top drivers"
                   },
                   {
                     icon: Timer,
-                    title: "Economia de tempo",
-                    description: "Chegue ao setup ideal em minutos, não horas"
+                    title: "Time Savings",
+                    description: "Reach the ideal setup in minutes, not hours"
                   },
                   {
                     icon: Gamepad2,
-                    title: "Multi-simulador",
-                    description: "Suporte para os principais simuladores do mercado"
+                    title: "Multi-Simulator",
+                    description: "Support for the main simulators on the market"
                   },
                 ].map((benefit) => (
                   <div key={benefit.title} className="flex gap-3 sm:gap-4">
@@ -339,8 +339,8 @@ export default function Landing() {
                     <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-green-500" />
                   </div>
                   <div>
-                    <div className="text-xs sm:text-sm font-medium">Setup otimizado</div>
-                    <div className="text-[10px] sm:text-xs text-muted-foreground">-1.2s no tempo de volta</div>
+                    <div className="text-xs sm:text-sm font-medium">Optimized Setup</div>
+                    <div className="text-[10px] sm:text-xs text-muted-foreground">-1.2s on lap time</div>
                   </div>
                 </div>
               </div>
@@ -353,10 +353,10 @@ export default function Landing() {
       <section className="py-12 sm:py-24 bg-muted/30">
         <div className="container text-center px-4">
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">
-            Compatível com seus <span className="text-primary">simuladores favoritos</span>
+            Compatible with your <span className="text-primary">favorite simulators</span>
           </h2>
           <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12 px-2">
-            Suporte completo para os principais simuladores de corrida do mercado
+            Full support for the main racing simulators on the market
           </p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
@@ -382,15 +382,15 @@ export default function Landing() {
             
             <div className="relative z-10">
               <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-                Pronto para dominar as pistas?
+                Ready to dominate the track?
               </h2>
               <p className="text-sm sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 sm:mb-10 px-2">
-                Junte-se a milhares de pilotos que já estão usando o Apex Engineer 
-                para alcançar tempos de volta mais rápidos.
+                Join thousands of drivers who are already using Apex Engineer 
+                to achieve faster lap times.
               </p>
               <Link to="/auth">
                 <Button size="lg" className="text-base sm:text-lg px-6 sm:px-10 py-5 sm:py-6 shadow-racing">
-                  Criar conta gratuita
+                  Create Free Account
                   <ChevronRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                 </Button>
               </Link>
@@ -410,7 +410,7 @@ export default function Landing() {
               <span className="text-lg sm:text-xl font-bold">Apex Engineer</span>
             </div>
             <p className="text-xs sm:text-sm text-muted-foreground text-center">
-              © 2026 Apex Engineer. Todos os direitos reservados.
+              © 2026 Apex Engineer. All rights reserved.
             </p>
           </div>
         </div>

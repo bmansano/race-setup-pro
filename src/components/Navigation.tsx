@@ -18,7 +18,7 @@ export function Navigation() {
     const getUserData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        setUserName(user.user_metadata?.name || user.email?.split('@')[0] || "Usuário");
+        setUserName(user.user_metadata?.name || user.email?.split('@')[0] || "User");
       }
     };
     getUserData();
@@ -27,8 +27,8 @@ export function Navigation() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast({
-      title: "Logout realizado",
-      description: "Até breve!",
+      title: "Signed out",
+      description: "See you soon!",
     });
     navigate("/");
   };
@@ -51,7 +51,7 @@ export function Navigation() {
               activeClassName="text-foreground bg-muted"
             >
               <Home className="h-4 w-4 inline mr-1 sm:mr-2" />
-              Início
+              Home
             </NavLink>
             <NavLink
               to="/simulators"
@@ -60,7 +60,7 @@ export function Navigation() {
               activeClassName="text-foreground bg-muted"
             >
               <Gamepad2 className="h-4 w-4 inline mr-1 sm:mr-2" />
-              Simuladores
+              Simulators
             </NavLink>
             <NavLink
               to="/profile"
@@ -68,7 +68,7 @@ export function Navigation() {
               activeClassName="text-foreground bg-muted"
             >
               <User className="h-4 w-4 inline mr-1 sm:mr-2" />
-              Perfil
+              Profile
             </NavLink>
           </div>
         </div>
@@ -76,10 +76,10 @@ export function Navigation() {
         <div className="flex items-center gap-1 sm:gap-2">
           {userName && (
             <span className="hidden lg:inline text-xs sm:text-sm text-muted-foreground">
-              Olá, {userName}
+              Hi, {userName}
             </span>
           )}
-          <Button variant="ghost" size="icon" onClick={handleLogout} title="Sair" className="h-8 w-8 sm:h-9 sm:w-9">
+          <Button variant="ghost" size="icon" onClick={handleLogout} title="Sign Out" className="h-8 w-8 sm:h-9 sm:w-9">
             <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
           <ThemeToggle />
@@ -99,7 +99,7 @@ export function Navigation() {
                   activeClassName="text-foreground bg-muted"
                 >
                   <Home className="h-4 w-4 inline mr-2" />
-                  Início
+                  Home
                 </NavLink>
                 <NavLink
                   to="/simulators"
@@ -109,7 +109,7 @@ export function Navigation() {
                   activeClassName="text-foreground bg-muted"
                 >
                   <Gamepad2 className="h-4 w-4 inline mr-2" />
-                  Simuladores
+                  Simulators
                 </NavLink>
                 <NavLink
                   to="/profile"
@@ -118,7 +118,7 @@ export function Navigation() {
                   activeClassName="text-foreground bg-muted"
                 >
                   <User className="h-4 w-4 inline mr-2" />
-                  Perfil
+                  Profile
                 </NavLink>
                 <Button
                   variant="ghost" 
@@ -129,7 +129,7 @@ export function Navigation() {
                   }}
                 >
                   <LogOut className="h-4 w-4 inline mr-2" />
-                  Sair
+                  Sign Out
                 </Button>
               </nav>
             </SheetContent>

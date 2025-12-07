@@ -28,7 +28,7 @@ import { getBaselineSetup } from "@/data/baseline-setups";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 
-// Lista de todos os simuladores suportados (em ordem alfabética)
+// List of all supported simulators (alphabetical order)
 const SIMULATORS = [
   "Assetto Corsa Competizione",
   "Assetto Corsa EVO",
@@ -52,7 +52,7 @@ export function AddSetupDialog() {
     condition: "",
   });
 
-  // Configuração dinâmica baseada no simulador selecionado
+  // Dynamic configuration based on selected simulator
   const [configuration, setConfiguration] = useState<Record<string, Record<string, string>>>({});
 
   const selectedSimulator = formData.simulator;
@@ -60,7 +60,7 @@ export function AddSetupDialog() {
   const availableTracks = selectedSimulator ? simulatorData[selectedSimulator]?.tracks || [] : [];
   const availableCategories = selectedSimulator ? getAvailableCategories(selectedSimulator) : [];
 
-  // Função para mapear nomes de campos do baseline para campos do simulador
+  // Function to map baseline field names to simulator fields
   const mapBaselineToSimulatorFields = (
     baselineSetup: ReturnType<typeof getBaselineSetup>,
     simulatorFields: ReturnType<typeof getSimulatorFields>
@@ -75,7 +75,7 @@ export function AddSetupDialog() {
       drivetrain: {},
     };
 
-    // Mapeamento de nomes de campos do baseline para campos do simulador
+    // Mapping of baseline field names to simulator field names
     const fieldMappings: Record<string, Record<string, string>> = {
       aero: {
         frontWing: 'frontWing',
@@ -126,10 +126,10 @@ export function AddSetupDialog() {
       },
     };
 
-    // Para cada categoria do baseline, mapeia os valores para os campos do simulador
+    // For each baseline category, map values to simulator fields
     const categories = ['aero', 'suspension', 'tires', 'brakes', 'differential', 'electronics', 'drivetrain'] as const;
     
-    // Primeiro inicializa todos os campos do simulador com valores vazios
+    // First initialize all simulator fields with empty values
     simulatorFields.aero.forEach(field => newConfig.aero[field.name] = "");
     simulatorFields.suspension.forEach(field => newConfig.suspension[field.name] = "");
     simulatorFields.tires.forEach(field => newConfig.tires[field.name] = "");
@@ -142,7 +142,7 @@ export function AddSetupDialog() {
       simulatorFields.drivetrain.forEach(field => newConfig.drivetrain[field.name] = "");
     }
 
-    // Mapeia valores do baseline aero
+    // Map baseline aero values
     if (baselineSetup.aero) {
       Object.entries(baselineSetup.aero).forEach(([key, value]) => {
         if (value) {
@@ -154,7 +154,7 @@ export function AddSetupDialog() {
       });
     }
 
-    // Mapeia valores do baseline suspension
+    // Map baseline suspension values
     if (baselineSetup.suspension) {
       Object.entries(baselineSetup.suspension).forEach(([key, value]) => {
         if (value) {
@@ -166,7 +166,7 @@ export function AddSetupDialog() {
       });
     }
 
-    // Mapeia valores do baseline tires
+    // Map baseline tires values
     if (baselineSetup.tires) {
       Object.entries(baselineSetup.tires).forEach(([key, value]) => {
         if (value) {
@@ -178,7 +178,7 @@ export function AddSetupDialog() {
       });
     }
 
-    // Mapeia valores do baseline brake para brakes
+    // Map baseline brake values to brakes
     if (baselineSetup.brake) {
       Object.entries(baselineSetup.brake).forEach(([key, value]) => {
         if (value) {
@@ -190,7 +190,7 @@ export function AddSetupDialog() {
       });
     }
 
-    // Mapeia valores do baseline differential
+    // Map baseline differential values
     if (baselineSetup.differential) {
       Object.entries(baselineSetup.differential).forEach(([key, value]) => {
         if (value) {
@@ -207,12 +207,12 @@ export function AddSetupDialog() {
     return newConfig;
   };
 
-  // Atualiza a configuração quando o simulador muda ou quando todos os campos necessários são preenchidos
+  // Update configuration when simulator changes or when all required fields are filled
   useEffect(() => {
     const fields = getSimulatorFields(formData.simulator);
     
     if (formData.simulator && formData.car && formData.track && formData.condition) {
-      // Busca o baseline setup baseado no simulador, carro, pista e condição
+      // Get baseline setup based on simulator, car, track and condition
       const baselineSetup = getBaselineSetup(
         formData.simulator,
         formData.car,
@@ -222,9 +222,9 @@ export function AddSetupDialog() {
 
       const newConfig = mapBaselineToSimulatorFields(baselineSetup, fields);
       setConfiguration(newConfig);
-      toast.success("Configuração base carregada automaticamente!");
+      toast.success("Base configuration loaded automatically!");
     } else if (formData.simulator) {
-      // Se apenas o simulador foi selecionado, inicializa campos vazios
+      // If only simulator is selected, initialize empty fields
       const newConfig: Record<string, Record<string, string>> = {
         aero: {},
         suspension: {},
@@ -253,7 +253,7 @@ export function AddSetupDialog() {
 
   const handleSubmit = async () => {
     if (!formData.name || !formData.simulator || !formData.car || !formData.track || !formData.condition) {
-      toast.error("Preencha todos os campos obrigatórios");
+      toast.error("Please fill in all required fields");
       return;
     }
 
@@ -262,7 +262,7 @@ export function AddSetupDialog() {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        toast.error("Você precisa estar logado para criar um setup");
+        toast.error("You need to be logged in to create a setup");
         return;
       }
 
@@ -282,10 +282,10 @@ export function AddSetupDialog() {
       if (existingSetup?.car_image_url) {
         // Reuse existing car image
         carImageUrl = existingSetup.car_image_url;
-        toast.success("Imagem do carro reutilizada de setup existente!", { id: "car-image" });
+        toast.success("Car image reused from existing setup!", { id: "car-image" });
       } else {
         // Generate new car image using AI
-        toast.loading("Gerando imagem do carro...", { id: "car-image" });
+        toast.loading("Generating car image...", { id: "car-image" });
         const { data: imageData, error: imageError } = await supabase.functions.invoke("generate-car-image", {
           body: {
             car: formData.car,
@@ -296,10 +296,10 @@ export function AddSetupDialog() {
 
         if (imageError) {
           console.error("Error generating car image:", imageError);
-          toast.error("Erro ao gerar imagem do carro, mas o setup será criado", { id: "car-image" });
+          toast.error("Error generating car image, but the setup will be created", { id: "car-image" });
         } else {
           carImageUrl = imageData?.imageUrl || null;
-          toast.success("Imagem do carro gerada!", { id: "car-image" });
+          toast.success("Car image generated!", { id: "car-image" });
         }
       }
 
@@ -325,7 +325,7 @@ export function AddSetupDialog() {
 
       if (error) throw error;
 
-      toast.success("Setup criado com sucesso!");
+      toast.success("Setup created successfully!");
       setOpen(false);
       
       // Navigate to the new setup details page
@@ -333,8 +333,8 @@ export function AddSetupDialog() {
         navigate(`/setup/${data.id}`);
       }
     } catch (error) {
-      console.error("Erro ao criar setup:", error);
-      toast.error("Erro ao criar setup");
+      console.error("Error creating setup:", error);
+      toast.error("Error creating setup");
     } finally {
       setLoading(false);
     }
@@ -377,32 +377,32 @@ export function AddSetupDialog() {
       <DialogTrigger asChild>
         <Button className="gap-2 shadow-racing text-xs sm:text-sm">
           <Plus className="h-4 w-4" />
-          <span className="hidden sm:inline">Adicionar Novo Setup</span>
-          <span className="sm:hidden">Novo Setup</span>
+          <span className="hidden sm:inline">Add New Setup</span>
+          <span className="sm:hidden">New Setup</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] w-[95vw] sm:w-full">
         <DialogHeader>
-          <DialogTitle className="text-lg sm:text-xl">Adicionar Novo Setup</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">Add New Setup</DialogTitle>
           <DialogDescription className="text-xs sm:text-sm">
-            Configure todos os parâmetros do setup do seu carro.
+            Configure all the setup parameters for your car.
           </DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[60vh] sm:max-h-[65vh] pr-4">
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Nome do Setup</Label>
+              <Label htmlFor="name">Setup Name</Label>
               <Input
                 id="name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Ex: Setup Spa Qualifying"
+                placeholder="E.g., Spa Qualifying Setup"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="simulator">Simulador</Label>
+              <Label htmlFor="simulator">Simulator</Label>
               <Select
                 value={formData.simulator}
                 onValueChange={(value) =>
@@ -410,7 +410,7 @@ export function AddSetupDialog() {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione o simulador" />
+                  <SelectValue placeholder="Select simulator" />
                 </SelectTrigger>
                 <SelectContent>
                   {SIMULATORS.map((sim) => (
@@ -421,14 +421,14 @@ export function AddSetupDialog() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="car">Carro</Label>
+              <Label htmlFor="car">Car</Label>
               <Select
                 value={formData.car}
                 onValueChange={(value) => setFormData({ ...formData, car: value })}
                 disabled={!selectedSimulator}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={selectedSimulator ? "Selecione o carro" : "Selecione um simulador primeiro"} />
+                  <SelectValue placeholder={selectedSimulator ? "Select car" : "Select a simulator first"} />
                 </SelectTrigger>
                 <SelectContent>
                   {availableCars.map((car) => (
@@ -441,14 +441,14 @@ export function AddSetupDialog() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="track">Pista</Label>
+              <Label htmlFor="track">Track</Label>
               <Select
                 value={formData.track}
                 onValueChange={(value) => setFormData({ ...formData, track: value })}
                 disabled={!selectedSimulator}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder={selectedSimulator ? "Selecione a pista" : "Selecione um simulador primeiro"} />
+                  <SelectValue placeholder={selectedSimulator ? "Select track" : "Select a simulator first"} />
                 </SelectTrigger>
                 <SelectContent>
                   {availableTracks.map((track) => (
@@ -461,24 +461,24 @@ export function AddSetupDialog() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="condition">Condição da Pista</Label>
+              <Label htmlFor="condition">Track Condition</Label>
               <Select
                 value={formData.condition}
                 onValueChange={(value) => setFormData({ ...formData, condition: value })}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione a condição" />
+                  <SelectValue placeholder="Select condition" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="dry">Pista Seca</SelectItem>
-                  <SelectItem value="wet">Pista Molhada</SelectItem>
+                  <SelectItem value="dry">Dry Track</SelectItem>
+                  <SelectItem value="wet">Wet Track</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {!formData.simulator && (
               <div className="text-center py-8 text-muted-foreground">
-                Selecione um simulador para ver os campos disponíveis
+                Select a simulator to see the available fields
               </div>
             )}
 
@@ -487,26 +487,26 @@ export function AddSetupDialog() {
                 <div className="overflow-x-auto -mx-4 px-4 pb-2">
                   <TabsList className={`inline-flex w-max min-w-full sm:w-full sm:grid ${availableCategories.length <= 5 ? 'sm:grid-cols-5' : 'sm:grid-cols-7'}`}>
                     <TabsTrigger value="aero" className="text-xs sm:text-sm px-2 sm:px-3">Aero</TabsTrigger>
-                    <TabsTrigger value="suspension" className="text-xs sm:text-sm px-2 sm:px-3">Suspensão</TabsTrigger>
-                    <TabsTrigger value="tires" className="text-xs sm:text-sm px-2 sm:px-3">Pneus</TabsTrigger>
-                    <TabsTrigger value="brakes" className="text-xs sm:text-sm px-2 sm:px-3">Freios</TabsTrigger>
-                    <TabsTrigger value="differential" className="text-xs sm:text-sm px-2 sm:px-3">Diferencial</TabsTrigger>
+                    <TabsTrigger value="suspension" className="text-xs sm:text-sm px-2 sm:px-3">Suspension</TabsTrigger>
+                    <TabsTrigger value="tires" className="text-xs sm:text-sm px-2 sm:px-3">Tires</TabsTrigger>
+                    <TabsTrigger value="brakes" className="text-xs sm:text-sm px-2 sm:px-3">Brakes</TabsTrigger>
+                    <TabsTrigger value="differential" className="text-xs sm:text-sm px-2 sm:px-3">Differential</TabsTrigger>
                     {availableCategories.includes('electronics') && (
-                      <TabsTrigger value="electronics" className="text-xs sm:text-sm px-2 sm:px-3">Eletrônica</TabsTrigger>
+                      <TabsTrigger value="electronics" className="text-xs sm:text-sm px-2 sm:px-3">Electronics</TabsTrigger>
                     )}
                     {availableCategories.includes('drivetrain') && (
-                      <TabsTrigger value="drivetrain" className="text-xs sm:text-sm px-2 sm:px-3">Geral</TabsTrigger>
+                      <TabsTrigger value="drivetrain" className="text-xs sm:text-sm px-2 sm:px-3">Drivetrain</TabsTrigger>
                     )}
                   </TabsList>
                 </div>
 
                 {renderCategoryTab('aero', 'Aero')}
-                {renderCategoryTab('suspension', 'Suspensão')}
-                {renderCategoryTab('tires', 'Pneus')}
-                {renderCategoryTab('brakes', 'Freios')}
-                {renderCategoryTab('differential', 'Diferencial')}
-                {availableCategories.includes('electronics') && renderCategoryTab('electronics', 'Eletrônica')}
-                {availableCategories.includes('drivetrain') && renderCategoryTab('drivetrain', 'Transmissão')}
+                {renderCategoryTab('suspension', 'Suspension')}
+                {renderCategoryTab('tires', 'Tires')}
+                {renderCategoryTab('brakes', 'Brakes')}
+                {renderCategoryTab('differential', 'Differential')}
+                {availableCategories.includes('electronics') && renderCategoryTab('electronics', 'Electronics')}
+                {availableCategories.includes('drivetrain') && renderCategoryTab('drivetrain', 'Drivetrain')}
               </Tabs>
             )}
           </div>
@@ -514,10 +514,10 @@ export function AddSetupDialog() {
 
         <div className="flex justify-end gap-2 pt-4">
           <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancelar
+            Cancel
           </Button>
           <Button onClick={handleSubmit} disabled={loading}>
-            {loading ? "Criando..." : "Criar Setup"}
+            {loading ? "Creating..." : "Create Setup"}
           </Button>
         </div>
       </DialogContent>
