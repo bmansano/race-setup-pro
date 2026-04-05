@@ -193,10 +193,10 @@ const automobilista2Cars: Car[] = [
   // DPI
   { id: "cadillac-dpi-vr", name: "Cadillac DPi-VR", category: "DPI" },
 
-  // Formula Edge
-  { id: "f-edge-v12", name: "F-Edge Model 1 (V12)", category: "Formula" },
-  { id: "f-edge-v10", name: "F-Edge Model 2 (V10)", category: "Formula" },
-  { id: "f-edge-v8", name: "F-Edge Model 3 (V8)", category: "Formula" },
+  // Formula Edge (F1 1995 era)
+  { id: "f-edge-v12", name: "F-Edge Model 1 - V12 (F1 1995)", category: "Formula" },
+  { id: "f-edge-v10", name: "F-Edge Model 2 - V10 (F1 1995)", category: "Formula" },
+  { id: "f-edge-v8", name: "F-Edge Model 3 - V8 (F1 1995)", category: "Formula" },
 
   // Formula HiTech Gen1
   { id: "f-hitech-gen1-m1", name: "Formula HiTech Gen1 Model 1", category: "Formula" },
@@ -267,9 +267,9 @@ const automobilista2Cars: Car[] = [
   { id: "formula-trainer-adv", name: "Formula Trainer Advanced", category: "Formula" },
 
   // Formula Hybrid Gen1-3
-  { id: "f-hybrid-gen1", name: "Formula Hybrid Gen1", category: "Formula" },
-  { id: "f-hybrid-gen2", name: "Formula Ultimate Hybrid Gen2", category: "Formula" },
-  { id: "f-hybrid-gen3", name: "Formula Ultimate Hybrid Gen3", category: "Formula" },
+  { id: "f-hybrid-gen1", name: "Formula Hybrid Gen1 (F1 2016)", category: "Formula" },
+  { id: "f-hybrid-gen2", name: "Formula Ultimate Hybrid Gen2 (F1 2018-21)", category: "Formula" },
+  { id: "f-hybrid-gen3", name: "Formula Ultimate Hybrid Gen3 (F1 2022-24)", category: "Formula" },
 
   // Formula USA 2023
   { id: "f-usa-2023", name: "Formula USA 2023 (IndyCar)", category: "Formula" },
