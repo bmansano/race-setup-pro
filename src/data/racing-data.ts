@@ -153,114 +153,412 @@ const iRacingTracks: Track[] = [
   { id: "laguna-seca", name: "WeatherTech Raceway Laguna Seca", country: "USA" },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
-// Automobilista 2 - Carros organizados alfabeticamente
+// Automobilista 2 - Complete car list (base + all DLCs) organized alphabetically
 const automobilista2Cars: Car[] = [
-  // DTM
-  { id: "alfa-155-v6-ti-dtm", name: "Alfa Romeo 155 V6 Ti (DTM 1995)", category: "DTM 1995" },
-  { id: "opel-calibra-dtm", name: "Opel Calibra (DTM 1995)", category: "DTM 1995" },
-  { id: "mercedes-c-class-dtm-1995", name: "Mercedes-Benz C-Class (DTM 1995)", category: "DTM 1995" },
-  
-  // Formula - Modern
-  { id: "f-ultimate-gen2", name: "Formula Ultimate Gen 2 (F1 2022-24)", category: "Formula" },
-  { id: "f-reiza", name: "Formula Reiza (F1 2011)", category: "Formula" },
-  { id: "f-usa-2023", name: "Formula USA 2023 (IndyCar)", category: "Formula" },
-  { id: "formula-3-brasil", name: "Dallara F309 (F3 Brasil)", category: "Formula" },
-  
-  // Formula - Historic
-  { id: "brabham-bt49", name: "Brabham BT49 (F1 1978/79)", category: "Historic Formula" },
-  { id: "brabham-bt52", name: "Brabham BT52 (F1 1983)", category: "Historic Formula" },
-  { id: "f-classic-gen4", name: "Formula Classic Gen 4 (F1 1991)", category: "Historic Formula" },
-  { id: "f-v10-gen2", name: "Formula V10 Gen 2 (Williams FW23 - F1 2001)", category: "Historic Formula" },
-  { id: "f-v12", name: "Formula V12 (Ferrari 412T2 - F1 1995)", category: "Historic Formula" },
-  { id: "lotus-49", name: "Lotus 49C (F1 1969/70)", category: "Historic Formula" },
-  { id: "lotus-72e", name: "Lotus 72E (F1 1974)", category: "Historic Formula" },
-  { id: "lotus-79", name: "Lotus 79 (F1 1978/79)", category: "Historic Formula" },
-  { id: "lotus-98t", name: "Lotus 98T (F1 1986)", category: "Historic Formula" },
-  { id: "mclaren-m23", name: "McLaren M23 (F1 1974)", category: "Historic Formula" },
-  
-  // Group C
-  { id: "jaguar-xjr9", name: "Jaguar XJR-9", category: "Group C" },
-  { id: "mercedes-c9", name: "Mercedes-Benz C9", category: "Group C" },
-  { id: "nissan-r89c", name: "Nissan R89C", category: "Group C" },
-  { id: "porsche-962c", name: "Porsche 962C", category: "Group C" },
-  { id: "sauber-c9", name: "Sauber C9", category: "Group C" },
-  
-  // GT1
-  { id: "aston-dbr9", name: "Aston Martin DBR9", category: "GT1" },
-  { id: "corvette-c5r", name: "Chevrolet Corvette C5.R", category: "GT1" },
-  { id: "dodge-viper-gtsr", name: "Dodge Viper GTS-R", category: "GT1" },
-  { id: "maserati-mc12-gt1", name: "Maserati MC12 GT1", category: "GT1" },
-  { id: "mclaren-f1-gtr", name: "McLaren F1 GTR", category: "GT1" },
-  
-  // GT3 Gen2
-  { id: "aston-vantage-gt3-evo", name: "Aston Martin Vantage GT3 Evo", category: "GT3" },
-  { id: "audi-r8-gt3-evo2", name: "Audi R8 LMS GT3 Evo II", category: "GT3" },
-  { id: "bmw-m4-gt3", name: "BMW M4 GT3", category: "GT3" },
-  { id: "corvette-z06-gt3", name: "Chevrolet Corvette Z06 GT3.R", category: "GT3" },
-  { id: "ferrari-296-gt3", name: "Ferrari 296 GT3", category: "GT3" },
-  { id: "lamborghini-huracan-gt3-evo2", name: "Lamborghini Huracán GT3 EVO2", category: "GT3" },
-  { id: "mclaren-720s-gt3-evo", name: "McLaren 720S GT3 Evo", category: "GT3" },
-  { id: "mercedes-gt3-evo", name: "Mercedes-AMG GT3 Evo", category: "GT3" },
-  { id: "porsche-992-gt3-r", name: "Porsche 911 GT3 R (992)", category: "GT3" },
-  
-  // GT4
-  { id: "alpine-a110-gt4", name: "Alpine A110 GT4 Evo", category: "GT4" },
-  { id: "aston-vantage-gt4", name: "Aston Martin Vantage GT4", category: "GT4" },
-  { id: "audi-r8-gt4", name: "Audi R8 LMS GT4", category: "GT4" },
-  { id: "bmw-m4-gt4", name: "BMW M4 GT4", category: "GT4" },
-  { id: "camaro-gt4", name: "Chevrolet Camaro GT4.R", category: "GT4" },
-  { id: "ginetta-g55-gt4", name: "Ginetta G55 GT4", category: "GT4" },
-  { id: "mclaren-570s-gt4", name: "McLaren 570S GT4", category: "GT4" },
-  { id: "mercedes-gt4", name: "Mercedes-AMG GT4", category: "GT4" },
-  { id: "porsche-718-gt4", name: "Porsche 718 Cayman GT4 Clubsport", category: "GT4" },
-  
-  // Hypercar / Road Car
-  { id: "brabham-bt62", name: "Brabham BT62", category: "Hypercar" },
+  // ARC Camaro
+  { id: "arc-camaro", name: "Aussie Racing Camaro", category: "ARC Camaro" },
+
+  // Caterham
   { id: "caterham-620r", name: "Caterham 620R", category: "Road Car" },
   { id: "caterham-academy", name: "Caterham Academy", category: "Road Car" },
-  { id: "corvette-c8-z06", name: "Chevrolet Corvette C8 Z06", category: "Road Car" },
+  { id: "caterham-superlight", name: "Caterham Superlight", category: "Road Car" },
+  { id: "caterham-supersport", name: "Caterham Supersport", category: "Road Car" },
+
+  // Copa Classic B
+  { id: "chevette-classic-b", name: "Chevrolet Chevette (Copa Classic B)", category: "Copa Classic" },
+  { id: "gol-classic-b", name: "Gol Classic B", category: "Copa Classic" },
+  { id: "mini-cooper-1965-b", name: "MINI Cooper S 1965 B", category: "Copa Classic" },
+  { id: "passat-classic-b", name: "Passat Classic B", category: "Copa Classic" },
+  { id: "puma-gte-classic-b", name: "Puma GTE (Copa Classic B)", category: "Copa Classic" },
+  { id: "uno-classic-b", name: "Uno Classic B", category: "Copa Classic" },
+
+  // Copa Classic FL
+  { id: "fusca-classic-fl", name: "Fusca Classic FL", category: "Copa Classic" },
+  { id: "gol-classic-fl", name: "Gol Classic FL", category: "Copa Classic" },
+  { id: "passat-classic-fl", name: "Passat Classic FL", category: "Copa Classic" },
+  { id: "puma-gtb-classic-fl", name: "Puma GTB (Copa Classic FL)", category: "Copa Classic" },
+
+  // Copa Fusca / Montana / Uno
+  { id: "copa-fusca", name: "Copa Fusca", category: "Copa" },
+  { id: "copa-montana", name: "Copa Montana", category: "Copa" },
+  { id: "copa-uno", name: "Copa Uno", category: "Copa" },
+
+  // Copa Truck
+  { id: "iveco-stralis", name: "Iveco Stralis (Copa Truck)", category: "Truck" },
+  { id: "man-tgx", name: "MAN TGX (Copa Truck)", category: "Truck" },
+  { id: "mercedes-actros", name: "Mercedes-Benz Actros (Copa Truck)", category: "Truck" },
+  { id: "vw-constellation", name: "Volkswagen Constellation (Copa Truck)", category: "Truck" },
+  { id: "vulkan-truck", name: "Vulkan Truck (Copa Truck)", category: "Truck" },
+
+  // DPI
+  { id: "cadillac-dpi-vr", name: "Cadillac DPi-VR", category: "DPI" },
+
+  // Formula Edge
+  { id: "f-edge-v12", name: "F-Edge Model 1 (V12)", category: "Formula" },
+  { id: "f-edge-v10", name: "F-Edge Model 2 (V10)", category: "Formula" },
+  { id: "f-edge-v8", name: "F-Edge Model 3 (V8)", category: "Formula" },
+
+  // Formula HiTech Gen1
+  { id: "f-hitech-gen1-m1", name: "Formula HiTech Gen1 Model 1", category: "Formula" },
+  { id: "f-hitech-gen1-m2", name: "Formula HiTech Gen1 Model 2", category: "Formula" },
+  { id: "f-hitech-gen1-m3", name: "Formula HiTech Gen1 Model 3", category: "Formula" },
+  { id: "f-hitech-gen1-m4", name: "Formula HiTech Gen1 Model 4", category: "Formula" },
+  { id: "mclaren-mp4-7a", name: "McLaren MP4/7A", category: "Formula" },
+
+  // Formula HiTech Gen2
+  { id: "f-hitech-gen2-m1", name: "Formula HiTech Gen2 Model 1", category: "Formula" },
+  { id: "f-hitech-gen2-m2", name: "Formula HiTech Gen2 Model 2", category: "Formula" },
+  { id: "f-hitech-gen2-m3", name: "Formula HiTech Gen2 Model 3", category: "Formula" },
+  { id: "mclaren-mp4-8", name: "McLaren Cosworth MP4/8", category: "Formula" },
+
+  // F3 Brasil
+  { id: "dallara-f301", name: "Dallara F301 (F3 Brasil)", category: "Formula" },
+  { id: "dallara-f309", name: "Dallara F309 (F3 Brasil)", category: "Formula" },
+
+  // Formula Classic Gen1-4
+  { id: "f-classic-gen1-m1", name: "Formula Classic Gen1 Model 1", category: "Historic Formula" },
+  { id: "f-classic-gen1-m2", name: "Formula Classic Gen1 Model 2", category: "Historic Formula" },
+  { id: "lotus-98t", name: "Lotus Renault 98T", category: "Historic Formula" },
+  { id: "f-classic-gen2-m1", name: "Formula Classic Gen2 Model 1", category: "Historic Formula" },
+  { id: "f-classic-gen2-m2", name: "Formula Classic Gen2 Model 2", category: "Historic Formula" },
+  { id: "f-classic-gen2-m3", name: "Formula Classic Gen2 Model 3", category: "Historic Formula" },
+  { id: "mclaren-mp4-4", name: "McLaren Honda MP4/4", category: "Historic Formula" },
+  { id: "f-classic-gen3-m1", name: "Formula Classic Gen3 Model 1", category: "Historic Formula" },
+  { id: "f-classic-gen3-m2", name: "Formula Classic Gen3 Model 2", category: "Historic Formula" },
+  { id: "f-classic-gen3-m3", name: "Formula Classic Gen3 Model 3", category: "Historic Formula" },
+  { id: "f-classic-gen3-m4", name: "Formula Classic Gen3 Model 4", category: "Historic Formula" },
+  { id: "mclaren-mp4-5b", name: "McLaren MP4/5B", category: "Historic Formula" },
+  { id: "f-classic-gen4-m1", name: "Formula Classic Gen4 Model 1", category: "Historic Formula" },
+  { id: "f-classic-gen4-m2", name: "Formula Classic Gen4 Model 2", category: "Historic Formula" },
+  { id: "f-classic-gen4-m3", name: "Formula Classic Gen4 Model 3", category: "Historic Formula" },
+  { id: "mclaren-mp4-6", name: "McLaren Honda MP4/6", category: "Historic Formula" },
+
+  // Formula Dirt
+  { id: "formula-dirt", name: "Formula Dirt", category: "Formula" },
+
+  // Formula Inter / Junior
+  { id: "formula-inter", name: "Formula Inter MG-15", category: "Formula" },
+  { id: "formula-junior", name: "Formula Junior", category: "Formula" },
+
+  // Formula V8 Gen3
+  { id: "formula-v8-gen3", name: "Formula V8 Gen3", category: "Formula" },
+
+  // Formula Retro Gen1
+  { id: "brabham-bt44", name: "Brabham BT44", category: "Historic Formula" },
+  { id: "f-retro-v12", name: "Formula Retro V12", category: "Historic Formula" },
+  { id: "f-retro-v8", name: "Formula Retro V8", category: "Historic Formula" },
+  { id: "lotus-72e", name: "Lotus 72E", category: "Historic Formula" },
+  { id: "mclaren-m23", name: "McLaren M23", category: "Historic Formula" },
+
+  // Formula Retro Gen2
+  { id: "brabham-bt46b", name: "Brabham Alfa Romeo BT46B", category: "Historic Formula" },
+  { id: "brabham-bt49", name: "Brabham Cosworth BT49", category: "Historic Formula" },
+  { id: "f-retro-gen2", name: "Formula Retro Gen2", category: "Historic Formula" },
+  { id: "lotus-79", name: "Lotus 79", category: "Historic Formula" },
+
+  // Formula Retro Gen3
+  { id: "brabham-bt52", name: "Brabham BMW BT52", category: "Historic Formula" },
+  { id: "f-retro-gen3-dfy", name: "Formula Retro Gen3 DFY", category: "Historic Formula" },
+  { id: "f-retro-gen3-turbo", name: "Formula Retro Gen3 Turbo", category: "Historic Formula" },
+  { id: "mclaren-mp4-1c", name: "McLaren Cosworth MP4/1C", category: "Historic Formula" },
+
+  // Formula Trainer
+  { id: "formula-trainer", name: "Formula Trainer", category: "Formula" },
+  { id: "formula-trainer-adv", name: "Formula Trainer Advanced", category: "Formula" },
+
+  // Formula Hybrid Gen1-3
+  { id: "f-hybrid-gen1", name: "Formula Hybrid Gen1", category: "Formula" },
+  { id: "f-hybrid-gen2", name: "Formula Ultimate Hybrid Gen2", category: "Formula" },
+  { id: "f-hybrid-gen3", name: "Formula Ultimate Hybrid Gen3", category: "Formula" },
+
+  // Formula USA 2023
+  { id: "f-usa-2023", name: "Formula USA 2023 (IndyCar)", category: "Formula" },
+
+  // Formula USA Gen1
+  { id: "lola-t95-ford", name: "Lola T95/00 Ford-Cosworth", category: "Historic Formula" },
+  { id: "lola-t95-merc", name: "Lola T95/00 Mercedes-Benz", category: "Historic Formula" },
+  { id: "reynard-95i-ford", name: "Reynard 95i Ford-Cosworth", category: "Historic Formula" },
+  { id: "reynard-95i-honda", name: "Reynard 95i Honda", category: "Historic Formula" },
+  { id: "reynard-95i-merc", name: "Reynard 95i Mercedes-Benz", category: "Historic Formula" },
+
+  // Formula USA Gen2
+  { id: "lola-t98-ford", name: "Lola T98/00 Ford-Cosworth", category: "Historic Formula" },
+  { id: "reynard-98i-ford", name: "Reynard 98i Ford-Cosworth", category: "Historic Formula" },
+  { id: "reynard-98i-honda", name: "Reynard 98i Honda", category: "Historic Formula" },
+  { id: "reynard-98i-merc", name: "Reynard 98i Mercedes-Benz", category: "Historic Formula" },
+  { id: "reynard-98i-toyota", name: "Reynard 98i Toyota", category: "Historic Formula" },
+  { id: "swift-009c-ford", name: "Swift 009c Ford-Cosworth", category: "Historic Formula" },
+
+  // Formula USA Gen3
+  { id: "lola-b2k00-ford", name: "Lola B2K/00 Ford-Cosworth", category: "Historic Formula" },
+  { id: "lola-b2k00-merc", name: "Lola B2K/00 Mercedes-Benz", category: "Historic Formula" },
+  { id: "lola-b2k00-toyota", name: "Lola B2K/00 Toyota", category: "Historic Formula" },
+  { id: "reynard-2ki-ford", name: "Reynard 2Ki Ford-Cosworth", category: "Historic Formula" },
+  { id: "reynard-2ki-honda", name: "Reynard 2Ki Honda", category: "Historic Formula" },
+  { id: "reynard-2ki-merc", name: "Reynard 2Ki Mercedes-Benz", category: "Historic Formula" },
+  { id: "reynard-2ki-toyota", name: "Reynard 2Ki Toyota", category: "Historic Formula" },
+
+  // Formula V10 Gen1/Gen2
+  { id: "f-v10-gen1", name: "Formula V10 Gen1", category: "Historic Formula" },
+  { id: "mclaren-mp4-12", name: "McLaren-Mercedes MP4/12", category: "Historic Formula" },
+  { id: "f-v10-gen2", name: "Formula V10 Gen2", category: "Historic Formula" },
+
+  // Formula Vee Gen1/Gen2
+  { id: "formula-vee", name: "Formula Vee", category: "Formula" },
+  { id: "formula-vee-fin", name: "Formula Vee + Fin", category: "Formula" },
+  { id: "formula-vee-gen2", name: "Formula Vee Gen2", category: "Formula" },
+
+  // Formula Vintage Gen1/Gen2
+  { id: "f-vintage-gen1-m1", name: "Formula Vintage Gen1 Model 1", category: "Historic Formula" },
+  { id: "f-vintage-gen1-m2", name: "Formula Vintage Gen1 Model 2", category: "Historic Formula" },
+  { id: "brabham-bt26a", name: "Brabham BT26A", category: "Historic Formula" },
+  { id: "f-vintage-gen2-m1", name: "Formula Vintage Gen2 Model 1", category: "Historic Formula" },
+  { id: "f-vintage-gen2-m2", name: "Formula Vintage Gen2 Model 2", category: "Historic Formula" },
+  { id: "lotus-49c", name: "Lotus 49C", category: "Historic Formula" },
+
+  // Ginetta
+  { id: "ginetta-g40-cup", name: "Ginetta G40 Cup", category: "GT5" },
+  { id: "ginetta-g55-gt4", name: "Ginetta G55 GT4 Supercup", category: "GT4" },
+
+  // German Group A
+  { id: "audi-v8-quattro-dtm", name: "Audi V8 Quattro DTM", category: "Group A" },
+  { id: "bmw-m3-evo-groupa", name: "BMW M3 Sport Evo (Group A)", category: "Group A" },
+  { id: "mercedes-190e-evo2", name: "Mercedes-Benz 190E 2.5-16 Evo II DTM", category: "Group A" },
+
+  // Group C
+  { id: "corvette-gtp", name: "Chevrolet Corvette GTP", category: "Group C" },
+  { id: "nissan-r89c", name: "Nissan R89C", category: "Group C" },
+  { id: "porsche-962c", name: "Porsche 962C", category: "Group C" },
+  { id: "sauber-c9", name: "Sauber Mercedes C9", category: "Group C" },
+
+  // GT Classics
+  { id: "corvette-c3r", name: "Chevrolet Corvette C3-R", category: "GT Classics" },
+  { id: "corvette-c3r-conv", name: "Chevrolet Corvette C3-R Convertible", category: "GT Classics" },
+  { id: "porsche-911-rsr-74", name: "Porsche 911 RSR 74", category: "GT Classics" },
+
+  // GT Open
+  { id: "ginetta-g55-gt3", name: "Ginetta G55 GT3", category: "GT Open" },
+  { id: "ultima-gtr-race", name: "Ultima GTR Race", category: "GT Open" },
+
+  // GT1
+  { id: "mclaren-f1-gtr", name: "McLaren F1 GTR", category: "GT1" },
+  { id: "mercedes-clk-lm", name: "Mercedes-Benz CLK LM", category: "GT1" },
+  { id: "nissan-r390-gt1", name: "Nissan R390 GT1", category: "GT1" },
+  { id: "porsche-911-gt1-98", name: "Porsche 911 GT1-98", category: "GT1" },
+
+  // GT1 2005
+  { id: "aston-dbr9", name: "Aston Martin DBR9", category: "GT1 2005" },
+  { id: "corvette-c5r", name: "Chevrolet Corvette C5-R", category: "GT1 2005" },
+  { id: "dodge-viper-gtsr", name: "Dodge Viper GTS-R", category: "GT1 2005" },
+  { id: "lamborghini-murcielago-rgt", name: "Lamborghini Murciélago R-GT", category: "GT1 2005" },
+  { id: "maserati-mc12-gt1", name: "Maserati MC12 GT1", category: "GT1 2005" },
+
+  // GT2 2005
+  { id: "milano-gt36", name: "Milano GT36", category: "GT2 2005" },
+  { id: "porsche-996-gt3-rsr", name: "Porsche 996 GT3 RSR", category: "GT2 2005" },
+
+  // GT3 Gen1
+  { id: "audi-r8-gt3-gen1", name: "Audi R8 LMS GT3", category: "GT3 Gen1" },
+  { id: "bmw-m6-gt3", name: "BMW M6 GT3", category: "GT3 Gen1" },
+  { id: "mclaren-720s-gt3-gen1", name: "McLaren 720S GT3", category: "GT3 Gen1" },
+  { id: "mercedes-gt3-gen1", name: "Mercedes-AMG GT3", category: "GT3 Gen1" },
+  { id: "nissan-gtr-nismo-gt3", name: "Nissan GT-R Nismo GT3", category: "GT3 Gen1" },
+  { id: "porsche-911-gt3-r-gen1", name: "Porsche 911 GT3 R", category: "GT3 Gen1" },
+
+  // GT3 Gen2
+  { id: "aston-vantage-gt3-evo", name: "Aston Martin Vantage GT3 Evo", category: "GT3 Gen2" },
+  { id: "audi-r8-gt3-evo2", name: "Audi R8 LMS GT3 Evo II", category: "GT3 Gen2" },
+  { id: "bmw-m4-gt3", name: "BMW M4 GT3", category: "GT3 Gen2" },
+  { id: "corvette-z06-gt3r", name: "Chevrolet Corvette Z06 GT3.R", category: "GT3 Gen2" },
+  { id: "lamborghini-huracan-gt3-evo2", name: "Lamborghini Huracán GT3 EVO2", category: "GT3 Gen2" },
+  { id: "mclaren-720s-gt3-evo", name: "McLaren 720S GT3 Evo", category: "GT3 Gen2" },
+  { id: "mercedes-gt3-evo", name: "Mercedes-AMG GT3 Evo", category: "GT3 Gen2" },
+  { id: "porsche-992-gt3-r", name: "Porsche 992 GT3 R", category: "GT3 Gen2" },
+
+  // GT4
+  { id: "alpine-a110-gt4-evo", name: "Alpine A110 GT4 Evo", category: "GT4" },
+  { id: "aston-vantage-gt4-evo", name: "Aston Martin Vantage GT4 Evo", category: "GT4" },
+  { id: "audi-r8-gt4", name: "Audi R8 LMS GT4", category: "GT4" },
+  { id: "bmw-m4-gt4", name: "BMW M4 GT4", category: "GT4" },
+  { id: "camaro-gt4r", name: "Chevrolet Camaro GT4.R", category: "GT4" },
+  { id: "mclaren-570s-gt4", name: "McLaren 570S GT4", category: "GT4" },
+  { id: "mercedes-gt4", name: "Mercedes-AMG GT4", category: "GT4" },
+  { id: "porsche-718-gt4-mr", name: "Porsche Cayman GT4 Clubsport MR", category: "GT4" },
+
+  // GT5
+  { id: "ginetta-g40", name: "Ginetta G40", category: "GT5" },
+  { id: "puma-p052", name: "Puma P052", category: "GT5" },
+
+  // GTE
+  { id: "aston-vantage-gte", name: "Aston Martin Vantage GTE", category: "GTE" },
+  { id: "bmw-m8-gte", name: "BMW M8 GTE", category: "GTE" },
+  { id: "corvette-c8r-gte", name: "Chevrolet Corvette C8.R", category: "GTE" },
+  { id: "porsche-911-rsr-gte", name: "Porsche 911 RSR GTE", category: "GTE" },
+
+  // GTR 2004
+  { id: "bmw-m3-e36-gtr", name: "BMW M3 E36 GTR", category: "GTR 2004" },
+
+  // Hot Cars
+  { id: "fusca-1-hotcars", name: "Fusca 1 Hot Cars", category: "Hot Cars" },
+  { id: "fusca-2-hotcars", name: "Fusca 2 Hot Cars", category: "Hot Cars" },
+  { id: "gol-hotcars", name: "Gol Hot Cars", category: "Hot Cars" },
+  { id: "passat-hotcars", name: "Passat Hot Cars", category: "Hot Cars" },
+
+  // Hypercars
+  { id: "aston-valkyrie-road", name: "Aston Martin Valkyrie", category: "Hypercar" },
+  { id: "brabham-bt62", name: "Brabham BT62", category: "Hypercar" },
   { id: "lamborghini-revuelto", name: "Lamborghini Revuelto", category: "Hypercar" },
   { id: "lamborghini-veneno", name: "Lamborghini Veneno Roadster", category: "Hypercar" },
-  
+  { id: "mclaren-senna", name: "McLaren Senna", category: "Hypercar" },
+
   // Karts
-  { id: "kart-125-2stroke", name: "Kart 125cc 2Stroke", category: "Kart" },
-  { id: "kart-125-shifter", name: "Kart 125cc Shifter", category: "Kart" },
+  { id: "kart-2t-125", name: "Kart 2-Stroke 125cc Direct", category: "Kart" },
+  { id: "kart-4t-race", name: "Kart 4-Stroke Race", category: "Kart" },
+  { id: "kart-4t-rental", name: "Kart 4-Stroke Rental", category: "Kart" },
+  { id: "kart-shifter", name: "Kart 2-Stroke 125cc Shifter", category: "Kart" },
   { id: "kart-cross", name: "Kart Cross", category: "Kart" },
-  { id: "kart-gx390", name: "Kart GX390 Race", category: "Kart" },
-  
-  // LMDh/GTP Prototypes
+  { id: "superkart-250", name: "Superkart 250cc", category: "Kart" },
+
+  // Ligier European Series
+  { id: "ligier-js-p4", name: "Ligier JS P4", category: "Ligier European Series" },
+  { id: "ligier-js2-r", name: "Ligier JS2 R", category: "Ligier European Series" },
+
+  // LMDh
   { id: "alpine-a424", name: "Alpine A424", category: "LMDh" },
-  { id: "aston-valkyrie-lmh", name: "Aston Martin Valkyrie AMR-LMH", category: "LMDh" },
+  { id: "aston-valkyrie-lmh", name: "Aston Martin Valkyrie Hypercar", category: "LMDh" },
   { id: "bmw-m-hybrid", name: "BMW M Hybrid V8", category: "LMDh" },
   { id: "cadillac-v-series", name: "Cadillac V-Series.R", category: "LMDh" },
   { id: "lamborghini-sc63", name: "Lamborghini SC63", category: "LMDh" },
   { id: "porsche-963", name: "Porsche 963", category: "LMDh" },
-  
-  // RallyCross
-  { id: "citroen-ds3-rx", name: "Citroen DS3 RX", category: "RallyCross" },
-  { id: "ford-fiesta-rx", name: "Ford Fiesta RX", category: "RallyCross" },
-  { id: "mitsubishi-evo-rx", name: "Mitsubishi Lancer Evo X RX", category: "RallyCross" },
-  { id: "vw-polo-rx", name: "Volkswagen Polo RX", category: "RallyCross" },
-  
-  // Stock Car Brasil
+
+  // LMP1 2005
+  { id: "audi-r8-lmp1", name: "Audi R8 LMP1", category: "LMP1 2005" },
+  { id: "courage-c60", name: "Courage C60 Hybrid", category: "LMP1 2005" },
+  { id: "dallara-sp1", name: "Dallara SP1", category: "LMP1 2005" },
+
+  // LMP2 Gen1
+  { id: "ligier-jsp217-gen1", name: "Ligier JS P217 (Gen1)", category: "LMP2 Gen1" },
+  { id: "oreca-07-gen1", name: "Oreca 07 (Gen1)", category: "LMP2 Gen1" },
+
+  // LMP2 Gen2
+  { id: "ligier-jsp217-gen2", name: "Ligier JS P217 (Gen2)", category: "LMP2 Gen2" },
+  { id: "oreca-07-gen2", name: "Oreca 07 (Gen2)", category: "LMP2 Gen2" },
+
+  // LMP2 2005
+  { id: "lola-b05-40-turbo", name: "Lola B05/40 Turbo", category: "LMP2 2005" },
+  { id: "lola-b05-40-v8", name: "Lola B05/40 V8", category: "LMP2 2005" },
+
+  // MINI JCW UK
+  { id: "mini-jcw", name: "MINI Cooper JCW", category: "MINI JCW" },
+
+  // Mitsubishi Lancer Cup
+  { id: "mitsubishi-lancer-r", name: "Mitsubishi Lancer R", category: "Mitsubishi Lancer Cup" },
+  { id: "mitsubishi-lancer-rs", name: "Mitsubishi Lancer RS", category: "Mitsubishi Lancer Cup" },
+
+  // BMW M1 Procar
+  { id: "bmw-m1-procar", name: "BMW M1 Procar", category: "M1 Procar" },
+
+  // Old Stock Race
+  { id: "opala-old-stock", name: "Chevrolet Opala Old Stock Race", category: "Stock Car" },
+
+  // Opala Stock Cars
   { id: "opala-1979", name: "Chevrolet Opala Stock Cars 1979", category: "Stock Car" },
+  { id: "opala-1986", name: "Chevrolet Opala Stock Cars 1986", category: "Stock Car" },
+
+  // P1 Gen1
+  { id: "ginetta-g58", name: "Ginetta G58", category: "Prototype" },
+  { id: "metalmoro-ajr-chevy", name: "MetalMoro AJR Chevrolet", category: "Prototype" },
+  { id: "metalmoro-ajr-honda", name: "MetalMoro AJR Honda", category: "Prototype" },
+  { id: "metalmoro-ajr-judd", name: "MetalMoro AJR Judd", category: "Prototype" },
+  { id: "metalmoro-ajr-nissan", name: "MetalMoro AJR Nissan", category: "Prototype" },
+
+  // P1 Gen2
+  { id: "ginetta-g58-gen2", name: "Ginetta G58 Gen2", category: "Prototype" },
+  { id: "ligier-jsp320", name: "Ligier JS P320", category: "Prototype" },
+  { id: "metalmoro-ajr-gen2-chevy", name: "MetalMoro AJR Gen2 Chevrolet", category: "Prototype" },
+  { id: "metalmoro-ajr-gen2-honda", name: "MetalMoro AJR Gen2 Honda", category: "Prototype" },
+  { id: "metalmoro-ajr-gen2-nissan", name: "MetalMoro AJR Gen2 Nissan", category: "Prototype" },
+  { id: "sigma-p1-g5", name: "Sigma P1 G5", category: "Prototype" },
+
+  // P2
+  { id: "metalmoro-mrx-turbo-p2", name: "MetalMoro MRX Duratec Turbo P2", category: "Prototype" },
+  { id: "sigma-p1", name: "Sigma P1", category: "Prototype" },
+
+  // P3
+  { id: "metalmoro-mrx-turbo-p3", name: "MetalMoro MRX Duratec Turbo P3", category: "Prototype" },
+  { id: "metalmoro-mrx-honda-p3", name: "MetalMoro MRX Honda P3", category: "Prototype" },
+  { id: "roco-001", name: "Roco 001", category: "Prototype" },
+
+  // P4
+  { id: "mcr-s2000", name: "MCR S2000", category: "Prototype" },
+  { id: "metalmoro-mrx-duratec-p4", name: "MetalMoro MRX Duratec P4", category: "Prototype" },
+
+  // Porsche Carrera Cup
+  { id: "porsche-911-cup-38", name: "Porsche 911 GT3 Cup 3.8", category: "Porsche Cup" },
+  { id: "porsche-911-cup-40", name: "Porsche 911 GT3 Cup 4.0", category: "Porsche Cup" },
+
+  // RallyCross
+  { id: "citroen-ds3-rx", name: "Citroën DS3 RX", category: "RallyCross" },
+  { id: "mini-countryman-rx", name: "MINI Countryman R60 RX", category: "RallyCross" },
+  { id: "mitsubishi-evo-rx", name: "Mitsubishi Lancer Evo10 RX", category: "RallyCross" },
+  { id: "vw-polo-rx", name: "Volkswagen Polo RX", category: "RallyCross" },
+
+  // Sprint Race
+  { id: "sprint-race", name: "Sprint Race", category: "Sprint Race" },
+
+  // Stock Car Brasil
   { id: "stock-car-1999", name: "Chevrolet Omega Stock Car 1999", category: "Stock Car" },
-  { id: "stock-car-2022", name: "Chevrolet Cruze Stock Car 2022", category: "Stock Car" },
-  { id: "stock-car-2023", name: "Chevrolet Cruze Stock Car 2023", category: "Stock Car" },
-  { id: "stock-car-2024", name: "Chevrolet Cruze Stock Car 2024", category: "Stock Car" },
-  { id: "toyota-stock-2024", name: "Toyota Corolla Stock Car 2024", category: "Stock Car" },
-  
-  // Touring Cars Group A
-  { id: "audi-quattro-v8", name: "Audi Quattro V8 (Group A)", category: "Touring Car" },
-  { id: "bmw-m3-e30-groupa", name: "BMW M3 Sport Evolution (Group A)", category: "Touring Car" },
-  { id: "ford-sierra-rs500", name: "Ford Sierra RS500 Cosworth (Group A)", category: "Touring Car" },
-  { id: "mercedes-190e-evo2", name: "Mercedes-Benz 190E Evo II (Group A)", category: "Touring Car" },
-  
-  // Trucks
-  { id: "iveco-stralis", name: "Iveco Stralis (Copa Truck)", category: "Truck" },
-  { id: "man-tgx", name: "MAN TGX (Copa Truck)", category: "Truck" },
-  { id: "mercedes-atego", name: "Mercedes-Benz Atego (Copa Truck)", category: "Truck" },
-  { id: "vw-constellation", name: "Volkswagen Constellation (Copa Truck)", category: "Truck" },
+  { id: "stock-car-2019", name: "Chevrolet Cruze Stock Car 2019", category: "Stock Car" },
+  { id: "stock-car-2020-chevy", name: "Chevrolet Cruze Stock Car 2020", category: "Stock Car" },
+  { id: "stock-car-2020-toyota", name: "Toyota Corolla Stock Car 2020", category: "Stock Car" },
+  { id: "stock-car-2021-chevy", name: "Chevrolet Cruze Stock Car 2021", category: "Stock Car" },
+  { id: "stock-car-2021-toyota", name: "Toyota Corolla Stock Car 2021", category: "Stock Car" },
+  { id: "stock-car-2022-chevy", name: "Chevrolet Cruze Stock Car 2022", category: "Stock Car" },
+  { id: "stock-car-2022-toyota", name: "Toyota Corolla Stock Car 2022", category: "Stock Car" },
+  { id: "stock-car-2023-chevy", name: "Chevrolet Cruze Stock Car 2023", category: "Stock Car" },
+  { id: "stock-car-2023-toyota", name: "Toyota Corolla Stock Car 2023", category: "Stock Car" },
+  { id: "stock-car-2024-chevy", name: "Chevrolet Cruze Stock Car 2024", category: "Stock Car" },
+  { id: "stock-car-2024-toyota", name: "Toyota Corolla Stock Car 2024", category: "Stock Car" },
+
+  // Stock USA
+  { id: "stock-usa-gen1", name: "Stock USA Gen1", category: "Stock USA" },
+  { id: "stock-usa-gen2", name: "Stock USA Gen2", category: "Stock USA" },
+  { id: "stock-usa-gen3", name: "Stock USA Gen3", category: "Stock USA" },
+  { id: "stock-usa-gen3-lm", name: "Stock USA Gen3 Le Mans", category: "Stock USA" },
+
+  // Street Cars
+  { id: "camaro-ss", name: "Chevrolet Camaro SS", category: "Road Car" },
+
+  // Super Trophy Trucks
+  { id: "super-trophy-truck", name: "Super Trophy Truck", category: "Off-Road" },
+
+  // Super Trofeo
+  { id: "huracan-super-trofeo-evo2", name: "Lamborghini Huracán Super Trofeo EVO2", category: "Super Trofeo" },
+  { id: "diablo-sv-r", name: "Lamborghini Diablo SV-R", category: "Diablo Super Trofeo" },
+
+  // Super V8
+  { id: "super-v8", name: "Super V8", category: "Super V8" },
+
+  // Super Cars
+  { id: "audi-r8-v10-gt", name: "Audi R8 V10 GT", category: "Supercars" },
+  { id: "corvette-c8-z06", name: "Chevrolet Corvette C8 Z06 / Z07", category: "Supercars" },
+  { id: "dodge-viper-acr", name: "Dodge Viper ACR", category: "Supercars" },
+  { id: "maserati-gt2-stradale", name: "Maserati GT2 Stradale", category: "Supercars" },
+  { id: "mclaren-f1-lm", name: "McLaren F1 LM", category: "Supercars" },
+  { id: "ultima-gtr", name: "Ultima GTR", category: "Supercars" },
+
+  // TS Cup
+  { id: "vw-polo-tscup", name: "Volkswagen Polo (TS Cup)", category: "TS Cup" },
+  { id: "vw-polo-gts-tscup", name: "Volkswagen Polo GTS (TS Cup)", category: "TS Cup" },
+  { id: "vw-virtus-tscup", name: "Volkswagen Virtus (TS Cup)", category: "TS Cup" },
+  { id: "vw-virtus-gts-tscup", name: "Volkswagen Virtus GTS (TS Cup)", category: "TS Cup" },
+
+  // Vintage Touring Cars
+  { id: "bmw-2002-turbo", name: "BMW 2002 Turbo", category: "Vintage Touring" },
+  { id: "corvette-c3", name: "Chevrolet Corvette C3", category: "Vintage Touring" },
+  { id: "lamborghini-miura-sv", name: "Lamborghini Miura SV", category: "Vintage Touring" },
+  { id: "lotus-23", name: "Lotus 23", category: "Vintage Touring" },
+  { id: "mini-cooper-1965", name: "MINI Cooper S 1965", category: "Vintage Touring" },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const automobilista2Tracks: Track[] = [
