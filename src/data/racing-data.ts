@@ -70,6 +70,7 @@ const iRacingCars: Car[] = [
   { id: "nascar-nextgen-camry", name: "NASCAR Next Gen Toyota Camry", category: "NASCAR" },
   { id: "nascar-nextgen-mustang", name: "NASCAR Next Gen Ford Mustang", category: "NASCAR" },
   { id: "nascar-truck-f150", name: "NASCAR Truck Series Ford F150", category: "NASCAR" },
+  { id: "nascar-truck-ram", name: "NASCAR Truck Series RAM", category: "NASCAR" },
   { id: "nascar-truck-silverado", name: "NASCAR Truck Series Chevrolet Silverado", category: "NASCAR" },
   { id: "nascar-truck-tundra", name: "NASCAR Truck Series Toyota Tundra TRD Pro", category: "NASCAR" },
   { id: "nascar-xfinity-camaro", name: "NASCAR Xfinity Chevrolet Camaro", category: "NASCAR" },
@@ -81,16 +82,21 @@ const iRacingCars: Car[] = [
   { id: "corvette-c8-stingray", name: "Chevrolet Corvette C8 Stingray", category: "Road Car" },
   { id: "mazda-mx5-cup", name: "Mazda MX-5 Cup", category: "Cup" },
   { id: "porsche-911-gt3-cup", name: "Porsche 911 GT3 Cup (992)", category: "Cup" },
+  { id: "porsche-911-cup-992-2", name: "Porsche 911 Cup (992.2)", category: "Cup" },
   { id: "toyota-gr86", name: "Toyota GR86", category: "Road Car" },
   
   // TCR
   { id: "audi-rs3-lms-tcr", name: "Audi RS3 LMS TCR", category: "TCR" },
+  { id: "audi-rs3-lms-gen2-tcr", name: "Audi RS3 LMS Gen2 TCR", category: "TCR" },
   { id: "honda-civic-type-r-tcr", name: "Honda Civic Type R TCR", category: "TCR" },
   { id: "hyundai-elantra-n-tcr", name: "Hyundai Elantra N TCR", category: "TCR" },
   
   // V8 Supercars
   { id: "supercars-camaro", name: "Supercars Chevrolet Camaro ZL1", category: "V8 Supercars" },
   { id: "supercars-mustang", name: "Supercars Ford Mustang GT", category: "V8 Supercars" },
+
+  // RallyCross
+  { id: "fia-cross-car", name: "FIA Cross Car", category: "RallyCross" },
 ].sort((a, b) => a.name.localeCompare(b.name));
 
 const iRacingTracks: Track[] = [
